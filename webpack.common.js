@@ -2,6 +2,10 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
+function resolve(myPath) {
+  return path.resolve(__dirname, myPath);
+}
+
 module.exports = {
   entry: {
     main: './src/main.js',
@@ -9,9 +13,7 @@ module.exports = {
 
   resolve: {
     alias: {
-      Views: path.resolve(__dirname, './src/views'),
-      Assets: path.resolve(__dirname, './src/assets'),
-      Styles: path.resolve(__dirname, './src/assets/styles')
+      Views: resolve('./src/views')
     }
   },
 
@@ -77,7 +79,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'Beautiful World',
       filename: 'index.html',
-      // template: './src/assets/template.html'
+      template: './src/assets/template.html'
     }),
     // 将你定义过的其它规则复制并应用到 .vue 文件里相应语言的块。
     new VueLoaderPlugin()
