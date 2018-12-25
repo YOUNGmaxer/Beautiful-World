@@ -8,12 +8,13 @@ function resolve(myPath) {
 
 module.exports = {
   entry: {
-    main: './src/main.js',
+    main: './src/main.js'
   },
 
   resolve: {
     alias: {
-      Views: resolve('./src/views')
+      Views: resolve('./src/views'),
+      Components: resolve('./src/components')
     }
   },
 
@@ -22,9 +23,6 @@ module.exports = {
       // 为了使用单文件组件，需要引入 vue-loader
       {
         test: /\.vue$/,
-        include: [
-          path.resolve(__dirname, 'src')
-        ],
         use: [
           'vue-loader'
         ]
@@ -32,9 +30,9 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /(node_modules)/,
-        use: {
-          loader: 'babel-loader'
-        }
+        use: [
+          'babel-loader'
+        ]
       },
       {
         test: /\.scss/,
@@ -49,10 +47,7 @@ module.exports = {
         ]
       },
       {
-        test: /\.css/,
-        include: [
-          path.resolve(__dirname, 'src'),
-        ],
+        test: /\.(css)/,
         use: [
           'style-loader',
           'css-loader',
@@ -60,11 +55,8 @@ module.exports = {
         ]
       },
       {
-        test: /\.(ttf|woff|woff2|eot)$/,
-        include: [
-          path.resolve(__dirname, 'node_modules/element-ui')
-        ],
-        loader: 'file-loader'
+        test: /\.(svg|ttf|woff|woff2|eot)$/,
+        use: ['file-loader']
       },
       // 引用字体文件需要 url-loader
       {
