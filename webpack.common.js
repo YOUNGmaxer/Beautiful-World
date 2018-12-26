@@ -7,9 +7,9 @@ function resolve(myPath) {
 }
 
 module.exports = {
-  entry: {
-    main: './src/main.js'
-  },
+  // entry: {
+  //   main: './src/main.js'
+  // },
 
   resolve: {
     alias: {
@@ -79,6 +79,7 @@ module.exports = {
 
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].js'
+    // publicPath: '/dist/', // 发布后在线访问的 url
+    filename: '[name].[hash:8].js'
   }
 };

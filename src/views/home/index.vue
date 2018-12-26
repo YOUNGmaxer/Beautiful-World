@@ -9,7 +9,8 @@
 </template>
 
 <script>
-import { Button } from 'iview';
+// TODO 这里引入 iview 在构建时出现了 unexpected token: const 的错误
+// import { Button } from 'iview';
 import LeftNav from 'Components/nav';
 
 // 引入基本模版
@@ -21,7 +22,7 @@ export default {
   name: 'Home',
 
   components: {
-    Button,
+    // Button,
     LeftNav
   },
 

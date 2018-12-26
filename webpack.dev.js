@@ -1,9 +1,14 @@
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
 const webpack = require('webpack');
+const hotMiddlewareScript = 'webpack-hot-middleware/client?noInfo=true&reload=true';
 
 module.exports = merge(common, {
   mode: 'development',
+
+  entry: {
+    main: ['./src/main.js', hotMiddlewareScript]
+  },
 
   // 方便开发环境查看源代码和调试
   devtool: 'eval-source-map',

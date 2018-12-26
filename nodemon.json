@@ -1,0 +1,13 @@
+{
+  "verbose": true,
+  "restartable": "rs",
+  "ignore": [
+    ".git",
+    "node_modules",
+    "src/**/*.*"
+  ],
+  "execMap": {
+    "js": "node --harmony"
+  },
+  "ext": "js"
+}
