@@ -37,8 +37,11 @@
 
 ### 服务端
 
+相关依赖
+
 * Koa2
 * koa-router
+* koa-bodyparser
 
 ## 开发体验
 

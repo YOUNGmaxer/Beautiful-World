@@ -1,9 +1,6 @@
 <template>
   <div>
     <LeftNav :tabList="tabList" @on-click="handleTabClick"></LeftNav>
-    <!-- <div class="chart-container">
-      <div class="chart-container__wrap"></div>
-    </div> -->
     <router-view></router-view>
   </div>
 </template>
@@ -40,7 +37,9 @@ export default {
   methods: {
     handleTabClick(tabIndex) {
       console.log(tabIndex);
+      console.log(this.$route.params);
       this.$router.push({
+        // path: 'a',
         params: { tabName: tabIndex }
       });
     }
