@@ -25,6 +25,7 @@
     "iview": "^3.2.1-rc.1",
     "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
+    "koa2-connect-history-api-fallback": "^0.1.0",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1",
     "vue-server-renderer": "^2.5.21",

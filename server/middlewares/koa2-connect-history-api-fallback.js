@@ -9,7 +9,8 @@ module.exports = (options) => {
   const noop = () => {};
 
   return async (ctx, next) => {
-    middleware(ctx, null, noop);
+    // middleware(ctx, null, noop);
+    middleware(ctx, ctx.response, noop);
     await next();
   };
 };

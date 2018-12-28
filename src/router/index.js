@@ -17,24 +17,10 @@ export default new Router({
       component: Home,
       children: [
         {
-          path: '',
+          path: ':tabName?',
           component: HomeMain
         }
       ]
-    },
-    {
-      path: '/main',
-      component: Home,
-      children: [
-        {
-          path: ':tabName',
-          component: HomeMain
-        }
-      ]
-    },
-    {
-      path: '/home',
-      component: Home
     }
   ]
 });
