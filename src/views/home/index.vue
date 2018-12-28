@@ -1,7 +1,9 @@
 <template>
-  <div>
+  <div class="home-container bw-flex bw-flex--center">
     <LeftNav :tabList="tabList" @on-click="handleTabClick"></LeftNav>
-    <router-view></router-view>
+    <div class="echart__container bw-flex bw-flex--center">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -26,7 +28,18 @@ export default {
   data() {
     return {
       tabList: [
-        '热力图', '柱状图', '堆叠柱状图'
+        {
+          name: '热力图',
+          type: 'hot-map'
+        },
+        {
+          name: '柱状图',
+          type: 'bar-map'
+        },
+        {
+          name: '堆叠柱状图',
+          type: 'bar-map-0'
+        }
       ]
     }
   },
@@ -35,17 +48,28 @@ export default {
   },
 
   methods: {
-    handleTabClick(tabIndex) {
-      console.log(tabIndex);
-      console.log(this.$route.params);
+    // 对 tab 进行路由
+    handleTabClick(tabType) {
       this.$router.push({
-        // path: 'a',
-        params: { tabName: tabIndex }
+        path: tabType
       });
     }
   }
 }
 </script>
 
-<style>
+<style lang="scss">
+@import 'Style/_global.scss';
+.home-container {
+  margin-left: var(--left-nav-width);
+  height: 100vh;
+  position: relative;
+}
+
+.echart__container {
+  width: 400px;
+  height: 400px;
+  margin: 0 auto;
+  border: 1px solid skyblue;
+}
 </style>

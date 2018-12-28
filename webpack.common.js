@@ -14,7 +14,9 @@ module.exports = {
   resolve: {
     alias: {
       Views: resolve('./src/views'),
-      Components: resolve('./src/components')
+      Components: resolve('./src/components'),
+      Assets: resolve('./src/assets'),
+      Style: resolve('./src/assets/style')
     }
   },
 

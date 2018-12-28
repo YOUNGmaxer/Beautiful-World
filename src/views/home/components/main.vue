@@ -12,14 +12,21 @@ export default {
     }
   },
 
+  // 对路由参数变化作出响应
+  watch: {
+    '$route' (to, from) {
+      console.log(to, from);
+      console.log(this.$route.params['tabName']);
+      this.tabIndex = this.$route.params['tabName'];
+    }
+  },
+
   mounted() {
-    // this.tabIndex = this.$router.params;
+    this.tabIndex = this.$route.params['tabName'];
+    console.log(this.tabIndex);
   }
 }
 </script>
 
 <style>
-.chart-container {
-  margin-left: 180px;
-}
 </style>

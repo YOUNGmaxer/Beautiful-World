@@ -5,8 +5,8 @@
         :class="tabCls(tabIndex)"
         v-for="(tabItem, tabIndex) in tabList"
         :key="tabIndex"
-        @click="handleTabChange(tabIndex)"
-      >{{ tabItem }}</li>
+        @click="handleTabChange(tabIndex, tabItem)"
+      >{{ tabItem.name }}</li>
       <slot></slot>
     </ul>
   </div>
@@ -37,19 +37,22 @@ export default {
         }
       ]
     },
-    handleTabChange(tabIndex) {
+    handleTabChange(tabIndex, tabItem) {
       this.currentTab = tabIndex;
       // 一个扩展的事件，方便外层父组件做一些事情，比如路由
-      this.$emit('on-click', tabIndex);
+      this.$emit('on-click', tabItem.type);
     }
   }
 }
 </script>
 
-<style>
+<style lang='scss'>
+@import 'Style/_global.scss';
+
 .l-nav {
   position: fixed;
-  width: 160px;
+  left: 0;
+  width: var(--left-nav-width);
   height: 100vh;
   background: darkcyan;
   color: white;

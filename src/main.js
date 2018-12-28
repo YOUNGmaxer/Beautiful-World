@@ -6,6 +6,9 @@ import store from './store';
 // 引入 iView 样式文件
 import 'iview/dist/styles/iview.css';
 
+// 引入公共样式文件
+import 'Assets/style/_common.scss';
+
 // 设置为 false 以阻止 vue 在启动时生成生产提示
 Vue.config.productionTip = false;
 

@@ -1,0 +1,17 @@
+.bw-flex {
+  display: flex;
+}
+
+.bw-flex--align-c {
+  align-items: center;
+}
+
+.bw-flex--justify-c {
+  justify-content: center;
+}
+
+// 垂直居中 + 水平居中
+.bw-flex--center {
+  justify-content: center;
+  align-items: center;
+}
