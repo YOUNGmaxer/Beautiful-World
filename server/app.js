@@ -6,6 +6,8 @@ const webpackConfig = require('../webpack.dev');
 const router = require('./routers/index');
 const bodyParser = require('koa-bodyparser');
 const history = require('./middlewares/koa2-connect-history-api-fallback');
+const mongoConnect = require('./database/connect');
+const testDB = require('./database/testDB');
 
 const app = new Koa();
 const compiler = webpack(webpackConfig);
@@ -13,6 +15,9 @@ const compiler = webpack(webpackConfig);
 const wdm = webpackDevMiddleware(compiler, {
   noInfo: true
 });
+
+mongoConnect();
+// testDB();
 
 app
   .use(wdm)
@@ -24,7 +29,14 @@ app.use(bodyParser());
 // 注意：位置需要放在路由前面
 app.use(history({
   verbose: true, // 转发日志
-  index: '/'
+  rewrites: [
+    {
+      from: /\/api/,
+      to: context => {
+        return context.parsedUrl.pathname;
+      }
+    }
+  ]
 }));
 
 app.use(router.routes(), router.allowedMethods());

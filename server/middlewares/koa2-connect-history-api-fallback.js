@@ -10,7 +10,7 @@ module.exports = (options) => {
 
   return async (ctx, next) => {
     // middleware(ctx, null, noop);
-    middleware(ctx, ctx.response, noop);
+    middleware(ctx, null, noop);
     await next();
   };
 };
