@@ -67,8 +67,8 @@ export default {
 }
 
 .echart__container {
-  width: 400px;
-  height: 400px;
+  width: 600px;
+  height: 600px;
   margin: 0 auto;
   border: 1px solid skyblue;
 }
