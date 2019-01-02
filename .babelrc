@@ -1,4 +1,7 @@
 {
+  "parserOpts": {
+    "ecmaVersion": 6
+  },
   "presets": [
     "@babel/preset-env"
   ],

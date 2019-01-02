@@ -16,7 +16,8 @@ module.exports = {
       Views: resolve('./src/views'),
       Components: resolve('./src/components'),
       Assets: resolve('./src/assets'),
-      Style: resolve('./src/assets/style')
+      Style: resolve('./src/assets/style'),
+      Store: resolve('./src/store')
     }
   },
 

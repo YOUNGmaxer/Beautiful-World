@@ -3,16 +3,14 @@
 </template>
 
 <script>
-import axios from 'axios';
 import echarts from 'echarts/lib/echarts';
 import 'echarts/lib/component/title';
+import store from 'Store';
+import { mapActions } from 'vuex';
 
 export default {
   methods: {
-    async getSightsData() {
-      const res = await axios.get('http://localhost:3001/api/sight');
-      return res;
-    }
+    ...mapActions(['getSightsData']),
   },
   mounted() {
     this.getSightsData().then(res => {
@@ -22,10 +20,10 @@ export default {
       const top20Data = data.slice(0, 20);
       const top20Name = top20Data.map(sight => {
         return sight.sight_name;
-      });
+      }).reverse();
       const top20Sale = top20Data.map(sight => {
         return sight.sight_sale_count;
-      });
+      }).reverse();
 
       // 渲染出柱状图
       const mapDom = document.getElementsByClassName('echart__bar-map')[0];
