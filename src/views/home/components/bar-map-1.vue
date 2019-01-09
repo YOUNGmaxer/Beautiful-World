@@ -22,27 +22,42 @@ export default {
   },
   methods: {
     ...mapActions(['getSightsData']),
+    parseDataOnArea(data) {
+      const areaData = data.map(sight => {
+        return sight.sight_districts.split('·')[0];
+      });
+      const counter = {};
+      areaData.forEach(area => {
+        if (!counter[area]) {
+          counter[area] = 1;
+        } else {
+          counter[area]++;
+        }
+      })
+      console.log(counter);
+      return counter;
+    }
   },
   mounted() {
     this.getSightsData(this.key).then(res => {
       // 处理数据，获取 top20 的内容
       const data = res.data;
       console.log('景点数据', data);
-      data.sort((a, b) => b.sight_sale_count - a.sight_sale_count);
-      const top20Data = data.slice(0, 20);
-      const top20Name = top20Data.map(sight => {
-        return sight.sight_name;
-      }).reverse();
-      const top20Sale = top20Data.map(sight => {
-        return sight.sight_sale_count;
-      }).reverse();
+      const counter = this.parseDataOnArea(data);
+      const sortedArea = Object.keys(counter).sort((a, b) => {
+        return counter[b] - counter[a];
+      }).slice(0, 20).reverse();
+      const sortedCount = sortedArea.map(area => {
+        return counter[area];
+      })
+      console.log(sortedArea, sortedCount);
 
       // 渲染出柱状图
       const mapDom = document.getElementsByClassName('echart__bar-map')[0];
       const myChart = echarts.init(mapDom);
       const option = {
         title: {
-          text: '热门景点销量Top20',
+          text: '区域景点数量',
           subtext: '数据来自去哪儿网',
           left: '5%',
           top: '3%'
@@ -67,13 +82,13 @@ export default {
         },
         yAxis: {
           type: 'category',
-          data: top20Name
+          data: sortedArea
         },
         series: [
           {
             name: this.key,
             type: 'bar',
-            data: top20Sale
+            data: sortedCount
           }
         ]
       };

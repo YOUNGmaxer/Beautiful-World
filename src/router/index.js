@@ -7,6 +7,7 @@ import Home from 'Views/home/index.vue';
 import HomeMain from 'Views/home/components/main.vue';
 import HotMap from 'Views/home/components/hot-map.vue';
 import BarMap from 'Views/home/components/bar-map.vue';
+import BarMap1 from 'Views/home/components/bar-map-1.vue';
 
 // 如果在一个模块化工程中使用它，必须要通过 Vue.use() 明确地安装路由功能
 Vue.use(Router);
@@ -25,6 +26,10 @@ export default new Router({
         {
           path: 'bar-map',
           component: BarMap
+        },
+        {
+          path: 'bar-map-1',
+          component: BarMap1
         },
         {
           path: ':tabName?',

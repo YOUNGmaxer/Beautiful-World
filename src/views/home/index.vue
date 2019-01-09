@@ -37,6 +37,10 @@ export default {
           type: 'bar-map'
         },
         {
+          name: '柱状图1',
+          type: 'bar-map-1'
+        },
+        {
           name: '堆叠柱状图',
           type: 'bar-map-0'
         }
