@@ -5,15 +5,21 @@
 <script>
 import echarts from 'echarts/lib/echarts';
 import 'echarts/lib/component/title';
+import 'echarts/lib/component/legend';
 import store from 'Store';
 import { mapActions } from 'vuex';
 
 export default {
+  data() {
+    return {
+      key: '热门景点'
+    }
+  },
   methods: {
     ...mapActions(['getSightsData']),
   },
   mounted() {
-    this.getSightsData().then(res => {
+    this.getSightsData(this.key).then(res => {
       // 处理数据，获取 top20 的内容
       const data = res.data;
       data.sort((a, b) => b.sight_sale_count - a.sight_sale_count);
@@ -42,7 +48,7 @@ export default {
           }
         },
         legend: {
-          data: ['汕头']
+          data: [this.key]
         },
         grid: {
           left: '1%',
@@ -59,7 +65,7 @@ export default {
         },
         series: [
           {
-            name: '汕头',
+            name: this.key,
             type: 'bar',
             data: top20Sale
           }

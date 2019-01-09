@@ -8,7 +8,8 @@ module.exports = {
   },
   env: {
     // for new ES6 global variables
-    es6: true
+    es6: true,
+    mocha: true
   },
   rules: {
     "no-new": 0,
