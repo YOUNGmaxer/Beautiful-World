@@ -40,11 +40,11 @@ export default {
       // 处理数据以适应热力图
       const data = res.data;
       const points = data.map(sight => {
-        const point = sight.sight_point;
+        const point = sight.point;
         return {
           lng: point[0],
           lat: point[1],
-          count: sight.sight_sale_count
+          count: sight.sale_count
         }
       });
 

@@ -17,7 +17,7 @@ export default {
   },
   data() {
     return {
-      key: '热门景点'
+      key: '汕头'
     }
   },
   methods: {
@@ -28,13 +28,13 @@ export default {
       // 处理数据，获取 top20 的内容
       const data = res.data;
       console.log('景点数据', data);
-      data.sort((a, b) => b.sight_sale_count - a.sight_sale_count);
+      data.sort((a, b) => b.sale_count - a.sale_count);
       const top20Data = data.slice(0, 20);
       const top20Name = top20Data.map(sight => {
-        return sight.sight_name;
+        return sight.name;
       }).reverse();
       const top20Sale = top20Data.map(sight => {
-        return sight.sight_sale_count;
+        return sight.sale_count;
       }).reverse();
 
       // 渲染出柱状图

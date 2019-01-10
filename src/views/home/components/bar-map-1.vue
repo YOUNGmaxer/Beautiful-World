@@ -17,14 +17,14 @@ export default {
   },
   data() {
     return {
-      key: '热门景点'
+      key: '汕头'
     }
   },
   methods: {
     ...mapActions(['getSightsData']),
     parseDataOnArea(data) {
       const areaData = data.map(sight => {
-        return sight.sight_districts.split('·')[0];
+        return sight.districts.split('·')[0];
       });
       const counter = {};
       areaData.forEach(area => {
@@ -40,13 +40,12 @@ export default {
   },
   mounted() {
     this.getSightsData(this.key).then(res => {
-      // 处理数据，获取 top20 的内容
       const data = res.data;
       console.log('景点数据', data);
       const counter = this.parseDataOnArea(data);
       const sortedArea = Object.keys(counter).sort((a, b) => {
         return counter[b] - counter[a];
-      }).slice(0, 20).reverse();
+      }).slice(0, 25).reverse();
       const sortedCount = sortedArea.map(area => {
         return counter[area];
       })
@@ -57,7 +56,7 @@ export default {
       const myChart = echarts.init(mapDom);
       const option = {
         title: {
-          text: '区域景点数量',
+          text: '热门景点数量',
           subtext: '数据来自去哪儿网',
           left: '5%',
           top: '3%'
@@ -88,9 +87,15 @@ export default {
           {
             name: this.key,
             type: 'bar',
-            data: sortedCount
+            data: sortedCount,
+            markPoint: 'circle'
           }
-        ]
+        ],
+        // 显示数值
+        label: {
+          show: true,
+          position: 'right'
+        }
       };
 
       myChart.setOption(option);
