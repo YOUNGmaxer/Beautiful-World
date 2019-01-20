@@ -2,7 +2,9 @@
   <div class="home-container bw-flex bw-flex--center">
     <LeftNav :tabList="tabList" @on-click="handleTabClick"></LeftNav>
     <div class="echart__container bw-flex bw-flex--center">
-      <router-view></router-view>
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
     </div>
   </div>
 </template>

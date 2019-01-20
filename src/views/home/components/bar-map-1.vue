@@ -17,7 +17,7 @@ export default {
   },
   data() {
     return {
-      key: '汕头'
+      key: '热门景点'
     }
   },
   methods: {
