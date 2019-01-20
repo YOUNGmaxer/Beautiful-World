@@ -2,6 +2,7 @@ const router = require('koa-router')();
 
 const home = require('./home');
 const api = require('./api');
+const map = require('./map');
 
 router.use(home.routes(), home.allowedMethods());
 

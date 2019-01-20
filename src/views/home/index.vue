@@ -1,6 +1,6 @@
 <template>
   <div class="home-container bw-flex bw-flex--center">
-    <LeftNav :tabList="tabList" @on-click="handleTabClick"></LeftNav>
+    <LeftNav :tabList="tabList" :routeTag="false"></LeftNav>
     <div class="echart__container bw-flex bw-flex--center">
       <keep-alive>
         <router-view></router-view>
@@ -32,34 +32,25 @@ export default {
       tabList: [
         {
           name: '热力图',
-          type: 'hot-map'
+          path: 'hot-map'
         },
         {
-          name: '柱状图',
-          type: 'bar-map'
+          name: '销量',
+          path: 'bar-map-top'
         },
         {
-          name: '柱状图1',
-          type: 'bar-map-1'
-        },
-        {
-          name: '堆叠柱状图',
-          type: 'bar-map-0'
+          name: '景点数量',
+          path: 'bar-map-num'
         }
       ]
     }
   },
 
   mounted() {
+    
   },
 
   methods: {
-    // 对 tab 进行路由
-    handleTabClick(tabType) {
-      this.$router.push({
-        path: tabType
-      });
-    }
   }
 }
 </script>

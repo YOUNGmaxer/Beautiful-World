@@ -19,6 +19,16 @@ export default {
     tabList: {
       type: Array,
       default: ['无']
+    },
+    // 用于确定是否要添加自定义事件
+    eventTag: {
+      type: Boolean,
+      default: false
+    },
+    // 用于确定是否要进行前端路由
+    routeTag: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -37,10 +47,21 @@ export default {
         }
       ]
     },
+    /**
+     * @description: 点击默认进行前端路由，同时支持设置取消路由，或添加自定义事件
+     */
     handleTabChange(tabIndex, tabItem) {
       this.currentTab = tabIndex;
-      // 一个扩展的事件，方便外层父组件做一些事情，比如路由
-      this.$emit('on-click', tabItem.type);
+      // 点击默认进行路由
+      if (this.routeTag) {
+        this.$router.push({
+          path: tabItem.path
+        });
+      }
+      if (this.eventTag) {
+        console.log('促发自定义事件');
+        this.$emit('on-click');
+      }
     }
   }
 }
