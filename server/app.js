@@ -1,3 +1,6 @@
+// 引入别名
+require('module-alias/register');
+
 const Koa = require('koa');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('koa-webpack-dev-middleware');

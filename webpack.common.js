@@ -77,7 +77,7 @@ module.exports = {
       template: './src/assets/template.html'
     }),
     // 将你定义过的其它规则复制并应用到 .vue 文件里相应语言的块。
-    new VueLoaderPlugin(),
+    new VueLoaderPlugin()
   ],
 
   output: {

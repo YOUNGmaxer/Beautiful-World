@@ -9,6 +9,7 @@ import HotMap from 'Views/home/components/hot-map.vue';
 import BarMap from 'Views/home/components/bar-map-top.vue';
 import BarMap1 from 'Views/home/components/bar-map-num.vue';
 import Map from 'Views/map/index.vue';
+import ChinaMap from 'Views/map/components/china-map.vue';
 
 // 如果在一个模块化工程中使用它，必须要通过 Vue.use() 明确地安装路由功能
 Vue.use(Router);
@@ -31,7 +32,7 @@ export default new Router({
         {
           path: 'bar-map-num',
           component: BarMap1
-        },
+        }
         // {
         //   path: ':tabName?',
         //   component: HomeMain
@@ -40,7 +41,13 @@ export default new Router({
     },
     {
       path: '/map',
-      component: Map
+      component: Map,
+      children: [
+        {
+          path: 'china',
+          component: ChinaMap
+        }
+      ]
     }
   ]
 });

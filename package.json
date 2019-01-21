@@ -10,6 +10,10 @@
     "eslint": "eslint src",
     "test": "mocha --require @babel/register"
   },
+  "_moduleAliases": {
+    "Server": "server",
+    "Data": "server/data"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/YOUNGmaxer/Beautiful-World.git"
@@ -23,12 +27,15 @@
   "dependencies": {
     "axios": "^0.18.0",
     "connect-history-api-fallback": "^1.5.0",
+    "d3": "^5.7.0",
     "echarts": "^4.2.0-rc.2",
     "iview": "^3.2.1-rc.1",
     "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
     "koa2-connect-history-api-fallback": "^0.1.0",
+    "module-alias": "^2.1.0",
     "mongodb": "^3.1.10",
+    "mongoose": "^4.13.18",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1",
     "vue-server-renderer": "^2.5.21",
@@ -65,6 +72,8 @@
     "sass-loader": "^7.1.0",
     "scss-loader": "0.0.1",
     "style-loader": "^0.23.1",
+    "terser-webpack-plugin": "^1.2.1",
+    "uglify-es-webpack-plugin": "^0.10.0",
     "uglifyjs-webpack-plugin": "^2.0.1",
     "url-loader": "^1.1.2",
     "vue-loader": "^15.4.2",

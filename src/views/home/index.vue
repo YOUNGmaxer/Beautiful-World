@@ -1,6 +1,6 @@
 <template>
   <div class="home-container bw-flex bw-flex--center">
-    <LeftNav :tabList="tabList" :routeTag="false"></LeftNav>
+    <LeftNav :tabList="tabList"></LeftNav>
     <div class="echart__container bw-flex bw-flex--center">
       <keep-alive>
         <router-view></router-view>
@@ -56,7 +56,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import 'Style/_global.scss';
 .home-container {
   margin-left: var(--left-nav-width);
   height: 100vh;

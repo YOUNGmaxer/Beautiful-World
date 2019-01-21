@@ -59,8 +59,7 @@ export default {
         });
       }
       if (this.eventTag) {
-        console.log('促发自定义事件');
-        this.$emit('on-click');
+        this.$emit('on-click', { name: tabItem.name, path: tabItem.path });
       }
     }
   }
