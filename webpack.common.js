@@ -77,12 +77,13 @@ module.exports = {
       template: './src/assets/template.html'
     }),
     // 将你定义过的其它规则复制并应用到 .vue 文件里相应语言的块。
-    new VueLoaderPlugin()
+    new VueLoaderPlugin(),
   ],
 
   output: {
     path: path.resolve(__dirname, 'dist'),
     // publicPath: '/dist/', // 发布后在线访问的 url
-    filename: '[name].js'
+    filename: '[name].js',
+    publicPath: '/'
   }
 };
