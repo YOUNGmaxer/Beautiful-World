@@ -1,16 +1,13 @@
-const { MongoClient } = require('mongodb');
-
-const MONGO_URI = 'mongodb://localhost:27017';
-const MONGO_DB = 'sights';
+const Mongo = require('Server/db/manager').MongoHandler;
+const { getCitiesSights } = require('./common');
 
 class CitySights {
   async totalData(ctx) {
-    let client = null;
-    const collectionName = ctx.params.key;
+    const collectionName = ctx.params.city;
+    const mongo = new Mongo('sights');
     try {
       // 连接数据库
-      client = await MongoClient.connect(MONGO_URI);
-      const db = client.db(MONGO_DB);
+      const db = await mongo.connect();
       const connection = db.collection(collectionName);
       // 查询数据
       const data = await connection.find().toArray();
@@ -19,8 +16,36 @@ class CitySights {
     } catch (err) {
       console.error('totalData', err);
     } finally {
-      client.close();
+      mongo.close();
     }
+  }
+
+  /**
+   * @description: 获取省份所有的景点数据
+   */
+  async getProvSights(ctx) {
+    const mongo = new Mongo('map');
+    const code = ctx.params.code;
+    const query = { code };
+    const provData = await mongo._find('code_pc', query);
+    // 获取该省份的所有城市
+    let cityData;
+    // TODO: 需要完善这里的逻辑，同时考虑有没有更好的写法
+    // 判断是否是直辖市
+    if (['11', '12'].includes(code)) {
+      cityData = [{ name: provData.name, code: provData.code }];
+    } else {
+      cityData = provData.children;
+    }
+    const data = await getCitiesSights(cityData);
+    ctx.body = data;
+  }
+
+  async getSightComments(ctx) {
+    const mongo = new Mongo('comments');
+    const rid = ctx.params.rid;
+    const commentsData = await mongo._find(rid);
+    ctx.body = commentsData;
   }
 }
 

@@ -11,8 +11,9 @@ import { mapActions } from 'vuex';
 
 export default {
   props: {
-    options: {
-      type: Object,
+    code: {
+      type: String,
+      default: '11'
     }
   },
   data() {

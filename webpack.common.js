@@ -17,7 +17,8 @@ module.exports = {
       Components: resolve('./src/components'),
       Assets: resolve('./src/assets'),
       Style: resolve('./src/assets/style'),
-      Store: resolve('./src/store')
+      Store: resolve('./src/store'),
+      Util: resolve('./utils')
     }
   },
 
@@ -66,7 +67,13 @@ module.exports = {
         test: /\.(ttf|woff|woff2|eot)$/,
         loader: 'url-loader?limit=100000',
         exclude: /(node_modules)/
-      }
+      },
+      // {
+      //   enforce: 'pre',
+      //   test: /\.(js|vue)$/,
+      //   loader: 'eslint-loader',
+      //   exclude: /node_modules/
+      // }
     ]
   },
 

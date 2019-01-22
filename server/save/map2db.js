@@ -80,11 +80,6 @@ class MapSaver {
 }
 
 const saver = new MapSaver();
-// saver.connectMongo()
-//   .then(data => {
-//     const path = `${saver.absPath}/区划代码/cities.json`;
-//     saver.saveData('cities_code', path);
-//   })
 
 saver.connectMongo()
   .then(data => {

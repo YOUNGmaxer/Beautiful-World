@@ -12,7 +12,8 @@
   },
   "_moduleAliases": {
     "Server": "server",
-    "Data": "server/data"
+    "Data": "server/data",
+    "Controller": "server/controllers"
   },
   "repository": {
     "type": "git",
@@ -31,8 +32,11 @@
     "echarts": "^4.2.0-rc.2",
     "iview": "^3.2.1-rc.1",
     "koa-bodyparser": "^4.2.1",
+    "koa-compress": "^3.0.0",
+    "koa-logger": "^3.2.0",
     "koa-router": "^7.4.0",
     "koa2-connect-history-api-fallback": "^0.1.0",
+    "lodash": "^4.17.11",
     "module-alias": "^2.1.0",
     "mongodb": "^3.1.10",
     "mongoose": "^4.13.18",
@@ -57,7 +61,10 @@
     "css-loader": "^1.0.0",
     "eslint": "^5.7.0",
     "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-loader": "^2.1.1",
+    "eslint-plugin-html": "^5.0.0",
     "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-vue": "^5.1.0",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^2.0.0",
     "html-webpack-plugin": "^3.2.0",
