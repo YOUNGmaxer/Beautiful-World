@@ -19,4 +19,26 @@ class MongoBase {
   }
 }
 
-module.exports = MongoBase;
+
+class MongoHandler extends MongoBase {
+  constructor(db = 'sights') {
+    super(db);
+  }
+
+  // 封装 findOne 方法
+  async _findOne(cName, query) {
+    try {
+      const db = await this.connect();
+      const collection = db.collection(cName);
+      const data = await collection.findOne(query);
+      return data;
+    } finally {
+      this.close();
+    }
+  }
+}
+
+module.exports = {
+  MongoBase,
+  MongoHandler
+};

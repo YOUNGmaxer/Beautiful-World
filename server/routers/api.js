@@ -1,13 +1,15 @@
 const router = require('koa-router')();
 
-const citySights = require('../controllers/sights/citySights');
-const chinaMap = require('../controllers/map/chinaMap');
+const citySights = require('Controller/sights/citySights');
+const chinaMap = require('Controller/map/chinaMap');
 
 /**
  * @description: 获取景点数据
  */
 // 获取某个城市的景点数据
-router.get('/sight/:key', citySights.totalData);
+router.get('/sight/:city', citySights.totalData);
+// 获取某个省的所有城市的景点数据
+router.get('/sight/prov/:code', citySights.getProvSights);
 
 /**
  * @description: 获取地图数据

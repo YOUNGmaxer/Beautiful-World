@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
-const Mongo = require('Server/db/manager');
+const Mongo = require('Server/db/manager').MongoBase;
+const { MongoHandler } = require('Server/db/manager');
 
 /**
  * ！注意写接口的时候会遇到一个问题，就是用异步方法会出现函数先结束，
@@ -32,21 +33,17 @@ class ChinaMap {
     }
   }
 
+  /**
+   * @description: 根据参数查找 map 数据库中的一条数据
+   * @param cName {String} collection 名称
+   * @param type {String} 指定查询的字段 code | name
+   */
   findOneByCodeOrName(cName, type = 'code') {
     return async function middleware(ctx) {
       const param = ctx.params.param;
       const query = type === 'code' ? { code: param } : { name: param };
-      const mongo = new Mongo('map');
-      try {
-        const db = await mongo.connect();
-        const collection = db.collection(cName);
-        const data = await collection.findOne(query);
-        ctx.body = data;
-      } catch (err) {
-        console.log('/api/code/pc', err);
-      } finally {
-        mongo.close();
-      }
+      const mongo = new MongoHandler('map');
+      ctx.body = await mongo._findOne(cName, query);
     };
   }
 }

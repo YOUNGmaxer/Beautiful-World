@@ -18,6 +18,8 @@ module.exports = {
     "class-methods-use-this": 0,
     "no-param-reassign": 0,
     "no-empty-pattern": 0,
-    "no-restricted-globals": 0
+    "no-restricted-globals": 0,
+    "no-underscore-dangle": 0,
+    "no-restricted-syntax": 0
   }
 }

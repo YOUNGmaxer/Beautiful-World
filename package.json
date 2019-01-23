@@ -12,7 +12,8 @@
   },
   "_moduleAliases": {
     "Server": "server",
-    "Data": "server/data"
+    "Data": "server/data",
+    "Controller": "server/controllers"
   },
   "repository": {
     "type": "git",
