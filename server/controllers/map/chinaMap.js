@@ -13,13 +13,41 @@ class ChinaMap {
     ctx.body = res;
   }
 
+  /**
+   * @description: 获得所有省份的数据，包括 code + name（仅省份）
+   */
   async getProvinceCode(ctx) {
     const cName = 'province_code';
     const mongo = new Mongo('map');
-    const db = await mongo.connect();
-    const collection = db.collection(cName);
-    const data = await collection.find().toArray();
-    ctx.body = data;
+    try {
+      const db = await mongo.connect();
+      const collection = db.collection(cName);
+
+      const data = await collection.find().toArray();
+      ctx.body = data;
+    } catch (err) {
+      console.log('/api/code/prov', err);
+    } finally {
+      mongo.close();
+    }
+  }
+
+  findOneByCodeOrName(cName, type = 'code') {
+    return async function middleware(ctx) {
+      const param = ctx.params.param;
+      const query = type === 'code' ? { code: param } : { name: param };
+      const mongo = new Mongo('map');
+      try {
+        const db = await mongo.connect();
+        const collection = db.collection(cName);
+        const data = await collection.findOne(query);
+        ctx.body = data;
+      } catch (err) {
+        console.log('/api/code/pc', err);
+      } finally {
+        mongo.close();
+      }
+    };
   }
 }
 

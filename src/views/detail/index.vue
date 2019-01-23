@@ -4,7 +4,7 @@
       left
     </div>
     <div class="ac--center bw-flex bw-flex--center">
-      center
+      <area-map></area-map>
     </div>
     <div class="ac--right bw-flex bw-flex--center">
       right
@@ -13,8 +13,12 @@
 </template>
 
 <script>
+import AreaMap from './components/area-map.vue';
+
 export default {
-  
+  components: {
+    AreaMap
+  }
 }
 </script>
 
