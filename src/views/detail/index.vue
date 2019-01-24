@@ -4,7 +4,7 @@
       left
     </div>
     <div class="ac--center bw-flex bw-flex--center">
-      <area-map></area-map>
+      <area-map :code="code"></area-map>
     </div>
     <div class="ac--right bw-flex bw-flex--center">
       right
@@ -14,10 +14,19 @@
 
 <script>
 import AreaMap from './components/area-map.vue';
+import _url from 'Util/url';
 
 export default {
   components: {
     AreaMap
+  },
+  data: {
+    code: '11'
+  },
+  beforeMount() {
+    // 根据 /detail/code 来选择加载哪个地区的地图，默认情况下加载北京地图
+    const pathCode = _url.getPath(2);
+    this.code = pathCode ? pathCode : '11';
   }
 }
 </script>

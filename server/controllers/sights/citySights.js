@@ -20,6 +20,9 @@ class CitySights {
     }
   }
 
+  /**
+   * @description: 获取省份所有的景点数据
+   */
   async getProvSights(ctx) {
     const mongo = new Mongo('map');
     const code = ctx.params.code;
@@ -27,9 +30,7 @@ class CitySights {
     const provData = await mongo._findOne('code_pc', query);
     // 获取该省份的所有城市
     const cityData = provData.children;
-
     const data = await getCitiesSights(cityData);
-
     ctx.body = data;
   }
 }

@@ -15,9 +15,6 @@ async function getCitiesSights(cities) {
   });
   let data = [];
   const tasks = [];
-  // const task = new Promise((resolve, reject) => {
-
-  // })
   const task = async (name) => {
     let collection = db.collection(name);
     const res = await collection.find().toArray();
@@ -26,7 +23,7 @@ async function getCitiesSights(cities) {
   for (const city of cities) {
     tasks.push(task(city.name));
   }
-
+  // 注意这里应该用 Promise.all 的写法，才能既利用异步的效率又能有同步的写法
   await Promise.all(tasks);
   return data;
 }
