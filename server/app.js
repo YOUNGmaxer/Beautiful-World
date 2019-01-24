@@ -9,6 +9,7 @@ const webpackConfig = require('../webpack.dev');
 const router = require('./routers/index');
 const bodyParser = require('koa-bodyparser');
 const history = require('./middlewares/koa2-connect-history-api-fallback');
+const compress = require('koa-compress');
 
 const app = new Koa();
 const compiler = webpack(webpackConfig);
@@ -22,6 +23,10 @@ app
   .use(webpackHotMiddleware(compiler));
 
 app.use(bodyParser());
+
+app.use(compress({
+  threshold: 2048
+}));
 
 // 此处主要是处理 vue-router 的 history 模式
 // 注意：位置需要放在路由前面
