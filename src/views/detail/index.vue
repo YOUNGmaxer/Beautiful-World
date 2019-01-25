@@ -2,6 +2,7 @@
   <div class="area-container bw-flex">
     <div class="ac--left bw-flex bw-flex--col">
       <sight-bar v-if="sightList && sightList.length" :sight-list="sightList"></sight-bar>
+      <sight-pie v-if="sightList && sightList.length" :sight-list="sightList"></sight-pie>
     </div>
     <div class="ac--center bw-flex bw-flex--center">
       <area-map v-if="sightList && sightList.length" :code="code" :sight-list="sightList"></area-map>
@@ -15,13 +16,15 @@
 <script>
 import AreaMap from './components/area-map.vue';
 import SightBar from './components/sight-bar.vue';
+import SightPie from './components/sight-pie.vue';
 import { mapActions, mapState } from 'vuex';
 import _url from 'Util/url';
 
 export default {
   components: {
     AreaMap,
-    SightBar
+    SightBar,
+    SightPie
   },
   data() {
     return {

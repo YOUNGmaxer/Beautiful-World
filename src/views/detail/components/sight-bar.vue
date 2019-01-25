@@ -1,11 +1,10 @@
 <template>
-<div class="sight-bar">sight-bar</div>
+<div class="sight-bar"></div>
 </template>
 
 <script>
 import echarts from 'echarts/lib/echarts';
 import 'echarts/lib/component/tooltip';
-import { mapActions } from 'vuex';
 
 // TODO: 考虑让组件既可以接收景点数组，又可以自己请求数据
 export default {
@@ -22,8 +21,6 @@ export default {
   },
 
   methods: {
-    ...mapActions('sight', ['getProvSights']),
-
     // 处理并获取 top n 的景点数据
     getTopData(data, topLevel) {
       data.sort((a, b) => b.sale_count - a.sale_count);
