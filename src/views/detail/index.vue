@@ -7,8 +7,8 @@
     <div class="ac--center bw-flex bw-flex--center">
       <area-map v-if="sightList && sightList.length" :code="code" :sight-list="sightList"></area-map>
     </div>
-    <div class="ac--right bw-flex bw-flex--center">
-      right
+    <div class="ac--right bw-flex bw-flex--col">
+      <sight-multi-bar v-if="sightList && sightList.length" :sight-list="sightList"></sight-multi-bar>
     </div>
   </div>
 </template>
@@ -17,6 +17,7 @@
 import AreaMap from './components/area-map.vue';
 import SightBar from './components/sight-bar.vue';
 import SightPie from './components/sight-pie.vue';
+import SightMultiBar from './components/sight-multi-bar.vue';
 import { mapActions, mapState } from 'vuex';
 import _url from 'Util/url';
 
@@ -24,7 +25,8 @@ export default {
   components: {
     AreaMap,
     SightBar,
-    SightPie
+    SightPie,
+    SightMultiBar
   },
   data() {
     return {

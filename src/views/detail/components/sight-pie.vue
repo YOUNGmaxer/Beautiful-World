@@ -1,5 +1,5 @@
 <template>
-<div class="sight-pie">sight-pie</div>
+<div class="sight-pie"></div>
 </template>
 
 <script>
@@ -45,7 +45,6 @@ export default {
       chart.showLoading();
 
       const data = this.getLevelData(this.sightList);
-      console.log('data', data);
       const option = {
         title: {
           text: '景点级别统计',
