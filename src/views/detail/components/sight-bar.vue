@@ -40,7 +40,6 @@ export default {
       chart.showLoading();
 
       const data = this.getTopData(this.sightList, 20);
-      console.log(data);
 
       const option = {
         title: {
