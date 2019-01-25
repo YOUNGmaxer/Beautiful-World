@@ -2,6 +2,10 @@
   display: flex;
 }
 
+.bw-flex--col {
+  flex-direction: column;
+}
+
 .bw-flex--align-c {
   align-items: center;
 }

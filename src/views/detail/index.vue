@@ -1,10 +1,10 @@
 <template>
   <div class="area-container bw-flex">
-    <div class="ac--left bw-flex bw-flex--center">
-      left
+    <div class="ac--left bw-flex bw-flex--col">
+      <sight-bar v-if="sightList && sightList.length" :sight-list="sightList"></sight-bar>
     </div>
     <div class="ac--center bw-flex bw-flex--center">
-      <area-map :code="code"></area-map>
+      <area-map v-if="sightList && sightList.length" :code="code" :sight-list="sightList"></area-map>
     </div>
     <div class="ac--right bw-flex bw-flex--center">
       right
@@ -14,19 +14,34 @@
 
 <script>
 import AreaMap from './components/area-map.vue';
+import SightBar from './components/sight-bar.vue';
+import { mapActions, mapState } from 'vuex';
 import _url from 'Util/url';
 
 export default {
   components: {
-    AreaMap
+    AreaMap,
+    SightBar
   },
-  data: {
-    code: '11'
+  data() {
+    return {
+      code: '11',
+      sightList: []
+    }
   },
-  beforeMount() {
+  computed: {
+  },
+  methods: {
+    ...mapActions('sight', ['getProvSights'])
+  },
+  created() {
     // 根据 /detail/code 来选择加载哪个地区的地图，默认情况下加载北京地图
     const pathCode = _url.getPath(2);
     this.code = pathCode ? pathCode : '11';
+    this.getProvSights(this.code)
+      .then(data => {
+        this.sightList = data;
+      })
   }
 }
 </script>

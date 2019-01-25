@@ -1,7 +1,5 @@
 <template>
-<div class="area-map bw-flex bw-flex--center">
-  
-</div>
+<div class="area-map bw-flex bw-flex--center"></div>
 </template>
 
 <script>
@@ -12,7 +10,7 @@ import 'echarts/lib/component/geo';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/visualMap';
 import axios from 'axios';
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import _url from 'Util/url';
 
 export default {
@@ -20,6 +18,10 @@ export default {
     code: {
       type: String,
       default: '11'
+    },
+    sightList: {
+      type: Array,
+      default: []
     }
   },
 
@@ -28,9 +30,16 @@ export default {
     }
   },
 
+  computed: {
+  },
+
   methods: {
     ...mapActions(['getProvinceMap']),
+    ...mapActions('sight', ['getProvSights']),
 
+    /**
+     * 处理数据，将数据转化为 {name, value} 格式
+     */
     convertData(data, geoData) {
       let res = [];
       for (let i = 0; i < data.length; i++) {
@@ -45,29 +54,26 @@ export default {
       return res;
     },
 
-    async renderAreaMap() {
+    async initAreaMap() {
       const areaDom = document.getElementsByClassName('area-map')[0];
       const myChart = echarts.init(areaDom);
       myChart.showLoading();
 
-      // // 根据 /detail/code 来选择加载哪个地区的地图，默认情况下加载北京地图
-      // const pathCode = _url.getPath(2);
-      // const code = pathCode ? pathCode : this.code;
       const geoJson = await this.getProvinceMap({ code: this.code });
       const areaName = geoJson.name;
 
       echarts.registerMap('ningxia', geoJson);
 
-      // 获取数据
-      const sightsData = await this.getProvSights(this.code);
-      const renderData = sightsData.map(sight => {
+      // 获取景点数据
+      // const sightsData = await this.getProvSights(this.code);
+      const renderData = this.sightList.map(sight => {
         return {
           name: sight.name,
           value: Number(sight.sale_count)
         };
       });
       const geoData = {};
-      sightsData.forEach(sight => {
+      this.sightList.forEach(sight => {
         geoData[sight.name] = [Number(sight.point[0]), Number(sight.point[1])];
       });
       const data = this.convertData(renderData, geoData);
@@ -131,7 +137,7 @@ export default {
             data: data,
             symbolSize: val => {
               val = val[2];
-              return val > 0 ? (val > 20 ? 20 : val) : 5;
+              return val > 0 ? (val > 15 ? 15 : val) : 5;
             },
             label: {
               normal: {
@@ -150,15 +156,10 @@ export default {
         ]
       });
     },
-
-    async getProvSights(code) {
-      const res = await axios.get(`http://localhost:3001/api/sight/prov/${code}`);
-      return res.data;
-    }
   },
 
   mounted() {
-    this.renderAreaMap();
+    this.initAreaMap();
   }
 }
 </script>
