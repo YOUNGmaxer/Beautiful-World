@@ -91,7 +91,6 @@ export default {
           }
         })
       };
-      console.log(option);
       chart.setOption(option);
       chart.hideLoading();
     }

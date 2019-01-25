@@ -29,7 +29,15 @@ class CitySights {
     const query = { code };
     const provData = await mongo._findOne('code_pc', query);
     // 获取该省份的所有城市
-    const cityData = provData.children;
+    let cityData;
+    // TODO: 需要完善这里的逻辑，同时考虑有没有更好的写法
+    // 判断是否是直辖市
+    if (['11', '12'].includes(code)) {
+      cityData = [{ name: provData.name, code: provData.code }];
+    } else {
+      cityData = provData.children;
+    }
+    console.log(cityData);
     const data = await getCitiesSights(cityData);
     ctx.body = data;
   }

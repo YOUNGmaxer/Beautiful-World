@@ -26,7 +26,6 @@ export default {
         const res = await axios.get(url);
         localStorage.setItem(code, JSON.stringify(res.data));
         commit('SET_SIGHT_LIST', res.data);
-        console.log('getProvSights');
         return res.data;
       }
       return JSON.parse(cacheData);

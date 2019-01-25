@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const Mongo = require('Server/db/manager').MongoBase;
-const { MongoHandler } = require('Server/db/manager');
+const Mongo = require('Server/db/manager').MongoHandler;
 
 /**
  * ！注意写接口的时候会遇到一个问题，就是用异步方法会出现函数先结束，
@@ -23,7 +22,6 @@ class ChinaMap {
     try {
       const db = await mongo.connect();
       const collection = db.collection(cName);
-
       const data = await collection.find().toArray();
       ctx.body = data;
     } catch (err) {
@@ -41,9 +39,16 @@ class ChinaMap {
   findOneByCodeOrName(cName, type = 'code') {
     return async function middleware(ctx) {
       const param = ctx.params.param;
-      const query = type === 'code' ? { code: param } : { name: param };
-      const mongo = new MongoHandler('map');
-      ctx.body = await mongo._findOne(cName, query);
+      const mongo = new Mongo('map');
+      // 如果没有传参就查找全部
+      if (param) {
+        const query = type === 'code' ? { code: param } : { name: param };
+        ctx.body = await mongo._findOne(cName, query);
+      } else {
+        const db = await mongo.connect();
+        const collection = db.collection(cName);
+        ctx.body = await collection.find().toArray();
+      }
     };
   }
 }
