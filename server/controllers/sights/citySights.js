@@ -37,7 +37,6 @@ class CitySights {
     } else {
       cityData = provData.children;
     }
-    console.log(cityData);
     const data = await getCitiesSights(cityData);
     ctx.body = data;
   }

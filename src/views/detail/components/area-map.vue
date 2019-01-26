@@ -9,9 +9,7 @@ import 'echarts/lib/chart/scatter';
 import 'echarts/lib/component/geo';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/visualMap';
-import axios from 'axios';
-import { mapActions, mapState } from 'vuex';
-import _url from 'Util/url';
+import { mapActions } from 'vuex';
 
 export default {
   props: {
@@ -27,7 +25,9 @@ export default {
 
   data() {
     return {
-    }
+      chart: null,
+      areaName: ''
+    };
   },
 
   computed: {
@@ -54,18 +54,71 @@ export default {
       return res;
     },
 
+    // 注册点击事件
+    registerClickEvent(chart) {
+      chart.on('click', { seriesName: this.areaName }, params => {
+        console.log('click', params.name, params.value, params.data.code);
+      });
+    },
+
+    // 统计每个区域的景点数量
+    // 为了兼容有些地区可能没有景点数据的问题，这里传入了 counter 模板进行兼容
+    countCitySights(sights, nameCounter) {
+      let res = [];
+      sights.forEach(sight => {
+        const city = sight.city || '';
+        if (city) {
+          nameCounter[city]++;
+        }
+      });
+      for (let key in nameCounter) {
+        if (Object.prototype.hasOwnProperty.call(nameCounter, key)) {
+          res.push({
+            name: key,
+            value: nameCounter[key]
+          });
+        }
+      }
+      return res;
+    },
+
+    // 提取省级 geoJson 中的城市名称和code
+    getGeoJsonCities(geoJson) {
+      const features = geoJson.features || [];
+      const nameMapForCode = {};
+      const nameMap = {};
+      // 这里增加一个对象，方便统计每个区域的景点数，同时用来兼容直辖市以及该区域没有景点的情况
+      const nameMapForCounter = {};
+      features.forEach(feature => {
+        const name = feature.properties.name;
+        const minName = name.replace('市', '');
+        const id = feature.properties.id;
+        nameMapForCode[name] = id;
+        nameMap[name] = minName;
+        nameMapForCounter[minName] = 0;
+      });
+      return { nameMap, nameMapForCode, nameMapForCounter };
+    },
+
     async initAreaMap() {
       const areaDom = document.getElementsByClassName('area-map')[0];
-      const myChart = echarts.init(areaDom);
-      myChart.showLoading();
+      this.chart = echarts.init(areaDom);
+      this.chart.showLoading();
 
+      // 获取地图数据
       const geoJson = await this.getProvinceMap({ code: this.code });
-      const areaName = geoJson.name;
+      this.areaName = geoJson.name;
+      // 获取省级区域的城市
+      const { nameMap, nameMapForCode, nameMapForCounter } = this.getGeoJsonCities(geoJson);
+      const cityCounter = this.countCitySights(this.sightList, nameMapForCounter);
 
-      echarts.registerMap('ningxia', geoJson);
+      cityCounter.forEach(item => {
+        const code = nameMapForCode[item.name] || nameMapForCode[`${item.name}市`];
+        item.code = code;
+      });
 
-      // 获取景点数据
-      // const sightsData = await this.getProvSights(this.code);
+      echarts.registerMap(this.areaName, geoJson);
+
       const renderData = this.sightList.map(sight => {
         return {
           name: sight.name,
@@ -74,51 +127,61 @@ export default {
       });
       const geoData = {};
       this.sightList.forEach(sight => {
-        geoData[sight.name] = [Number(sight.point[0]), Number(sight.point[1])];
+        if (sight.point) {
+          geoData[sight.name] = [Number(sight.point[0]), Number(sight.point[1])];
+        }
       });
       const data = this.convertData(renderData, geoData);
-      console.log(data);
 
-      myChart.hideLoading();
-      let option = {};
-      myChart.setOption(option = {
+      this.chart.hideLoading();
+      this.chart.setOption({
         title: {
-          text: `${areaName}地图`,
+          text: `${this.areaName}地图`,
           left: 'center'
         },
         tooltip: {
           // 提示类型
-          trigger: 'item',
-          formatter: params => `${params.name} : ${params.value[2]}`
+          trigger: 'item'
         },
-        visualMap: {
-          min: 0,
-          max: 200,
-          calculable: true,
-          inRange: {
-            color: ['#50a3ba', '#eac736', '#d94e5d'],
-          },
-          textStyle: {
-            color: '#fff'
-          }
-        },
+        // visualMap: {
+        //   min: 0,
+        //   max: 200,
+        //   calculable: true,
+        //   inRange: {
+        //     color: ['#50a3ba', '#eac736', '#d94e5d'],
+        //   },
+        //   textStyle: {
+        //     color: '#fff'
+        //   }
+        // },
         geo: {
-          map: 'ningxia',
+          map: this.areaName,
           itemStyle: {
             normal: {
-                areaColor: '#323c48',
-                borderColor: '#111'
+              areaColor: '#323c48',
+              borderColor: '#111'
             },
             emphasis: {
-                areaColor: '#2a333d'
+              areaColor: '#2a333d'
             }
           }
         },
         series: [
           {
-            // name: areaName,
+            name: this.areaName,
             type: 'map',
-            mapType: 'ningxia',
+            mapType: this.areaName,
+            tooltip: {
+              formatter: (params) => {
+                return `
+                  城市:${params.name}<br />
+                  代号:${params.data.code}<br />
+                  景点数量:${params.value}
+                `;
+              }
+            },
+            data: cityCounter,
+            nameMap,
             itemStyle: {
               // 设置区域填充颜色
               areaColor: '#090A19',
@@ -135,6 +198,9 @@ export default {
             type: 'scatter',
             coordinateSystem: 'geo',
             data: data,
+            tooltip: {
+              formatter: params => `${params.name} : ${params.value[2]}`
+            },
             symbolSize: val => {
               val = val[2];
               return val > 0 ? (val > 15 ? 15 : val) : 5;
@@ -155,7 +221,10 @@ export default {
           }
         ]
       });
-    },
+
+      // 注册点击事件
+      this.registerClickEvent(this.chart);
+    }
   },
 
   mounted() {

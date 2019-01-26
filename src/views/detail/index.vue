@@ -1,17 +1,17 @@
 <template>
-  <div class="area-container bw-flex">
-    <div class="ac--left bw-flex bw-flex--col">
-      <sight-bar v-if="sightList && sightList.length" :sight-list="sightList"></sight-bar>
-      <sight-pie v-if="sightList && sightList.length" :sight-list="sightList"></sight-pie>
-    </div>
-    <div class="ac--center bw-flex bw-flex--center">
-      <area-map v-if="sightList && sightList.length" :code="code" :sight-list="sightList"></area-map>
-    </div>
-    <div class="ac--right bw-flex bw-flex--col">
-      <sight-multi-bar v-if="sightList && sightList.length" :sight-list="sightList"></sight-multi-bar>
-      <sight-polar-bar v-if="sightList && sightList.length" :sight-list="sightList"></sight-polar-bar>
-    </div>
+<div class="area-container bw-flex">
+  <div class="ac--left bw-flex bw-flex--col">
+    <sight-bar v-if="sightList && sightList.length" :sight-list="sightList"></sight-bar>
+    <sight-pie v-if="sightList && sightList.length" :sight-list="sightList"></sight-pie>
   </div>
+  <div class="ac--center bw-flex bw-flex--center">
+    <area-map v-if="sightList && sightList.length" :code="code" :sight-list="sightList"></area-map>
+  </div>
+  <div class="ac--right bw-flex bw-flex--col">
+    <sight-multi-bar v-if="sightList && sightList.length" :sight-list="sightList"></sight-multi-bar>
+    <sight-polar-bar v-if="sightList && sightList.length" :sight-list="sightList"></sight-polar-bar>
+  </div>
+</div>
 </template>
 
 <script>
@@ -45,13 +45,13 @@ export default {
   created() {
     // 根据 /detail/code 来选择加载哪个地区的地图，默认情况下加载北京地图
     const pathCode = _url.getPath(2);
-    this.code = pathCode ? pathCode : '11';
+    this.code = pathCode || '11';
     this.getProvSights(this.code)
       .then(data => {
         this.sightList = data;
-      })
+      });
   }
-}
+};
 </script>
 
 <style style="scss">

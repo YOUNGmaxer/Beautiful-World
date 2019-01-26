@@ -21,9 +21,13 @@ export default {
   },
 
   methods: {
-    // 处理并获取 top n 的景点数据
+    // 处理并获取 top N 的景点数据
     getTopData(data, topLevel) {
-      data.sort((a, b) => b.sale_count - a.sale_count);
+      data.sort((a, b) => {
+        a.sale_count = a.sale_count || 0;
+        b.sale_count = b.sale_count || 0;
+        return b.sale_count - a.sale_count;
+      });
       let topData = data.slice(0, topLevel);
       topData = topData.reverse();
       const renderData = { name: [], value: [] };
@@ -47,7 +51,7 @@ export default {
           subtext: '数据来自去哪儿网'
         },
         tooltip: {
-          trigger: 'axis',
+          trigger: 'axis'
         },
         // 直角坐标系
         grid: {
@@ -59,7 +63,7 @@ export default {
         // 直角坐标系的 x 轴
         xAxis: {
           // 坐标轴类型
-          type: 'value',
+          type: 'value'
         },
         yAxis: {
           type: 'category',
@@ -71,7 +75,7 @@ export default {
             data: data.value
           }
         ]
-      }
+      };
       chart.setOption(option);
       chart.hideLoading();
     }
@@ -80,7 +84,7 @@ export default {
   mounted() {
     this.initRankBar();
   }
-}
+};
 </script>
 
 <style>

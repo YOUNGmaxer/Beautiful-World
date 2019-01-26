@@ -19,6 +19,9 @@ router.get('/map', chinaMap.getMapData);
 // 获取省份地图数据
 router.get('/map/prov/:param', chinaMap.findOneByCodeOrName('province_map', 'code'));
 router.get('/map/prov/name/:param', chinaMap.findOneByCodeOrName('province_map', 'name'));
+// 获取城市地图数据
+router.get('/map/city/:param', chinaMap.findOneByCodeOrName('city_map', 'code'));
+router.get('/map/city/name/:param', chinaMap.findOneByCodeOrName('city_map', 'name'));
 
 /**
  * @description: 获取省城区信息

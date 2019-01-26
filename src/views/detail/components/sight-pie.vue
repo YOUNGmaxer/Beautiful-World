@@ -35,7 +35,6 @@ export default {
           value: levelCounter[key]
         });
       }
-      console.log(renderData);
       return renderData;
     },
 

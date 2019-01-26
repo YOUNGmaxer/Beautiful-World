@@ -1,4 +1,3 @@
-
 class UrlParser {
   constructor() {
     this.url = location.href;
@@ -20,7 +19,6 @@ class UrlParser {
 
   /**
    * @description: 构造 url
-   * @param {type} 
    * @return: url
    */
   getUrl(path) {

@@ -17,8 +17,8 @@ export default {
 
   data() {
     return {
-      levelRefer: [ '1A景区', '2A景区', '3A景区', '4A景区', '5A景区' ]
-    }
+      levelRefer: ['1A景区', '2A景区', '3A景区', '4A景区', '5A景区']
+    };
   },
 
   methods: {
@@ -28,7 +28,7 @@ export default {
       let cityCounter = {};
       let cityRank = [];
       let nameList = [];
-      let levelList = [ [], [], [], [], [] ];
+      let levelList = [[], [], [], [], []];
       // 按城市进行景点级别的提取，并统计数量
       sights.forEach(sight => {
         const city = sight.city || '';
@@ -36,7 +36,7 @@ export default {
         if (city) {
           if (!cityCounter[city]) {
             cityCounter[city] = {};
-            cityCounter[city]['sum'] = 0;
+            cityCounter[city].sum = 0;
           }
           if (level) {
             let temp = cityCounter[city];
@@ -48,10 +48,12 @@ export default {
 
       // 将城市按景点数量进行排序
       for (let key in cityCounter) {
-        cityRank.push({
-          name: key,
-          sum: cityCounter[key].sum
-        });
+        if (Object.prototype.hasOwnProperty.call(cityCounter, key)) {
+          cityRank.push({
+            name: key,
+            sum: cityCounter[key].sum
+          });
+        }
       }
       cityRank.sort((a, b) => {
         return b.sum - a.sum;
@@ -69,7 +71,7 @@ export default {
             levelList[_i].push(0);
           }
         });
-      })
+      });
       return {
         name: nameList,
         value: levelList
@@ -106,7 +108,7 @@ export default {
             type: 'bar',
             stack: '总量',
             data: data.value[i]
-          }
+          };
         })
       };
 
@@ -119,7 +121,7 @@ export default {
     this.initLevelMultiBar();
     // this.getCitySightsNum(this.sightList);
   }
-}
+};
 </script>
 
 <style>
