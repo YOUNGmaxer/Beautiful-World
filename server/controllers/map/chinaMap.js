@@ -43,7 +43,7 @@ class ChinaMap {
       // 如果没有传参就查找全部
       if (param) {
         const query = type === 'code' ? { code: param } : { name: param };
-        ctx.body = await mongo._findOne(cName, query);
+        ctx.body = await mongo._find(cName, query);
       } else {
         const db = await mongo.connect();
         const collection = db.collection(cName);

@@ -12,6 +12,11 @@ router.get('/sight/:city', citySights.totalData);
 router.get('/sight/prov/:code', citySights.getProvSights);
 
 /**
+ * @description: 获取景点评论
+ */
+router.get('/sight/comment/:rid', citySights.getSightComments);
+
+/**
  * @description: 获取地图数据
  */
 // 获取中国全地图数据

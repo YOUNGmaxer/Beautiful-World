@@ -25,13 +25,15 @@ class MongoHandler extends MongoBase {
     super(db);
   }
 
-  // 封装 findOne 方法
-  async _findOne(cName, query) {
+  // 封装 find 方法
+  async _find(cName, query) {
     try {
       const db = await this.connect();
       const collection = db.collection(cName);
-      const data = await collection.findOne(query);
-      return data;
+      if (query) {
+        return await collection.findOne(query);
+      }
+      return await collection.find().toArray();
     } finally {
       this.close();
     }

@@ -27,7 +27,7 @@ class CitySights {
     const mongo = new Mongo('map');
     const code = ctx.params.code;
     const query = { code };
-    const provData = await mongo._findOne('code_pc', query);
+    const provData = await mongo._find('code_pc', query);
     // 获取该省份的所有城市
     let cityData;
     // TODO: 需要完善这里的逻辑，同时考虑有没有更好的写法
@@ -39,6 +39,13 @@ class CitySights {
     }
     const data = await getCitiesSights(cityData);
     ctx.body = data;
+  }
+
+  async getSightComments(ctx) {
+    const mongo = new Mongo('comments');
+    const rid = ctx.params.rid;
+    const commentsData = await mongo._find(rid);
+    ctx.body = commentsData;
   }
 }
 
