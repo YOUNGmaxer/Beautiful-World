@@ -19,10 +19,20 @@ export default {
      * @param code {String} 省级代号
      * @return: 景点数据列表
      */
-    async getProvSights({ commit }, code) {
+    async getProvSights({ commit }, { code, type = 'prov' }) {
       const cacheData = localStorage.getItem(code);
       if (!cacheData) {
-        const url = _url.getUrl(`/api/sight/prov/${code}`);
+        let url;
+        switch (type) {
+          case 'prov':
+            url = _url.getUrl(`/api/sight/prov/${code}`);
+            break;
+          case 'city':
+            url = _url.getUrl(`/api/sight/city/${code}`);
+            break;
+          default:
+            break;
+        }
         const res = await axios.get(url);
         localStorage.setItem(code, JSON.stringify(res.data));
         commit('SET_SIGHT_LIST', res.data);

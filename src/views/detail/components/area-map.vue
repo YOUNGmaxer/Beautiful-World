@@ -19,7 +19,7 @@ export default {
     },
     sightList: {
       type: Array,
-      default: []
+      default: () => []
     }
   },
 
@@ -174,7 +174,7 @@ export default {
             tooltip: {
               formatter: (params) => {
                 return `
-                  城市:${params.name}<br />
+                  地区:${params.name}<br />
                   代号:${params.data.code}<br />
                   景点数量:${params.value}
                 `;
@@ -230,7 +230,7 @@ export default {
   mounted() {
     this.initAreaMap();
   }
-}
+};
 </script>
 
 <style>

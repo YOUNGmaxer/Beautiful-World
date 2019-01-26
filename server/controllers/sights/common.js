@@ -28,6 +28,25 @@ async function getCitiesSights(cities) {
   return data;
 }
 
+/**
+ * @description: 获取一个城市的所有景点数据
+ * @param city {String}
+ * @return: data 景点数据数组
+ */
+async function getCitySights(city) {
+  const mongo = new Mongo('sights');
+  try {
+    const db = await mongo.connect();
+    city = city.replace('市', '');
+    const collection = db.collection(city);
+    const data = await collection.find().toArray();
+    return data;
+  } finally {
+    mongo.close();
+  }
+}
+
 module.exports = {
-  getCitiesSights
+  getCitiesSights,
+  getCitySights
 };

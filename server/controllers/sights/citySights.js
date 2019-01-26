@@ -1,23 +1,25 @@
 const Mongo = require('Server/db/manager').MongoHandler;
-const { getCitiesSights } = require('./common');
+const { getCitiesSights, getCitySights } = require('./common');
 
 class CitySights {
-  async totalData(ctx) {
+  async getCitySightsByName(ctx) {
     const collectionName = ctx.params.city;
-    const mongo = new Mongo('sights');
-    try {
-      // 连接数据库
-      const db = await mongo.connect();
-      const connection = db.collection(collectionName);
-      // 查询数据
-      const data = await connection.find().toArray();
-      // 返回数据
-      ctx.body = data;
-    } catch (err) {
-      console.error('totalData', err);
-    } finally {
-      mongo.close();
-    }
+    const data = await getCitySights(collectionName);
+    ctx.body = data;
+    // const mongo = new Mongo('sights');
+    // try {
+    //   // 连接数据库
+    //   const db = await mongo.connect();
+    //   const connection = db.collection(collectionName);
+    //   // 查询数据
+    //   const data = await connection.find().toArray();
+    //   // 返回数据
+    //   ctx.body = data;
+    // } catch (err) {
+    //   console.error('getCitySightsByName', err);
+    // } finally {
+    //   mongo.close();
+    // }
   }
 
   /**
@@ -41,6 +43,21 @@ class CitySights {
     ctx.body = data;
   }
 
+  /**
+   * @description: 获取城市景点数据
+   */
+  async getCitySights(ctx) {
+    const mongo = new Mongo('map');
+    const code = ctx.params.code;
+    const query = { code };
+    const cityData = await mongo._find('city_code', query);
+    const data = await getCitySights(cityData.name);
+    ctx.body = data;
+  }
+
+  /**
+   * @description: 获取景点评论数据
+   */
   async getSightComments(ctx) {
     const mongo = new Mongo('comments');
     const rid = ctx.params.rid;

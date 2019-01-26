@@ -3,7 +3,7 @@ import _url from 'Util/url';
 
 export default {
   async getSightsData({}, key = '汕头') {
-    const url = _url.getUrl(`/api/sight/${key}`);
+    const url = _url.getUrl(`/api/sight/city/name${key}`);
     const res = await axios.get(url);
     return res;
   },
@@ -20,9 +20,20 @@ export default {
    * @return: GeoJson
    */
   async getProvinceMap({}, { name = '北京市', code }) {
-    let url = _url.getUrl('/api/map/prov');
+    let api;
+    const len = code.length;
+    switch (len) {
+      case 2:
+        api = '/api/map/prov';
+        break;
+      case 4:
+        api = '/api/map/city';
+        break;
+      default:
+    }
+    let url = _url.getUrl(api);
     url = code ? `${url}/${code}` : `${url}/name/${name}`;
     const res = await axios.get(url);
     return res.data;
-  }
+  },
 };

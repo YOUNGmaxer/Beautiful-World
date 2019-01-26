@@ -58,7 +58,7 @@ export default {
             data
           }
         ]
-      }
+      };
       chart.setOption(option);
       chart.hideLoading();
     }
@@ -67,12 +67,12 @@ export default {
   mounted() {
     this.initLevelPie();
   }
-}
+};
 </script>
 
 <style>
 .sight-pie {
   width: 100%;
-  height: 50%;
+  height: 100%;
 }
 </style>
