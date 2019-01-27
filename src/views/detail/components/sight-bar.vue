@@ -16,7 +16,7 @@ export default {
     },
     sightList: {
       type: Array,
-      default: []
+      default: () => []
     }
   },
 
@@ -47,7 +47,7 @@ export default {
 
       const option = {
         title: {
-          text: '景点销量排行 Top20',
+          text: '景点销量最多',
           subtext: '数据来自去哪儿网'
         },
         tooltip: {
@@ -90,6 +90,6 @@ export default {
 <style>
 .sight-bar {
   width: 100%;
-  height: 50%;
+  height: 100%;
 }
 </style>

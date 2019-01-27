@@ -18,26 +18,7 @@ class CodeSaver extends Saver {
     return fileData;
   }
 
-  async saveCodeToMongo1(data) {
-    const cName = 'code_pc';
-    const collection = this.db.collection(cName);
-    await collection.createIndex('code', { unique: true });
-    data.forEach((item) => {
-      collection.insertOne(item);
-    });
-  }
-
-  async saveCodeToMongo2(data) {
-    const cName = 'code_pca';
-    const collection = this.db.collection(cName);
-    await collection.createIndex('code', { unique: true });
-    data.forEach((item) => {
-      collection.insertOne(item);
-    });
-  }
-
-  async saveCodeToMongo3(data) {
-    const cName = 'code_pcas';
+  async saveCodeToMongo(data, cName = 'code_pc') {
     const collection = this.db.collection(cName);
     await collection.createIndex('code', { unique: true });
     data.forEach((item) => {
@@ -47,11 +28,11 @@ class CodeSaver extends Saver {
 }
 
 const basePath = '/Users/yzm/Desktop/Source/地图数据/区划代码';
-const filename = 'pcas-code.json';
+const filename = 'cities.json';
 const saver = new CodeSaver(basePath, 'map');
 
 (async () => {
   await saver.connectMongo();
   const data = saver.getFileContent(filename);
-  saver.saveCodeToMongo3(data);
+  saver.saveCodeToMongo(data, 'city_code');
 })();

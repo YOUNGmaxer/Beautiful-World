@@ -127,6 +127,6 @@ export default {
 <style>
 .sight-multi-bar {
   width: 100%;
-  height: 50%;
+  height: 100%;
 }
 </style>

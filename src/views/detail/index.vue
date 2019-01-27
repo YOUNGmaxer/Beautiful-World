@@ -1,15 +1,25 @@
 <template>
 <div class="area-container bw-flex">
   <div class="ac--left bw-flex bw-flex--col">
-    <sight-bar v-if="sightList && sightList.length" :sight-list="sightList"></sight-bar>
-    <sight-pie v-if="sightList && sightList.length" :sight-list="sightList"></sight-pie>
+    <div class="ac--left-box">
+      <sight-bar v-if="sightList && sightList.length" :sight-list="sightList"></sight-bar>
+    </div>
+    <div class="ac--left-box">
+      <sight-pie v-if="sightList && sightList.length" :sight-list="sightList"></sight-pie>
+    </div>
   </div>
   <div class="ac--center bw-flex bw-flex--center">
     <area-map v-if="sightList && sightList.length" :code="code" :sight-list="sightList"></area-map>
   </div>
   <div class="ac--right bw-flex bw-flex--col">
-    <sight-multi-bar v-if="sightList && sightList.length" :sight-list="sightList"></sight-multi-bar>
-    <sight-polar-bar v-if="sightList && sightList.length" :sight-list="sightList"></sight-polar-bar>
+    <div class="ac--right-box">
+      <sight-multi-bar v-if="sightList && sightList.length" :sight-list="sightList">
+      </sight-multi-bar>
+    </div>
+    <div class="ac--right-box">
+      <sight-polar-bar v-if="sightList && sightList.length" :sight-list="sightList">
+      </sight-polar-bar>
+    </div>
   </div>
 </div>
 </template>
@@ -20,7 +30,7 @@ import SightBar from './components/sight-bar.vue';
 import SightPie from './components/sight-pie.vue';
 import SightMultiBar from './components/sight-multi-bar.vue';
 import SightPolarBar from './components/sight-polar-bar.vue';
-import { mapActions, mapState } from 'vuex';
+import { mapActions } from 'vuex';
 import _url from 'Util/url';
 
 export default {
@@ -46,7 +56,7 @@ export default {
     // 根据 /detail/code 来选择加载哪个地区的地图，默认情况下加载北京地图
     const pathCode = _url.getPath(2);
     this.code = pathCode || '11';
-    this.getProvSights(this.code)
+    this.getProvSights({ code: this.code })
       .then(data => {
         this.sightList = data;
       });
@@ -62,6 +72,10 @@ export default {
 .ac--left, .ac--right {
   width: 25%;
   max-width: 400px;
+}
+.ac--left-box, .ac--right-box {
+  width: 100%;
+  height: 50%;
 }
 .ac--center {
   flex: 1;

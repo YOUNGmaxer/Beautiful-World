@@ -12,18 +12,17 @@ export default {
   props: {
     sightList: {
       type: Array,
-      default: []
+      default: () => []
     }
   },
 
   data() {
     return {
-      commentRefer: [ '全部', '好评', '中评', '差评' ]
-    }
+      commentRefer: ['全部', '好评', '中评', '差评']
+    };
   },
 
   methods: {
-    
     // 将评论的统计对象映射到一个数组中
     mapCommentToArray(comment) {
       let res = [];
@@ -36,10 +35,10 @@ export default {
     getTopCommentSights(sights, topLevel = 20) {
       sights.sort((a, b) => {
         if (!a.comment) {
-          a.comment = { '全部': 0 };
+          a.comment = { 全部: 0 };
         }
         if (!b.comment) {
-          b.comment = { '全部': 0 };
+          b.comment = { 全部: 0 };
         }
         return b.comment['全部'] - a.comment['全部'];
       });
@@ -95,16 +94,15 @@ export default {
       chart.hideLoading();
     }
   },
-  
   mounted() {
     this.initCommentRankBar();
   }
-}
+};
 </script>
 
 <style>
 .sight-polar-bar {
   width: 100%;
-  height: 50%;
+  height: 100%;
 }
 </style>
