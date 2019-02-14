@@ -55,6 +55,9 @@ class CitySights {
     ctx.body = data;
   }
 
+  /**
+   * @description: 获取景点评论数据
+   */
   async getSightComments(ctx) {
     const mongo = new Mongo('comments');
     const rid = ctx.params.rid;

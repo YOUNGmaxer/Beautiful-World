@@ -230,7 +230,7 @@ export default {
   mounted() {
     this.initAreaMap();
   }
-}
+};
 </script>
 
 <style>
