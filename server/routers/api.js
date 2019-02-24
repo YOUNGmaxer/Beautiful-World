@@ -13,6 +13,8 @@ router.get('/sight/city/name/:city', citySights.getCitySightsByName);
 router.get('/sight/city/:code', citySights.getCitySights);
 // 获取某个省的所有城市的景点数据（需要兼容直辖市）
 router.get('/sight/prov/:code', citySights.getProvSights);
+// 根据景点id查询景点数据
+router.get('/sight/:sid', citySights.getSightBySid);
 
 /**
  * @description: 获取景点评论
@@ -43,7 +45,5 @@ router.get('/code/pca/:param?', chinaMap.findOneByCodeOrName('code_pca', 'code')
 router.get('/code/pca/name/:param?', chinaMap.findOneByCodeOrName('code_pca', 'name'));
 router.get('/code/pcas/:param?', chinaMap.findOneByCodeOrName('code_pcas', 'code'));
 router.get('/code/pcas/name/:param?', chinaMap.findOneByCodeOrName('code_pcas', 'name'));
-
-
 
 module.exports = router;
