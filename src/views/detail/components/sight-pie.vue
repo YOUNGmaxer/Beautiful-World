@@ -11,7 +11,7 @@ export default {
   props: {
     sightList: {
       type: Array,
-      default: []
+      default: () => []
     }
   },
 
