@@ -1,7 +1,5 @@
 <template>
-<div class="word-cloud">
-
-</div>
+<div class="word-cloud"></div>
 </template>
 
 <script>

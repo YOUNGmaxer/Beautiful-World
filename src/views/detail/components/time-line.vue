@@ -100,6 +100,6 @@ export default {
 
 <style>
 .time-line {
-  height: calc(100% - 400px);
+  height: 100%;
 }
 </style>

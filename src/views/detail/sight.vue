@@ -11,10 +11,18 @@
       v-if="rid"
       :rid="rid"
     ></word-cloud>
-    <time-line
-      v-if="rid"
-      :rid="rid"
-    ></time-line>
+    <div class="sight-right--bottom">
+      <div class="right__time-line">
+        <time-line
+          v-if="rid"
+          :rid="rid"
+        ></time-line>
+      </div>
+      <div class="right__time-week">
+        <time-week>
+        </time-week>
+      </div>
+    </div>
   </div>
 </div>
 </template>
@@ -23,6 +31,7 @@
 import SightCard from './components/sight-card.vue';
 import WordCloud from './components/word-cloud.vue';
 import TimeLine from './components/time-line.vue';
+import TimeWeek from './components/time-week.vue';
 import axios from 'axios';
 import _url from 'Util/url';
 
@@ -30,7 +39,8 @@ export default {
   components: {
     SightCard,
     WordCloud,
-    TimeLine
+    TimeLine,
+    TimeWeek
   },
   data() {
     return {
@@ -67,5 +77,17 @@ export default {
 .sight-right {
   height: 100%;
   flex: 1;
+}
+.sight-right--bottom {
+  height: calc(100% - 400px);
+}
+.right__time-line, .right__time-week {
+  /* display: inline-block; */
+  float: left;
+  width: 50%;
+  height: 50%;
+}
+body {
+  overflow: hidden;
 }
 </style>
