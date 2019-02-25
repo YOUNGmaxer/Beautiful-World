@@ -14,8 +14,6 @@
 </template>
 
 <script>
-import axios from 'axios';
-import _url from 'Util/url';
 import SightNutPie from './sight-nut-pie.vue';
 
 export default {
@@ -23,14 +21,13 @@ export default {
     SightNutPie
   },
   props: {
-    sid: {
-      type: String,
-      default: '1174758904'
+    sightData: {
+      type: Object,
+      default: null
     }
   },
   data() {
     return {
-      sightData: {},
       commentData: null
     };
   },
@@ -52,21 +49,14 @@ export default {
   },
 
   mounted() {
-    const url = _url.getUrl(`/api/sight/${this.sid}`);
-    axios
-      .get(url)
-      .then(res => {
-        this.sightData = res.data;
-        console.log(this.sightData);
-        const map = new BMap.Map('sight-map');
-        const point = this.sightData.point;
-        const lng = Number(point[0]);
-        const lat = Number(point[1]);
-        this.commentData = this.convertCommentData(this.sightData.comment);
-        map.centerAndZoom(new BMap.Point(lng, lat), 11);
-        map.setCurrentCity(this.sightData.city);
-        map.enableScrollWheelZoom(true);
-      });
+    const map = new BMap.Map('sight-map');
+    const point = this.sightData.point;
+    const lng = Number(point[0]);
+    const lat = Number(point[1]);
+    this.commentData = this.convertCommentData(this.sightData.comment);
+    map.centerAndZoom(new BMap.Point(lng, lat), 11);
+    map.setCurrentCity(this.sightData.city);
+    map.enableScrollWheelZoom(true);
   }
 };
 </script>
