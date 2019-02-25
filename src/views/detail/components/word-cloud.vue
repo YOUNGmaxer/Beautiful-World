@@ -63,7 +63,7 @@ export default {
 .word-cloud {
   /* width: 100%; */
   height: 400px;
-  margin: 20px 40px 20px 10px;
+  padding: 20px 40px 20px 10px;
   box-sizing: border-box;
 }
 </style>

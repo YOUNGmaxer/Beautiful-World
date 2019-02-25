@@ -11,6 +11,10 @@
       v-if="rid"
       :rid="rid"
     ></word-cloud>
+    <time-line
+      v-if="rid"
+      :rid="rid"
+    ></time-line>
   </div>
 </div>
 </template>
@@ -18,13 +22,15 @@
 <script>
 import SightCard from './components/sight-card.vue';
 import WordCloud from './components/word-cloud.vue';
+import TimeLine from './components/time-line.vue';
 import axios from 'axios';
 import _url from 'Util/url';
 
 export default {
   components: {
     SightCard,
-    WordCloud
+    WordCloud,
+    TimeLine
   },
   data() {
     return {
