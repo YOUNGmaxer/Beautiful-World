@@ -3,10 +3,9 @@
 </template>
 
 <script>
-import _url from 'Util/url';
-import axios from 'axios';
-import groupBy from 'lodash/groupBy';
+import _groupBy from 'lodash/groupBy';
 import moment from 'moment';
+import { mapState, mapActions } from 'vuex';
 import echarts from 'echarts/lib/echarts';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/dataZoom';
@@ -17,33 +16,28 @@ export default {
     rid: {
       type: String,
       default: null
+    },
+    groupType: {
+      type: String,
+      default: 'month'
     }
   },
 
+  computed: {
+    ...mapState('comment', ['comments', 'timeList'])
+  },
+
   methods: {
-    // 获取景点所有评论数据
-    async getCommentData(rid) {
-      const url = _url.getUrl(`/api/sight/comment/${rid}`);
-      const res = await axios.get(url);
-      return res.data;
-    },
+    ...mapActions('comment', ['groupTimeBySeason']),
 
-    // 获取景点所有评论的时间
-    async getCommentTimeList(rid) {
-      const commentList = await this.getCommentData(rid);
-      const timeList = commentList.map(comment => comment.date);
-      console.log(timeList);
-      return timeList;
-    },
-
-    // 按时间进行分组
-    async groupTime(rid) {
-      const timeList = await this.getCommentTimeList(rid);
+    // 按月份进行分组
+    groupTimeByMonth(timeList) {
+      // const timeList = await this.getCommentTimeList(rid);
       // const groupedTimeList = groupBy(timeList, item => item);
-      const groupedTimeListMonth = groupBy(timeList, item => {
+      const groupedTimeList = _groupBy(timeList, item => {
         return moment(item).format('YYYY-MM');
       });
-      return groupedTimeListMonth;
+      return groupedTimeList;
     },
 
     async initLineChart() {
@@ -52,15 +46,20 @@ export default {
       chart.showLoading();
 
       // 获取时间列表
-      const list = await this.groupTime(this.rid);
+      let list = [];
+      switch (this.groupType) {
+        case 'month':
+          list = this.groupTimeByMonth(this.timeList);
+          break;
+        default:
+          break;
+      }
       console.log(list);
       // 将时间列表对象分为两个对应数组
       const timeList = Object.keys(list).sort((a, b) => {
         return new Date(a) - new Date(b);
       });
       const valueList = timeList.map(time => list[time].length);
-      // console.log('timeList', timeList);
-      // console.log('valueList', valueList);
 
       const option = {
         tooltip: {
