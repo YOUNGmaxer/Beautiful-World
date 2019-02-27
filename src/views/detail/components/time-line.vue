@@ -1,5 +1,5 @@
 <template>
-<div class="time-line"></div>
+<div class="time-line" :class="specialClass"></div>
 </template>
 
 <script>
@@ -23,8 +23,15 @@ export default {
     }
   },
 
+  data() {
+    return {
+      specialClass: `time-line-${this.groupType}`
+    };
+  },
+
+
   computed: {
-    ...mapState('comment', ['comments', 'timeList'])
+    ...mapState('comment', ['comments', 'timeList', 'seasonList'])
   },
 
   methods: {
@@ -32,34 +39,61 @@ export default {
 
     // 按月份进行分组
     groupTimeByMonth(timeList) {
-      // const timeList = await this.getCommentTimeList(rid);
-      // const groupedTimeList = groupBy(timeList, item => item);
       const groupedTimeList = _groupBy(timeList, item => {
         return moment(item).format('YYYY-MM');
       });
       return groupedTimeList;
     },
 
+    groupTimeBySeason(timeList) {
+      const groupedTimeList = _groupBy(timeList, item => {
+        const seasonSeries = ['春', '夏', '秋', '冬'];
+        const timeMoment = moment(item);
+        const month = timeMoment.month();
+        const year = timeMoment.year();
+        const season = this.seasonList[month];
+        const seasonIndex = seasonSeries.indexOf(season) + 1;
+        const seasonWeight = 1 - Number((1 / seasonIndex).toFixed(2));
+        return timeMoment.format(`YYYY-${season}-${year + seasonWeight}`);
+      });
+      console.log(groupedTimeList);
+      return groupedTimeList;
+    },
+
     async initLineChart() {
-      const dom = document.getElementsByClassName('time-line')[0];
+      const dom = document.getElementsByClassName(this.specialClass)[0];
       const chart = echarts.init(dom);
       chart.showLoading();
 
       // 获取时间列表
       let list = [];
+      let timeList = [];
+      let valueList = [];
       switch (this.groupType) {
         case 'month':
           list = this.groupTimeByMonth(this.timeList);
+          // 将时间列表对象分为两个对应数组
+          timeList = Object.keys(list).sort((a, b) => {
+            return new Date(a) - new Date(b);
+          });
+          valueList = timeList.map(time => list[time].length);
+          break;
+        case 'season':
+          list = this.groupTimeBySeason(this.timeList);
+          timeList = Object.keys(list).sort((a, b) => {
+            const aWeight = Number(a.split('-')[2]);
+            const bWeight = Number(b.split('-')[2]);
+            return aWeight - bWeight;
+          });
+          valueList = timeList.map(time => list[time].length);
+          timeList = timeList.map(time => {
+            const nameArr = time.split('-');
+            return `${nameArr[0]}-${nameArr[1]}`;
+          });
           break;
         default:
           break;
       }
-      console.log(list);
-      // 将时间列表对象分为两个对应数组
-      const timeList = Object.keys(list).sort((a, b) => {
-        return new Date(a) - new Date(b);
-      });
-      const valueList = timeList.map(time => list[time].length);
 
       const option = {
         tooltip: {
@@ -93,6 +127,7 @@ export default {
 
   mounted() {
     this.initLineChart();
+    this.groupTimeBySeason(this.timeList);
   }
 };
 </script>

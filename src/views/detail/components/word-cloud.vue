@@ -45,7 +45,6 @@ export default {
       await loadJs(url);
       const dom = document.getElementsByClassName('word-cloud')[0];
       const list = await this.getCommentSegment(this.rid);
-      console.log(list);
       WordCloud(dom, { list });
       LoadingBar.finish();
     }

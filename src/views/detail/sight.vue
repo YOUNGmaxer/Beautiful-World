@@ -23,6 +23,12 @@
         <time-week v-if="ready">
         </time-week>
       </div>
+      <div class="right__chart right__time-line-season">
+        <time-line
+          v-if="ready"
+          groupType="season"
+        ></time-line>
+      </div>
       <div class="right__chart right__time-season">
         <time-season v-if="ready">
         </time-season>
@@ -114,8 +120,11 @@ export default {
 .right__time-week {
   width: 40%;
 }
+.right__time-line-season {
+  width: 60%;
+}
 .right__time-season {
-  width: 50%;
+  width: 40%;
 }
 body {
   overflow: hidden;

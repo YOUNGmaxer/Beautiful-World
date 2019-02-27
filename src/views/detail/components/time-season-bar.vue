@@ -45,8 +45,11 @@ export default {
         tooltip: {
           trigger: 'axis',
           formatter: (params) => {
-            console.log('params', params);
-            return `${params.value}`;
+            return `
+              ${params[1].name}</br>
+              评论数：${seasonData[params[1].name].length}</br>
+              评论数占比：${params[1].value}%
+            `;
           }
         },
         yAxis: {
@@ -86,7 +89,7 @@ export default {
                 },
                 position: 'insideTopRight',
                 textStyle: {
-                  color: 'skyblue'
+                  color: 'rgb(206, 118, 90)'
                 },
                 offset: [0, -10]
               }
