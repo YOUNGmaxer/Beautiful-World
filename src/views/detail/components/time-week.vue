@@ -1,5 +1,8 @@
 <template>
-<div class="time-week bw-full">{{ comments.length }}</div>
+<div class="time-week-wrap bw-full box-shadow-1">
+  <chart-title>评论时间分布（按星期）</chart-title>
+  <div class="time-week">{{ comments.length }}</div>
+</div>
 </template>
 
 <script>
@@ -9,8 +12,12 @@ import _groupBy from 'lodash/groupBy';
 import echarts from 'echarts/lib/echarts';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/chart/pie';
+import ChartTitle from './chart-title.vue';
 
 export default {
+  components: {
+    ChartTitle
+  },
   computed: {
     ...mapState('comment', ['comments', 'timeList'])
   },
@@ -84,7 +91,8 @@ export default {
       const outerData = this.convert4OuterPie(groupedWeek);
       const innerData = this.convert4InnerPie(groupedWeek);
 
-      const option = {
+      const option = {};
+      option.baseOption = {
         tooltip: {
           trigger: 'item'
         },
@@ -109,9 +117,29 @@ export default {
           }
         ]
       };
+      option.media = [
+        {
+          option: {
+            query: {
+              minAspectRatio: 1
+            },
+            series: [
+              {
+                center: ['50%', '50%']
+              },
+              {
+                center: ['50%', '50%']
+              }
+            ]
+          }
+        }
+      ]
+
 
       chart.setOption(option);
       chart.hideLoading();
+      // 当窗口发生变动时，重新渲染图标
+      window.addEventListener('resize', chart.resize);
     }
   },
 
@@ -122,4 +150,7 @@ export default {
 </script>
 
 <style>
+.time-week {
+  height: calc(100% - var(--chart-title-height));
+}
 </style>

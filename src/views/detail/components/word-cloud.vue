@@ -1,5 +1,5 @@
 <template>
-<div class="word-cloud"></div>
+<div class="word-cloud box-shadow-1"></div>
 </template>
 
 <script>
@@ -59,8 +59,7 @@ export default {
 <style>
 .word-cloud {
   /* width: 100%; */
-  height: 400px;
-  padding: 20px 40px 20px 10px;
+  height: 100%;
   box-sizing: border-box;
 }
 </style>

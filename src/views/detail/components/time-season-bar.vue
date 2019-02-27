@@ -1,5 +1,8 @@
 <template>
-<div class="time-season bw-full">time season</div>
+<div class="time-season-wrap bw-full box-shadow-1">
+  <chart-title>评论时间分布（按季度）</chart-title>
+  <div class="time-season">time season</div>
+</div>
 </template>
 
 <script>
@@ -10,9 +13,12 @@ import 'echarts/lib/chart/pictorialBar';
 import 'echarts/lib/chart/bar';
 import { mapActions, mapState } from 'vuex';
 import _sum from 'lodash/sum';
+import ChartTitle from './chart-title.vue';
 
 export default {
-
+  components: {
+    ChartTitle
+  },
   computed: {
     ...mapState('comment', ['timeList'])
   },
@@ -108,6 +114,7 @@ export default {
 
       chart.setOption(option);
       chart.hideLoading();
+      window.addEventListener('resize', chart.resize);
     }
   },
 
@@ -118,5 +125,7 @@ export default {
 </script>
 
 <style>
-
+.time-season {
+  height: calc(100% - var(--chart-title-height));
+}
 </style>

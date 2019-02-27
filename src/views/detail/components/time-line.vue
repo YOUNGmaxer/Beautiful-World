@@ -1,5 +1,9 @@
 <template>
-<div class="time-line" :class="specialClass"></div>
+<div class="time-line-wrap box-shadow-1">
+  <chart-title>评论时间分布</chart-title>
+  <div class="time-line" :class="specialClass"></div>
+</div>
+
 </template>
 
 <script>
@@ -10,8 +14,12 @@ import echarts from 'echarts/lib/echarts';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/dataZoom';
 import 'echarts/lib/chart/line';
+import ChartTitle from './chart-title.vue';
 
 export default {
+  components: {
+    ChartTitle
+  },
   props: {
     rid: {
       type: String,
@@ -104,7 +112,10 @@ export default {
           data: timeList
         },
         yAxis: {
-          type: 'value'
+          type: 'value',
+          axisTick: {
+            show: false
+          }
         },
         dataZoom: [
           {
@@ -122,6 +133,7 @@ export default {
       };
       chart.setOption(option);
       chart.hideLoading();
+      window.addEventListener('resize', chart.resize);
     }
   },
 
@@ -133,7 +145,10 @@ export default {
 </script>
 
 <style>
-.time-line {
+.time-line-wrap {
   height: 100%;
+}
+.time-line {
+  height: calc(100% - var(--chart-title-height));
 }
 </style>

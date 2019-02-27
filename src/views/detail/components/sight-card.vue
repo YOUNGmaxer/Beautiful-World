@@ -63,9 +63,8 @@ export default {
 
 <style lang="scss">
 .sight-card {
-  // width: 100%;
-  min-height: 400px;
-  margin: 20px;
+  // min-height: 400px;
+  height: 100%;
   box-sizing: border-box;
   box-shadow: 1px 1px 5px rgba(0,0,0,0.5);
 }

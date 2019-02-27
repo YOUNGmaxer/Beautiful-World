@@ -7,31 +7,21 @@
     ></sight-card>
   </div>
   <div class="sight-right">
-    <word-cloud
-      v-if="rid"
-      :rid="rid"
-    ></word-cloud>
+    <div class="sight-right--top">
+      <word-cloud v-if="rid" :rid="rid"></word-cloud>
+    </div>
     <div class="sight-right--bottom bw-flex">
       <div class="right__chart right__time-line">
-        <time-line
-          v-if="ready"
-          :rid="rid"
-          groupType="month"
-        ></time-line>
+        <time-line v-if="ready" groupType="month"></time-line>
       </div>
       <div class="right__chart right__time-week">
-        <time-week v-if="ready">
-        </time-week>
+        <time-week v-if="ready"></time-week>
       </div>
       <div class="right__chart right__time-line-season">
-        <time-line
-          v-if="ready"
-          groupType="season"
-        ></time-line>
+        <time-line v-if="ready" groupType="season"></time-line>
       </div>
       <div class="right__chart right__time-season">
-        <time-season v-if="ready">
-        </time-season>
+        <time-season v-if="ready"></time-season>
       </div>
     </div>
   </div>
@@ -100,19 +90,24 @@ export default {
 .sight-left {
   width: 500px;
   height: 100%;
+  padding: 20px;
 }
 .sight-right {
   height: 100%;
   flex: 1;
 }
+.sight-right--top {
+  height: 400px;
+  padding: 20px 10px;
+}
 .sight-right--bottom {
   height: calc(100% - 400px);
   flex-wrap: wrap;
+  padding: 20px 10px;
 }
 .right__chart {
-  /* float: left;
-  width: 50%; */
   height: 50%;
+  padding: 5px;
 }
 .right__time-line {
   width: 60%;
