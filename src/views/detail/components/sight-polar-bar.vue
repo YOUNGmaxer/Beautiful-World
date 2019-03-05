@@ -1,5 +1,10 @@
 <template>
-<div class="sight-polar-bar">polar bar</div>
+<div class="sight-polar-bar-wrap bw-full box-shadow-1">
+  <chart-title>
+    <slot></slot>
+  </chart-title>
+  <div class="sight-polar-bar chart-title__height"></div>
+</div>
 </template>
 
 <script>
@@ -7,8 +12,12 @@ import echarts from 'echarts/lib/echarts';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/polar';
 import 'echarts/lib/chart/bar';
+import ChartTitle from './chart-title.vue';
 
 export default {
+  components: {
+    ChartTitle
+  },
   props: {
     sightList: {
       type: Array,
@@ -64,9 +73,9 @@ export default {
       const data = this.getTopCommentSights(this.sightList, 15);
 
       const option = {
-        title: {
-          text: '景点评论最多'
-        },
+        // title: {
+        //   text: '景点评论最多'
+        // },
         tooltip: {
           trigger: 'axis'
         },
@@ -92,6 +101,7 @@ export default {
       };
       chart.setOption(option);
       chart.hideLoading();
+      window.addEventListener('resize', chart.resize);
     }
   },
   mounted() {
@@ -103,6 +113,5 @@ export default {
 <style>
 .sight-polar-bar {
   width: 100%;
-  height: 100%;
 }
 </style>

@@ -15,13 +15,13 @@ export default {
 
 <style>
 :root {
-  --chart-title-height: 28px;
+  --chart-title-height: 32px;
 }
 .chart-title {
   background: rgb(248, 248, 248);
   font-size: 16px;
-  font-weight: 400;
-  line-height: 28px;
+  font-weight: 300;
+  line-height: var(--chart-title-height);
   height: var(--chart-title-height);
 }
 .chart-title__split {
@@ -32,5 +32,8 @@ export default {
   margin-right: 10px;
 }
 .chart-title__text {
+}
+div .chart-title__height {
+  height: calc(100% - var(--chart-title-height));
 }
 </style>

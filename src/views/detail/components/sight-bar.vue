@@ -1,13 +1,22 @@
 <template>
-<div class="sight-bar"></div>
+<div class="sight-bar-wrap bw-full box-shadow-1">
+  <chart-title>
+    <slot></slot>
+  </chart-title>
+  <div class="sight-bar"></div>
+</div>
 </template>
 
 <script>
 import echarts from 'echarts/lib/echarts';
 import 'echarts/lib/component/tooltip';
+import ChartTitle from './chart-title.vue';
 
 // TODO: 考虑让组件既可以接收景点数组，又可以自己请求数据
 export default {
+  components: {
+    ChartTitle
+  },
   props: {
     // 地区代号
     code: {
@@ -46,10 +55,10 @@ export default {
       const data = this.getTopData(this.sightList, 20);
 
       const option = {
-        title: {
-          text: '景点销量最多',
-          subtext: '数据来自去哪儿网'
-        },
+        // title: {
+        //   text: '景点销量最多',
+        //   subtext: '数据来自去哪儿网'
+        // },
         tooltip: {
           trigger: 'axis'
         },
@@ -58,7 +67,11 @@ export default {
           // 是否显示直角坐标系网络
           show: true,
           // 是否包含坐标轴的刻度
-          containLabel: true
+          containLabel: true,
+          left: '5%',
+          right: '8%',
+          bottom: '10%',
+          top: '10%'
         },
         // 直角坐标系的 x 轴
         xAxis: {
@@ -67,7 +80,17 @@ export default {
         },
         yAxis: {
           type: 'category',
-          data: data.name
+          data: data.name,
+          axisLabel: {
+            formatter: (value) => {
+              value = value.toString();
+              const MAX_LENGTH = 4;
+              if (value.length > MAX_LENGTH) {
+                return `${value.slice(0, MAX_LENGTH)}...`;
+              }
+              return value;
+            }
+          }
         },
         series: [
           {
@@ -78,6 +101,7 @@ export default {
       };
       chart.setOption(option);
       chart.hideLoading();
+      window.addEventListener('resize', chart.resize);
     }
   },
 
@@ -90,6 +114,6 @@ export default {
 <style>
 .sight-bar {
   width: 100%;
-  height: 100%;
+  height: calc(100% - var(--chart-title-height));
 }
 </style>

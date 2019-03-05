@@ -1,17 +1,26 @@
 <template>
-<div class="sight-multi-bar">multi bar</div>
+<div class="sight-multi-bar-wrap bw-full box-shadow-1">
+  <chart-title>
+    <slot></slot>
+  </chart-title>
+  <div class="sight-multi-bar chart-title__height">multi bar</div>
+</div>
 </template>
 
 <script>
 import echarts from 'echarts/lib/echarts';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/chart/bar';
+import ChartTitle from './chart-title.vue';
 
 export default {
+  components: {
+    ChartTitle
+  },
   props: {
     sightList: {
       type: Array,
-      default: []
+      default: () => []
     }
   },
 
@@ -85,14 +94,16 @@ export default {
 
       const data = this.getCitySightsNum(this.sightList);
       const option = {
-        title: {
-          text: '景点城市分布'
-        },
+        // title: {
+        //   text: '景点城市分布'
+        // },
         tooltip: {
-          trigger: 'axis',
+          trigger: 'axis'
         },
         grid: {
-          containLabel: true
+          containLabel: true,
+          bottom: '10%',
+          top: '10%'
         },
         xAxis: {
           type: 'value'
@@ -114,6 +125,7 @@ export default {
 
       chart.setOption(option);
       chart.hideLoading();
+      window.addEventListener('resize', chart.resize);
     }
   },
 

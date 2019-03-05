@@ -1,13 +1,22 @@
 <template>
-<div class="sight-pie"></div>
+<div class="sight-pie-wrap bw-full box-shadow-1">
+  <chart-title>
+    <slot></slot>
+  </chart-title>
+  <div class="sight-pie chart-title__height"></div>
+</div>
 </template>
 
 <script>
 import echarts from 'echarts/lib/echarts';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/chart/pie';
+import ChartTitle from './chart-title.vue';
 
 export default {
+  components: {
+    ChartTitle
+  },
   props: {
     sightList: {
       type: Array,
@@ -45,10 +54,10 @@ export default {
 
       const data = this.getLevelData(this.sightList);
       const option = {
-        title: {
-          text: '景点级别统计',
-          subtext: '数据来自去哪儿网'
-        },
+        // title: {
+        //   text: '景点级别统计',
+        //   subtext: '数据来自去哪儿网'
+        // },
         tooltip: {
           trigger: 'item'
         },
@@ -61,6 +70,7 @@ export default {
       };
       chart.setOption(option);
       chart.hideLoading();
+      window.addEventListener('resize', chart.resize);
     }
   },
 
@@ -73,6 +83,5 @@ export default {
 <style>
 .sight-pie {
   width: 100%;
-  height: 100%;
 }
 </style>
