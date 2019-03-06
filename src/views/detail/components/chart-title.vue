@@ -18,16 +18,17 @@ export default {
   --chart-title-height: 32px;
 }
 .chart-title {
-  background: rgb(248, 248, 248);
+  background: rgb(30, 25, 50);
   font-size: 16px;
   font-weight: 300;
   line-height: var(--chart-title-height);
   height: var(--chart-title-height);
+  color: #fff;
 }
 .chart-title__split {
   width: 3px;
   height: 18px;
-  background: rgb(56, 219, 133);
+  background: rgb(145, 129, 18);
   margin-left: 8px;
   margin-right: 10px;
 }

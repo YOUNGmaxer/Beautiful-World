@@ -8,12 +8,12 @@
 </template>
 
 <script>
-import echarts from 'echarts/lib/echarts';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/polar';
 import 'echarts/lib/chart/bar';
 import ChartTitle from './chart-title.vue';
 import { axisLabelFormatter } from '../js/formatter';
+import init from '../js/init';
 
 export default {
   components: {
@@ -67,10 +67,6 @@ export default {
     },
 
     initCommentRankBar() {
-      const dom = document.getElementsByClassName('sight-polar-bar')[0];
-      const chart = echarts.init(dom);
-      chart.showLoading();
-
       const data = this.getTopCommentSights(this.sightList, 15);
 
       const option = {
@@ -110,9 +106,7 @@ export default {
           };
         })
       };
-      chart.setOption(option);
-      chart.hideLoading();
-      window.addEventListener('resize', chart.resize);
+      init('sight-polar-bar', option);
     }
   },
   mounted() {

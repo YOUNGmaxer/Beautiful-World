@@ -8,10 +8,10 @@
 </template>
 
 <script>
-import echarts from 'echarts/lib/echarts';
 import 'echarts/lib/component/tooltip';
 import ChartTitle from './chart-title.vue';
 import { axisLabelFormatter } from '../js/formatter';
+import init from '../js/init';
 
 // TODO: 考虑让组件既可以接收景点数组，又可以自己请求数据
 export default {
@@ -49,12 +49,7 @@ export default {
     },
 
     initRankBar() {
-      const barDom = document.getElementsByClassName('sight-bar')[0];
-      const chart = echarts.init(barDom);
-      chart.showLoading();
-
       const data = this.getTopData(this.sightList, 20);
-
       const option = {
         // title: {
         //   text: '景点销量最多',
@@ -93,9 +88,8 @@ export default {
           }
         ]
       };
-      chart.setOption(option);
-      chart.hideLoading();
-      window.addEventListener('resize', chart.resize);
+
+      init('sight-bar', option);
     }
   },
 

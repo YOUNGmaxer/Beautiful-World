@@ -1,5 +1,7 @@
 <template>
+<div>
 <div class="area-container bw-flex">
+  <star-bg></star-bg>
   <div class="ac--left bw-flex bw-flex--col">
     <div class="ac--left-box">
       <sight-bar v-if="isListPrepared" :sight-list="sightList">景点销量Top20</sight-bar>
@@ -24,6 +26,8 @@
     </div>
   </div>
 </div>
+</div>
+
 </template>
 
 <script>
@@ -32,6 +36,7 @@ import SightBar from './components/sight-bar.vue';
 import SightPie from './components/sight-pie.vue';
 import SightMultiBar from './components/sight-multi-bar.vue';
 import SightPolarBar from './components/sight-polar-bar.vue';
+import StarBg from 'Components/bg/star.vue';
 import { mapActions } from 'vuex';
 import _url from 'Util/url';
 
@@ -41,7 +46,8 @@ export default {
     SightBar,
     SightPie,
     SightMultiBar,
-    SightPolarBar
+    SightPolarBar,
+    StarBg
   },
   data() {
     return {
