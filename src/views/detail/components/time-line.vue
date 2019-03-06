@@ -109,7 +109,10 @@ export default {
         },
         xAxis: {
           type: 'category',
-          data: timeList
+          data: timeList,
+          axisLabel: {
+            // interval: 1
+          }
         },
         yAxis: {
           type: 'value',

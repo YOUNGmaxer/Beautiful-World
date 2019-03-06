@@ -11,6 +11,7 @@
 import echarts from 'echarts/lib/echarts';
 import 'echarts/lib/component/tooltip';
 import ChartTitle from './chart-title.vue';
+import { axisLabelFormatter } from '../js/formatter';
 
 // TODO: 考虑让组件既可以接收景点数组，又可以自己请求数据
 export default {
@@ -82,14 +83,7 @@ export default {
           type: 'category',
           data: data.name,
           axisLabel: {
-            formatter: (value) => {
-              value = value.toString();
-              const MAX_LENGTH = 4;
-              if (value.length > MAX_LENGTH) {
-                return `${value.slice(0, MAX_LENGTH)}...`;
-              }
-              return value;
-            }
+            formatter: axisLabelFormatter
           }
         },
         series: [

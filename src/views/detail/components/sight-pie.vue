@@ -61,10 +61,16 @@ export default {
         tooltip: {
           trigger: 'item'
         },
+        legend: {
+          orient: 'horizontal',
+          x: 'center',
+          bottom: '8%'
+        },
         series: [
           {
             type: 'pie',
-            data
+            data,
+            radius: [0, '60%']
           }
         ]
       };

@@ -13,6 +13,7 @@ import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/polar';
 import 'echarts/lib/chart/bar';
 import ChartTitle from './chart-title.vue';
+import { axisLabelFormatter } from '../js/formatter';
 
 export default {
   components: {
@@ -79,14 +80,24 @@ export default {
         tooltip: {
           trigger: 'axis'
         },
+        legend: {
+          orient: 'horizontal',
+          bottom: '8%'
+        },
         // 极坐标
-        polar: {},
+        polar: {
+          // radius: [0, '60%']
+          radius: '60%'
+        },
         // 径向轴
         radiusAxis: {},
         // 角度轴
         angleAxis: {
           type: 'category',
-          data: data.name
+          data: data.name,
+          axisLabel: {
+            formatter: axisLabelFormatter
+          }
         },
         series: this.commentRefer.map((v, i) => {
           // if (!i) return ;
@@ -96,7 +107,7 @@ export default {
             data: data.value.map(_v => _v[i]),
             coordinateSystem: 'polar',
             stack: '评论分布总和'
-          }
+          };
         })
       };
       chart.setOption(option);

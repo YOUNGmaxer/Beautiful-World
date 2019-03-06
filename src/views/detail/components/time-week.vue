@@ -113,7 +113,9 @@ export default {
             type: 'pie',
             radius: ['50%', '70%'],
             label: {},
-            data: outerData
+            data: outerData,
+            // 选中时的偏移距离
+            selectedOffset: 5
           }
         ]
       };
