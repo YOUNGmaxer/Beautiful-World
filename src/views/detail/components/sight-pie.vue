@@ -60,7 +60,10 @@ export default {
         legend: {
           orient: 'horizontal',
           x: 'center',
-          bottom: '8%'
+          bottom: '8%',
+          // textStyle: {
+          //   color: '#fff'
+          // }
         },
         series: [
           {
@@ -70,7 +73,7 @@ export default {
           }
         ]
       };
-      init('sight-pie', option);
+      init('sight-pie', option, { legend: true });
     }
   },
 

@@ -58,7 +58,17 @@ export default {
     // 注册点击事件
     registerClickEvent(chart) {
       chart.on('click', { seriesName: this.areaName }, params => {
-        console.log('click', params.name, params.value, params.data.code);
+        if (params.componentType === 'series') {
+          if (params.seriesType === 'map') {
+            console.log('map');
+          }
+          if (params.seriesType === 'scatter') {
+            console.log('scatter');
+          }
+        }
+        console.log(params);
+        // 进行路由跳转
+        // this.$router.push(`/detail_city/${params.data.code}`);
       });
     },
 
@@ -132,8 +142,12 @@ export default {
 
       const option = {
         title: {
-          text: `${this.areaName}地图`,
-          left: 'center'
+          text: `${this.areaName}`,
+          left: 'center',
+          top: '5%',
+          textStyle: {
+            color: '#fff'
+          }
         },
         tooltip: {
           // 提示类型

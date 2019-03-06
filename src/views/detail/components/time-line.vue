@@ -15,6 +15,7 @@ import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/dataZoom';
 import 'echarts/lib/chart/line';
 import ChartTitle from './chart-title.vue';
+import init from '../js/init';
 
 export default {
   components: {
@@ -69,10 +70,6 @@ export default {
     },
 
     async initLineChart() {
-      const dom = document.getElementsByClassName(this.specialClass)[0];
-      const chart = echarts.init(dom);
-      chart.showLoading();
-
       // 获取时间列表
       let list = [];
       let timeList = [];
@@ -107,6 +104,10 @@ export default {
         tooltip: {
           trigger: 'axis'
         },
+        grid: {
+          show: false,
+          top: '10%'
+        },
         xAxis: {
           type: 'category',
           data: timeList,
@@ -124,7 +125,10 @@ export default {
           {
             type: 'slider',
             start: 20,
-            end: 60
+            end: 80,
+            textStyle: {
+              color: '#aaa'
+            }
           }
         ],
         series: [
@@ -134,9 +138,7 @@ export default {
           }
         ]
       };
-      chart.setOption(option);
-      chart.hideLoading();
-      window.addEventListener('resize', chart.resize);
+      init(this.specialClass, option);
     }
   },
 

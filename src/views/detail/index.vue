@@ -4,7 +4,7 @@
   <star-bg></star-bg>
   <div class="ac--left bw-flex bw-flex--col">
     <div class="ac--left-box">
-      <sight-bar v-if="isListPrepared" :sight-list="sightList">景点销量Top20</sight-bar>
+      <sight-bar v-if="isListPrepared" :_sight-list="sightList">景点销量Top20</sight-bar>
     </div>
     <div class="ac--left-box">
       <sight-pie v-if="isListPrepared" :sight-list="sightList">景点级别统计</sight-pie>
@@ -53,7 +53,7 @@ export default {
     return {
       code: '11',
       sightList: []
-    }
+    };
   },
   computed: {
     isListPrepared() {
@@ -61,17 +61,33 @@ export default {
     }
   },
   methods: {
-    ...mapActions('sight', ['getProvSights'])
+    ...mapActions('sight', ['getProvSights']),
+    getSightsData() {
+      // 根据 /detail/code 来选择加载哪个地区的地图，默认情况下加载北京地图
+      const pathCode = _url.getPath(2);
+      this.code = pathCode || '11';
+      this.getProvSights({ code: this.code })
+        .then(data => {
+          this.sightList = data;
+        });
+    }
   },
+  // beforeRouteEnter(to, from, next) {
+  //   // 判断是否是从城市页面返回的，如果是就直接使用缓存数据而不重新加载数据
+  //   if (from.name === 'detail_city') {
+  //     to.meta.isBack = true;
+  //   }
+  //   next();
+  // },
   created() {
-    // 根据 /detail/code 来选择加载哪个地区的地图，默认情况下加载北京地图
-    const pathCode = _url.getPath(2);
-    this.code = pathCode || '11';
-    this.getProvSights({ code: this.code })
-      .then(data => {
-        this.sightList = data;
-      });
-  }
+    this.getSightsData();
+  },
+  // activated() {
+  //   if (!this.$route.meta.isBack) {
+  //     this.getSightsData();
+  //   }
+  //   this.$route.meta.isBack = false;
+  // }
 };
 </script>
 

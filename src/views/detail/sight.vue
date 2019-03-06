@@ -1,5 +1,6 @@
 <template>
 <div class="sight-container bw-flex">
+  <star-bg></star-bg>
   <div class="sight-left">
     <sight-card
       v-if="sightData"
@@ -8,7 +9,7 @@
   </div>
   <div class="sight-right">
     <div class="sight-right--top">
-      <word-cloud v-if="rid" :rid="rid"></word-cloud>
+      <word-cloud v-if="rid" :rid="rid">景点词云</word-cloud>
     </div>
     <div class="sight-right--bottom bw-flex">
       <div class="right__chart right__time-line">
@@ -34,6 +35,7 @@ import WordCloud from './components/word-cloud.vue';
 import TimeLine from './components/time-line.vue';
 import TimeWeek from './components/time-week.vue';
 import TimeSeason from './components/time-season-bar.vue';
+import StarBg from 'Components/bg/star.vue';
 import axios from 'axios';
 import _url from 'Util/url';
 import { mapActions, mapState } from 'vuex';
@@ -44,7 +46,8 @@ export default {
     WordCloud,
     TimeLine,
     TimeWeek,
-    TimeSeason
+    TimeSeason,
+    StarBg
   },
   data() {
     return {
@@ -98,16 +101,16 @@ export default {
 }
 .sight-right--top {
   height: 400px;
-  padding: 20px 10px;
+  padding: 20px 20px 10px 10px;
 }
 .sight-right--bottom {
   height: calc(100% - 400px);
   flex-wrap: wrap;
-  padding: 20px 10px;
+  padding: 10px 10px 10px 0;
 }
 .right__chart {
   height: 50%;
-  padding: 5px;
+  padding: 10px;
 }
 .right__time-line {
   width: 60%;

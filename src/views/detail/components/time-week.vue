@@ -13,6 +13,7 @@ import echarts from 'echarts/lib/echarts';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/chart/pie';
 import ChartTitle from './chart-title.vue';
+import init from '../js/init';
 
 export default {
   components: {
@@ -82,12 +83,7 @@ export default {
     },
 
     initWeekPie() {
-      const dom = document.getElementsByClassName('time-week')[0];
-      const chart = echarts.init(dom);
-      chart.showLoading();
-
       const groupedWeek = this.groupTimeByWeek(this.timeList);
-      console.log('groupedWeek', groupedWeek);
       const outerData = this.convert4OuterPie(groupedWeek);
       const innerData = this.convert4InnerPie(groupedWeek);
 
@@ -95,6 +91,10 @@ export default {
       option.baseOption = {
         tooltip: {
           trigger: 'item'
+        },
+        legend: {
+          orient: 'vertical',
+          x: 'right'
         },
         series: [
           {
@@ -127,21 +127,16 @@ export default {
             },
             series: [
               {
-                center: ['50%', '50%']
+                center: ['45%', '50%']
               },
               {
-                center: ['50%', '50%']
+                center: ['45%', '50%']
               }
             ]
           }
         }
-      ]
-
-
-      chart.setOption(option);
-      chart.hideLoading();
-      // 当窗口发生变动时，重新渲染图标
-      window.addEventListener('resize', chart.resize);
+      ];
+      init('time-week', option, { legend: true });
     }
   },
 

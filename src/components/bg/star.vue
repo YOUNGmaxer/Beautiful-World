@@ -1,5 +1,5 @@
 <template>
-<canvas id="canvas-star" class="bg-midnight"></canvas>
+<canvas id="canvas-star" class="bg-midnight star"></canvas>
 </template>
 
 <script>
@@ -15,7 +15,8 @@ export default {
 
   methods: {
     init() {
-      const canvas = document.getElementById('canvas-star');
+      // const canvas = document.getElementById('canvas-star');
+      let canvas = document.getElementsByClassName('star')[0];
       const ctx = canvas.getContext('2d');
       const WIDTH = document.documentElement.clientWidth;
       const HEIGHT = document.documentElement.clientHeight;
@@ -27,6 +28,11 @@ export default {
         round[i] = new RoundItem(i, Math.random() * WIDTH, Math.random() * HEIGHT);
         round[i].draw(ctx);
       }
+
+      window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      });
     }
   },
 

@@ -1,15 +1,20 @@
 <template>
-<div class="word-cloud box-shadow-1"></div>
+<div class="word-cloud-wrap bw-full box-shadow-1">
+  <chart-title><slot></slot></chart-title>
+  <div class="word-cloud chart-title__height"></div>
+</div>
 </template>
 
 <script>
 import loadJs from 'Util/asyncLoadJs.js';
 import axios from 'axios';
 import { LoadingBar } from 'iview';
+import ChartTitle from './chart-title.vue';
 
 export default {
   components: {
-    LoadingBar
+    LoadingBar,
+    ChartTitle
   },
   props: {
     rid: {
@@ -45,7 +50,12 @@ export default {
       await loadJs(url);
       const dom = document.getElementsByClassName('word-cloud')[0];
       const list = await this.getCommentSegment(this.rid);
-      WordCloud(dom, { list });
+      const wordOption = {
+        list,
+        // backgroundColor: '#ffe0e0',
+        backgroundColor: 'rgba(255, 224, 224, 0.9)'
+      };
+      WordCloud(dom, wordOption);
       LoadingBar.finish();
     }
   },
@@ -58,9 +68,7 @@ export default {
 
 <style>
 .word-cloud {
-  /* width: 100%; */
-  height: 100%;
   box-sizing: border-box;
-  overflow: scroll;
+  overflow: auto;
 }
 </style>

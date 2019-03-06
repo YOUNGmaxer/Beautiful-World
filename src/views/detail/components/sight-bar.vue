@@ -1,7 +1,7 @@
 <template>
 <div class="sight-bar-wrap bw-full box-shadow-1">
   <chart-title>
-    <slot></slot>
+    <slot>景点销量排名</slot>
   </chart-title>
   <div class="sight-bar"></div>
 </div>
@@ -24,7 +24,7 @@ export default {
       type: String,
       default: '45'
     },
-    sightList: {
+    _sightList: {
       type: Array,
       default: () => []
     }
@@ -49,7 +49,7 @@ export default {
     },
 
     initRankBar() {
-      const data = this.getTopData(this.sightList, 20);
+      const data = this.getTopData(this._sightList, 20);
       const option = {
         // title: {
         //   text: '景点销量最多',

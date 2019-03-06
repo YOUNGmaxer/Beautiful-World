@@ -1,5 +1,5 @@
 <template>
-<div class="title__statistics bw-flex">
+<div class="title__statistics bw-flex bw-full">
   <div class="data-box bw-flex bw-flex--col bw-flex--center"
     v-for="(item, index) in dataBox"
     :key="index"
@@ -31,17 +31,27 @@ export default {
 
 <style>
 .title__statistics {
-  width: 100%;
-  height: 100%;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-right: 15px;
 }
 .data-box {
-  flex: 1;
+  flex-grow: 1;
   font-size: 40px;
+  color: #ccc;
+  background: rgba(255,255,255,0.1);
+  margin-right: 15px;
+  padding: 10px;
+}
+.data-box:last-child {
+  margin-right: 0;
 }
 .data-number {
   font-size: 70px;
+  font-weight: 100;
 }
 .data-name {
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 700;
 }
 </style>

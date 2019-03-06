@@ -1,5 +1,11 @@
+// TODO: 有没有更好的写法，避免 url 和 path 不是动态的
 class UrlParser {
   constructor() {
+    this.url = location.href;
+    this.path = location.pathname;
+  }
+
+  refresh() {
     this.url = location.href;
     this.path = location.pathname;
   }
@@ -10,6 +16,7 @@ class UrlParser {
    * @return: {String} 路径的值
    */
   getPath(index = 0) {
+    this.refresh();
     if (!index) {
       return this.path;
     }
@@ -22,6 +29,7 @@ class UrlParser {
    * @return: url
    */
   getUrl(path) {
+    this.refresh();
     return `//${location.host}${path}`;
   }
 }

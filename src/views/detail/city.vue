@@ -1,7 +1,9 @@
 <template>
 <div class="city-container bw-flex">
+  <!-- TODO: 这里为什么没有了 if 之后会出现问题，获取 dom 时好像获取到上一个页面的 dom 节点 -->
+  <star-bg v-if="isListPrepared"></star-bg>
   <div class="cc--left">
-    <area-map v-if="sightList && sightList.length" :code="code" :sight-list="sightList"></area-map>
+    <area-map v-if="isListPrepared" :code="code" :sight-list="sightList"></area-map>
   </div>
   <div class="cc--right">
     <div class="cc__statistics">
@@ -12,11 +14,10 @@
     </div>
     <div class="cc__charts bw-flex">
       <div class="chart--left">
-        <sight-bar v-if="sightList && sightList.length" :sight-list="sightList"></sight-bar>
+        <sight-bar v-if="isListPrepared" :_sight-list="sightList"></sight-bar>
       </div>
       <div class="chart--right">
-        <sight-polar-bar v-if="sightList && sightList.length" :sight-list="sightList">
-        </sight-polar-bar>
+        <sight-polar-bar v-if="isListPrepared" :sight-list="sightList"></sight-polar-bar>
       </div>
     </div>
   </div>
@@ -30,13 +31,15 @@ import SightPolarBar from './components/sight-polar-bar.vue';
 import DataCity from './components/data-city.vue';
 import { mapActions, mapMutations } from 'vuex';
 import _url from 'Util/url';
+import StarBg from 'Components/bg/star.vue';
 
 export default {
   components: {
     AreaMap,
     SightBar,
     SightPolarBar,
-    DataCity
+    DataCity,
+    StarBg
   },
   data() {
     return {
@@ -44,6 +47,11 @@ export default {
       sightList: [],
       dataBox: []
     };
+  },
+  computed: {
+    isListPrepared() {
+      return this.sightList && this.sightList.length;
+    }
   },
 
   methods: {
@@ -85,19 +93,36 @@ export default {
         number: sum,
         name: '评论数'
       });
+    },
+
+    getSightsData() {
+      const pathCode = _url.getPath(2);
+      this.code = pathCode || '1101';
+      this.getProvSights({ code: this.code, type: 'city' })
+        .then(data => {
+          this.sightList = data;
+          this.setDataBox(data);
+        });
     }
   },
 
-  created() {
-    const pathCode = _url.getPath(2);
-    this.code = pathCode || '1101';
-    this.getProvSights({ code: this.code, type: 'city' })
-      .then(data => {
-        this.sightList = data;
-        this.setDataBox(data);
-        console.log(this.sightList);
-      });
-  }
+  // beforeRouteEnter(to, from, next) {
+  //   if (from.name === 'detail_sight') {
+  //     to.meta.isBack = true;
+  //   }
+  //   next();
+  // },
+
+  mounted() {
+    this.getSightsData();
+  },
+
+  // activated() {
+  //   if (!this.$route.meta.isBack) {
+  //     this.getSightsData();
+  //   }
+  //   this.$route.meta.isBack = false;
+  // }
 };
 
 </script>
@@ -106,24 +131,28 @@ export default {
 .city-container {
   width: 100vw;
   height: 100vh;
+  --left-width: 40%;
+  --statistics-height: 30%;
 }
 .cc--left {
   height: 100%;
-  width: 40%;
+  width: var(--left-width);
 }
 .cc--right {
   height: 100%;
-  width: 60%;
+  width: calc(100% - var(--left-width));
 }
 .cc__statistics {
-  height: 30%;
+  height: var(--statistics-height);
 }
 .cc__charts {
   width: 100%;
-  height: 70%;
+  height: calc(100% - var(--statistics-height));
 }
 .chart--left, .chart--right {
   width: 50%;
   height: 100%;
+  padding-right: 15px;
+  padding-bottom: 15px;
 }
 </style>

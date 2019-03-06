@@ -1,5 +1,5 @@
 <template>
-<div class="sight-card">
+<div class="sight-card box-shadow-1">
   <div class="sight-card__map" id="sight-map"></div>
   <div class="sight-card__info">
     <p class="sight-name">{{ sightData.name }}</p>
@@ -66,7 +66,7 @@ export default {
   // min-height: 400px;
   height: 100%;
   box-sizing: border-box;
-  box-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+  // background: rgba(255, 255, 255, 0.1);
 }
 .sight-card__map {
   width: 100%;
@@ -74,6 +74,7 @@ export default {
 }
 .sight-card__info {
   padding: 15px;
+  color: #ccc;
   .sight-name {
     font-size: 32px;
     margin-bottom: 15px;

@@ -1,12 +1,11 @@
 <template>
 <div class="time-season-wrap bw-full box-shadow-1">
   <chart-title>评论时间分布（按季度）</chart-title>
-  <div class="time-season">time season</div>
+  <div class="time-season"></div>
 </div>
 </template>
 
 <script>
-import echarts from 'echarts/lib/echarts';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/grid';
 import 'echarts/lib/chart/pictorialBar';
@@ -14,6 +13,7 @@ import 'echarts/lib/chart/bar';
 import { mapActions, mapState } from 'vuex';
 import _sum from 'lodash/sum';
 import ChartTitle from './chart-title.vue';
+import init from '../js/init';
 
 export default {
   components: {
@@ -27,13 +27,8 @@ export default {
     ...mapActions('comment', ['groupTimeBySeason']),
 
     async initSeasonBar() {
-      const dom = document.getElementsByClassName('time-season')[0];
-      const chart = echarts.init(dom);
-      chart.showLoading();
-
       const yData = ['春', '夏', '秋', '冬'];
       const seasonData = await this.groupTimeBySeason(this.timeList);
-      console.log('seasonData', seasonData);
       const xData = yData.map(item => {
         return seasonData[item].length;
       });
@@ -42,11 +37,12 @@ export default {
         return (item / xDataSum).toFixed(2) * 100;
       });
       const xFullData = xData.map(() => 100);
-      console.log('xData', xData, xPersentData);
 
       const option = {
         grid: {
-          containLabel: true
+          containLabel: true,
+          bottom: '10%',
+          top: '15%'
         },
         tooltip: {
           trigger: 'axis',
@@ -107,14 +103,11 @@ export default {
             symbolRepeat: true,
             symbolSize: 14,
             data: xPersentData
-
           }
         ]
       };
 
-      chart.setOption(option);
-      chart.hideLoading();
-      window.addEventListener('resize', chart.resize);
+      init('time-season', option);
     }
   },
 

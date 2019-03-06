@@ -1,7 +1,7 @@
 <template>
 <div class="sight-polar-bar-wrap bw-full box-shadow-1">
   <chart-title>
-    <slot></slot>
+    <slot>景点评论最多</slot>
   </chart-title>
   <div class="sight-polar-bar chart-title__height"></div>
 </div>
@@ -106,7 +106,7 @@ export default {
           };
         })
       };
-      init('sight-polar-bar', option);
+      init('sight-polar-bar', option, { legend: true });
     }
   },
   mounted() {
