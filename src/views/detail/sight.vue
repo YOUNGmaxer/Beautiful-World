@@ -1,6 +1,6 @@
 <template>
 <div class="sight-container bw-flex">
-  <star-bg></star-bg>
+  <star-bg v-if="ready"></star-bg>
   <div class="sight-left">
     <sight-card
       v-if="sightData"

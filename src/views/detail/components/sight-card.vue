@@ -6,10 +6,9 @@
     <p class="sight-districts">{{ sightData.districts }}</p>
     <p class="sight-address">{{ sightData.address }}</p>
   </div>
-  <sight-nut-pie
-    v-if="commentData"
-    :pieData="commentData"
-  ></sight-nut-pie>
+  <div class="sight-card__pie">
+    <sight-nut-pie v-if="commentData" :pieData="commentData"></sight-nut-pie>
+  </div>
 </div>
 </template>
 
@@ -66,15 +65,18 @@ export default {
   // min-height: 400px;
   height: 100%;
   box-sizing: border-box;
-  // background: rgba(255, 255, 255, 0.1);
+
+  --card-map-height: 40%;
+  --card-info-height: 160px;
 }
 .sight-card__map {
   width: 100%;
-  height: 400px;
+  height: var(--card-map-height);
 }
 .sight-card__info {
   padding: 15px;
   color: #ccc;
+  max-height: var(--card-info-height);
   .sight-name {
     font-size: 32px;
     margin-bottom: 15px;
@@ -97,5 +99,8 @@ export default {
     margin-left: 2px;
     margin-bottom: 10px;
   }
+}
+.sight-card__pie {
+  height: calc(100% - var(--card-map-height) - var(--card-info-height));
 }
 </style>

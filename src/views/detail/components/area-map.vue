@@ -57,16 +57,18 @@ export default {
 
     // 注册点击事件
     registerClickEvent(chart) {
-      chart.on('click', { seriesName: this.areaName }, params => {
+      chart.on('click', params => {
         if (params.componentType === 'series') {
           if (params.seriesType === 'map') {
-            console.log('map');
+            this.$router.push(`/detail_city/${params.data.code}`);
           }
           if (params.seriesType === 'scatter') {
-            console.log('scatter');
+            const sightObj = this.sightList.find((sight) => {
+              return sight.name === params.name;
+            });
+            this.$router.push(`/detail_sight/${sightObj.sid}`);
           }
         }
-        console.log(params);
         // 进行路由跳转
         // this.$router.push(`/detail_city/${params.data.code}`);
       });
@@ -209,20 +211,22 @@ export default {
             coordinateSystem: 'geo',
             data: data,
             tooltip: {
-              formatter: params => `${params.name} : ${params.value[2]}`
+              formatter: params => {
+                return `${params.name} : ${params.value[2]}`;
+              }
             },
             symbolSize: val => {
               val = val[2];
               return val > 0 ? (val > 15 ? 15 : val) : 5;
             },
-            label: {
-              normal: {
-                show: false
-              },
-              emphasis: {
-                show: true
-              }
-            },
+            // label: {
+            //   normal: {
+            //     show: false
+            //   },
+            //   emphasis: {
+            //     show: true
+            //   }
+            // },
             itemStyle: {
               normal: {
                 color: '#ddb926'

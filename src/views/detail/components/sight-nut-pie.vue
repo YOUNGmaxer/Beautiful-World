@@ -1,7 +1,7 @@
 <template>
-<div class="pie-container">
+<!-- <div class="pie-container"> -->
   <div class="sight-nut-pie"></div>
-</div>
+<!-- </div> -->
 </template>
 
 <script>
@@ -20,7 +20,6 @@ export default {
 
   methods: {
     initPie() {
-
       const legendData = this.pieData.map(item => item.name);
       const option = {
         legend: {
@@ -50,15 +49,15 @@ export default {
 </script>
 
 <style>
-.pie-container {
+/* .pie-container {
   width: 100%;
-  padding-bottom: 80%;
+  padding-bottom: 40%;
   height: 0;
   position: relative;
-}
+} */
 .sight-nut-pie {
   width: 100%;
   height: 100%;
-  position: absolute;
+  /* position: absolute; */
 }
 </style>

@@ -92,10 +92,11 @@ export default {
         tooltip: {
           trigger: 'item'
         },
-        legend: {
-          orient: 'vertical',
-          x: 'right'
-        },
+        // TODO: 未做自适应处理，在小屏幕下会出现重叠
+        // legend: {
+        //   orient: 'vertical',
+        //   x: 'right'
+        // },
         series: [
           {
             name: '评论时间（按工作日和休息日）',
@@ -136,7 +137,7 @@ export default {
           }
         }
       ];
-      init('time-week', option, { legend: true });
+      init('time-week', option);
     }
   },
 
