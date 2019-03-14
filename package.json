@@ -13,7 +13,8 @@
   "_moduleAliases": {
     "Server": "server",
     "Data": "server/data",
-    "Controller": "server/controllers"
+    "Controller": "server/controllers",
+    "Settings": "settings.js"
   },
   "repository": {
     "type": "git",

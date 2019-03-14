@@ -18,7 +18,8 @@ module.exports = {
       Assets: resolve('./src/assets'),
       Style: resolve('./src/assets/style'),
       Store: resolve('./src/store'),
-      Util: resolve('./utils')
+      Util: resolve('./utils'),
+      Settings: resolve('./settings')
     }
   },
 

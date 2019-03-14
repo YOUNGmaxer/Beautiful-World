@@ -45,6 +45,10 @@ export default {
 
     async initCloud() {
       // wordcloud2 的 cdn 链接
+      LoadingBar.config({
+        color: '#fef171',
+        height: 4
+      });
       LoadingBar.start();
       const url = 'https://cdn.bootcss.com/wordcloud2.js/1.1.0/wordcloud2.js';
       await loadJs(url);

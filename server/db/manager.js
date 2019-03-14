@@ -1,9 +1,13 @@
 const { MongoClient } = require('mongodb');
+// const { MONGO_URL } = require('../../settings');
+const { MONGO_URL } = require('Settings');
 
 class MongoBase {
   constructor(db = 'sights') {
-    this.MONGO_URL = 'mongodb://106.13.70.140:27017';
+    console.log(MONGO_URL);
+    this.MONGO_URL = MONGO_URL;
     this.MONGO_DB = db;
+    this.option = { authSource: 'admin' };
     this.client = null;
     this.db = null;
   }
