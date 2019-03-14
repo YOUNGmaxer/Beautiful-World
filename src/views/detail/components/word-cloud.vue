@@ -1,25 +1,62 @@
 <template>
 <div class="word-cloud-wrap bw-full box-shadow-1">
-  <chart-title><slot></slot></chart-title>
-  <div class="word-cloud chart-title__height"></div>
+  <chart-title :hasButton="hasButton" @trigger-click="handleChartBtn"><slot></slot></chart-title>
+  <div class="word-container chart-title__height">
+    <div class="word-cloud bw-full"></div>
+    <div class="word-setting" :class="settingClass">
+      <ul class="setting__list" v-for="wordProp in wordPropsList">
+        <li class="bw-flex bw-flex--align-c bw-flex--justify-between">
+          <span class="setting-name">{{ wordPropsMap[wordProp] }}</span>
+          <setting-switch @on-change="change(wordProp, $event)" :value="true"></setting-switch>
+        </li>
+      </ul>
+    </div>
+  </div>
 </div>
 </template>
 
 <script>
 import loadJs from 'Util/asyncLoadJs.js';
 import axios from 'axios';
-import { LoadingBar } from 'iview';
+import { LoadingBar, Switch, Button } from 'iview';
 import ChartTitle from './chart-title.vue';
 
 export default {
   components: {
     LoadingBar,
-    ChartTitle
+    ChartTitle,
+    SettingSwitch: Switch,
+    Button
   },
   props: {
     rid: {
       type: String,
       default: ''
+    }
+  },
+  data() {
+    return {
+      hasButton: true,
+      settingStatus: false,
+      // 词性英文中文映射表
+      wordPropsMap: {
+        a: '形容词',
+        n: '名词',
+        v: '动词',
+        ns: '地名'
+      },
+      // 当前分词数据中的词性种类
+      wordPropsList: [],
+      // 当前显示的词性种类
+      curPropsList: [],
+      originSegmentData: {},
+      cloudDom: {}
+    };
+  },
+
+  computed: {
+    settingClass() {
+      return this.settingStatus ? '' : 'word-setting--hidden';
     }
   },
 
@@ -35,11 +72,25 @@ export default {
       return resList;
     },
 
+    // 将对象转化为数组
+    convertObj2Array(obj) {
+      let arr = [];
+      for (let key in obj) {
+        if ({}.hasOwnProperty.call(obj, key)) {
+          arr.push([key, obj[key]]);
+        }
+      }
+      return arr;
+    },
+
     async getCommentSegment(rid) {
       const url = `//localhost:3002/hanlp/api/segment/${rid}`;
       const res = await axios.get(url);
-      console.log(res.data);
-      const list = this.convertSegmentData(res.data);
+      this.originSegmentData = res.data;
+      console.log(this.originSegmentData);
+      this.wordPropsList = Object.keys(this.originSegmentData);
+      this.curPropsList = [].concat(this.wordPropsList);
+      const list = this.convertSegmentData(this.originSegmentData);
       return list;
     },
 
@@ -52,15 +103,47 @@ export default {
       LoadingBar.start();
       const url = 'https://cdn.bootcss.com/wordcloud2.js/1.1.0/wordcloud2.js';
       await loadJs(url);
-      const dom = document.getElementsByClassName('word-cloud')[0];
+      this.cloudDom = document.getElementsByClassName('word-cloud')[0];
       const list = await this.getCommentSegment(this.rid);
+      this.updateWordCloud(list);
+      LoadingBar.finish();
+    },
+
+    updateWordCloud(list) {
       const wordOption = {
         list,
-        // backgroundColor: '#ffe0e0',
         backgroundColor: 'rgba(255, 224, 224, 0.9)'
       };
-      WordCloud(dom, wordOption);
-      LoadingBar.finish();
+      WordCloud(this.cloudDom, wordOption);
+    },
+
+    handleChartBtn() {
+      this.settingStatus = !this.settingStatus;
+    },
+
+    // switch 触发事件
+    change(msg, status) {
+      if (status) {
+        if (!this.curPropsList.includes(msg)) {
+          this.curPropsList.push(msg);
+        }
+      } else {
+        let index = this.curPropsList.indexOf(msg);
+        if (index >= 0) {
+          this.curPropsList.splice(index, 1);
+        }
+      }
+
+      let list = [];
+      this.curPropsList.forEach((prop => {
+        let item = this.originSegmentData[prop];
+        let itemArr = this.convertObj2Array(item);
+        list = list.concat(itemArr);
+      }));
+
+      this.updateWordCloud(list);
+      console.log(this.curPropsList);
+      console.log(list);
     }
   },
 
@@ -71,8 +154,33 @@ export default {
 </script>
 
 <style>
+.word-cloud-wrap {
+  overflow: hidden;
+}
+.word-container {
+  --setting-width: 140px;
+  position: relative;
+}
 .word-cloud {
   box-sizing: border-box;
   overflow: auto;
+}
+.word-setting {
+  width: var(--setting-width);
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: rgba(0,0,0,0.6);
+}
+.word-setting--hidden {
+  transform: translateX(var(--setting-width));
+}
+.setting__list {
+  list-style: none;
+}
+.setting__list li {
+  color: #fff;
+  margin: 10px;
 }
 </style>

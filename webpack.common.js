@@ -29,7 +29,13 @@ module.exports = {
       {
         test: /\.vue$/,
         use: [
-          'vue-loader'
+          'vue-loader',
+          {
+            loader: 'iview-loader',
+            options: {
+              prefix: false
+            }
+          }
         ]
       },
       {

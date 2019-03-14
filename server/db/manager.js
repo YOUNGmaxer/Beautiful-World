@@ -4,7 +4,6 @@ const { MONGO_URL } = require('Settings');
 
 class MongoBase {
   constructor(db = 'sights') {
-    console.log(MONGO_URL);
     this.MONGO_URL = MONGO_URL;
     this.MONGO_DB = db;
     this.option = { authSource: 'admin' };

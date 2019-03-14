@@ -43,7 +43,7 @@ export default {
       const ret = [];
       let maxValue = 0;
       this.weekList.forEach(day => {
-        const value = groupedData[day].length;
+        const value = groupedData[day] && groupedData[day].length;
         if (value > maxValue) maxValue = value;
         ret.push({
           name: day,
@@ -64,7 +64,7 @@ export default {
       let workValue = 0;
       let weekValue = 0;
       this.weekList.forEach(day => {
-        const val = groupedData[day].length;
+        const val = groupedData[day] && groupedData[day].length;
         if (day === '周日' || day === '周六') {
           weekValue += val;
         } else {

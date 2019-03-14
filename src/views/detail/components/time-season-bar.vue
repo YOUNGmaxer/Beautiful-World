@@ -30,11 +30,11 @@ export default {
       const yData = ['春', '夏', '秋', '冬'];
       const seasonData = await this.groupTimeBySeason(this.timeList);
       const xData = yData.map(item => {
-        return seasonData[item].length;
+        return seasonData[item] && seasonData[item].length;
       });
       const xDataSum = _sum(xData);
       const xPersentData = xData.map(item => {
-        return (item / xDataSum).toFixed(2) * 100;
+        return ((item / xDataSum) * 100).toFixed(2);
       });
       const xFullData = xData.map(() => 100);
 
@@ -49,7 +49,7 @@ export default {
           formatter: (params) => {
             return `
               ${params[1].name}</br>
-              评论数：${seasonData[params[1].name].length}</br>
+              评论数：${seasonData[params[1].name] && seasonData[params[1].name].length}</br>
               评论数占比：${params[1].value}%
             `;
           }
