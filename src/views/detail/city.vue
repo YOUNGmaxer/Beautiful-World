@@ -112,10 +112,13 @@ export default {
   //   }
   //   next();
   // },
+  beforeMoung() {
+    document.body.setAttribute('class', 'bg-lemon-twist');
+  },
 
   mounted() {
     this.getSightsData();
-  },
+  }
 
   // activated() {
   //   if (!this.$route.meta.isBack) {

@@ -1,4 +1,5 @@
 import echarts from 'echarts/lib/echarts';
+import _debounce from 'lodash/debounce';
 
 function init(className, option = {}, { legend = false } = {}) {
   const dom = document.getElementsByClassName(className)[0];
@@ -24,7 +25,8 @@ function init(className, option = {}, { legend = false } = {}) {
   chart.setOption(option);
   chart.setOption(baseOption);
   chart.hideLoading();
-  window.addEventListener('resize', chart.resize);
+  // 这里对改变窗口时的自适应进行了防抖操作，避免触发过于频繁消耗性能
+  window.addEventListener('resize', _debounce(chart.resize, 300));
 
   return chart;
 }

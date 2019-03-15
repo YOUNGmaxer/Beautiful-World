@@ -127,6 +127,7 @@ export default {
       });
 
       echarts.registerMap(this.areaName, geoJson);
+      console.log(geoJson);
 
       const renderData = this.sightList.map(sight => {
         return {
