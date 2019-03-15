@@ -33,10 +33,11 @@ class MongoHandler extends MongoBase {
     try {
       const db = await this.connect();
       const collection = db.collection(cName);
-      if (query) {
-        return await collection.findOne(query);
-      }
-      return await collection.find().toArray();
+      return query ? await collection.findOne(query) : await collection.find().toArray();
+      // if (query) {
+      //   return await collection.findOne(query);
+      // }
+      // return await collection.find().toArray();
     } finally {
       this.close();
     }

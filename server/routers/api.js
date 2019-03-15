@@ -26,6 +26,7 @@ router.get('/sight/comment/:rid', citySights.getSightComments);
  */
 // 获取中国全地图数据
 router.get('/map', chinaMap.getMapData);
+router.get('/map/china', chinaMap.getChinaMap);
 // 获取省份地图数据
 router.get('/map/prov/:param', chinaMap.findOneByCodeOrName('province_map', 'code'));
 router.get('/map/prov/name/:param', chinaMap.findOneByCodeOrName('province_map', 'name'));
