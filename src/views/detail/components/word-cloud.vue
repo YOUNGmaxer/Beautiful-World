@@ -4,7 +4,7 @@
   <div class="word-container chart-title__height">
     <div class="word-cloud bw-full"></div>
     <div class="word-setting" :class="settingClass">
-      <ul class="setting__list" v-for="wordProp in wordPropsList">
+      <ul class="setting__list" v-for="wordProp in wordPropsList" :key="wordProp">
         <li class="bw-flex bw-flex--align-c bw-flex--justify-between">
           <span class="setting-name">{{ wordPropsMap[wordProp] }}</span>
           <setting-switch @on-change="change(wordProp, $event)" :value="true"></setting-switch>
@@ -18,15 +18,14 @@
 <script>
 import loadJs from 'Util/asyncLoadJs.js';
 import axios from 'axios';
-import { LoadingBar, Switch, Button } from 'iview';
+import { LoadingBar, Switch } from 'iview';
 import ChartTitle from './chart-title.vue';
 
 export default {
   components: {
     LoadingBar,
     ChartTitle,
-    SettingSwitch: Switch,
-    Button
+    SettingSwitch: Switch
   },
   props: {
     rid: {
@@ -112,7 +111,8 @@ export default {
     updateWordCloud(list) {
       const wordOption = {
         list,
-        backgroundColor: 'rgba(255, 224, 224, 0.9)'
+        backgroundColor: 'rgba(255, 224, 224, 0.9)',
+        minSize: 8
       };
       WordCloud(this.cloudDom, wordOption);
     },
@@ -142,8 +142,8 @@ export default {
       }));
 
       this.updateWordCloud(list);
-      console.log(this.curPropsList);
-      console.log(list);
+      // console.log(this.curPropsList);
+      // console.log(list);
     }
   },
 
@@ -172,9 +172,11 @@ export default {
   right: 0;
   top: 0;
   background: rgba(0,0,0,0.6);
+  transition: 1s;
 }
 .word-setting--hidden {
   transform: translateX(var(--setting-width));
+  transition: 1s;
 }
 .setting__list {
   list-style: none;

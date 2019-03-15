@@ -1,4 +1,4 @@
-import Detail from 'Views/detail/index.vue';
+import Detail from 'Views/detail/province.vue';
 
 export default {
   path: '/detail/:code?',

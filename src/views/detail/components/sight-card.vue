@@ -52,10 +52,15 @@ export default {
     const point = this.sightData.point;
     const lng = Number(point[0]);
     const lat = Number(point[1]);
+    const mapPoint = new BMap.Point(lng, lat);
+    // 创建标注
+    const marker = new BMap.Marker(mapPoint);
     this.commentData = this.convertCommentData(this.sightData.comment);
-    map.centerAndZoom(new BMap.Point(lng, lat), 11);
+    map.centerAndZoom(mapPoint, 11);
     map.setCurrentCity(this.sightData.city);
     map.enableScrollWheelZoom(true);
+    // 将标注添加到地图
+    map.addOverlay(marker);
   }
 };
 </script>
