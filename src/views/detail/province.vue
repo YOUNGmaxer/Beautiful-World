@@ -4,7 +4,7 @@
   <star-bg></star-bg>
   <div class="ac--left bw-flex bw-flex--col">
     <div class="ac--left-box">
-      <sight-bar v-if="isListPrepared" :_sight-list="sightList">景点销量Top20</sight-bar>
+      <sight-bar v-if="isListPrepared" :sight-list="sightList">景点销量Top20</sight-bar>
     </div>
     <div class="ac--left-box">
       <sight-pie v-if="isListPrepared" :sight-list="sightList">景点级别统计</sight-pie>
@@ -63,7 +63,7 @@ export default {
   methods: {
     ...mapActions('sight', ['getProvSights']),
     getSightsData() {
-      // 根据 /detail/code 来选择加载哪个地区的地图，默认情况下加载北京地图
+      // 根据 /detail_province/code 来选择加载哪个地区的地图，默认情况下加载北京地图
       const pathCode = _url.getPath(2);
       this.code = pathCode || '11';
       this.getProvSights({ code: this.code })

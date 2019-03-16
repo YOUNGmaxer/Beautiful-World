@@ -11,6 +11,7 @@ import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/visualMap';
 import { mapActions } from 'vuex';
 import init from '../js/init';
+import { getGeoJsonCities } from '../js/convert';
 
 export default {
   props: {
@@ -95,30 +96,12 @@ export default {
       return res;
     },
 
-    // 提取省级 geoJson 中的城市名称和code
-    getGeoJsonCities(geoJson) {
-      const features = geoJson.features || [];
-      const nameMapForCode = {};
-      const nameMap = {};
-      // 这里增加一个对象，方便统计每个区域的景点数，同时用来兼容直辖市以及该区域没有景点的情况
-      const nameMapForCounter = {};
-      features.forEach(feature => {
-        const name = feature.properties.name;
-        const minName = name.replace('市', '');
-        const id = feature.properties.id;
-        nameMapForCode[name] = id;
-        nameMap[name] = minName;
-        nameMapForCounter[minName] = 0;
-      });
-      return { nameMap, nameMapForCode, nameMapForCounter };
-    },
-
     async initAreaMap() {
       // 获取地图数据
       const geoJson = await this.getProvinceMap({ code: this.code });
       this.areaName = geoJson.name;
       // 获取省级区域的城市
-      const { nameMap, nameMapForCode, nameMapForCounter } = this.getGeoJsonCities(geoJson);
+      const { nameMap, nameMapForCode, nameMapForCounter } = getGeoJsonCities(geoJson);
       const cityCounter = this.countCitySights(this.sightList, nameMapForCounter);
 
       cityCounter.forEach(item => {

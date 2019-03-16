@@ -24,10 +24,17 @@ export default {
       type: String,
       default: '45'
     },
-    _sightList: {
+    sightList: {
       type: Array,
       default: () => []
     }
+  },
+
+  data() {
+    return {
+      // 考虑到传进来的 sightList 属于 vuex，因此这里添加一个变量浅拷贝一份
+      localSightList: []
+    };
   },
 
   methods: {
@@ -49,7 +56,8 @@ export default {
     },
 
     initRankBar() {
-      const data = this.getTopData(this._sightList, 20);
+      this.localSightList = this.sightList.slice(0);
+      const data = this.getTopData(this.localSightList, 20);
       const option = {
         // title: {
         //   text: '景点销量最多',

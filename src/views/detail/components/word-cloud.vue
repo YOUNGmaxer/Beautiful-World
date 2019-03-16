@@ -100,7 +100,9 @@ export default {
         height: 4
       });
       LoadingBar.start();
-      const url = 'https://cdn.bootcss.com/wordcloud2.js/1.1.0/wordcloud2.js';
+      // 这个 cdn 突然出现问题，加载不到资源，好像是 301 永久重定向了
+      // const url = 'https://cdn.bootcss.com/wordcloud2.js/1.1.0/wordcloud2.js';
+      const url = '//tencent.beecdn.cn/libs/wordcloud2.js/1.1.0/wordcloud2.js';
       await loadJs(url);
       this.cloudDom = document.getElementsByClassName('word-cloud')[0];
       const list = await this.getCommentSegment(this.rid);

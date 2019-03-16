@@ -28,7 +28,8 @@ export default {
 
   data() {
     return {
-      commentRefer: ['全部', '好评', '中评', '差评']
+      commentRefer: ['全部', '好评', '中评', '差评'],
+      localSightList: []
     };
   },
 
@@ -67,7 +68,8 @@ export default {
     },
 
     initCommentRankBar() {
-      const data = this.getTopCommentSights(this.sightList, 15);
+      this.localSightList = this.sightList.slice(0);
+      const data = this.getTopCommentSights(this.localSightList, 15);
 
       const option = {
         // title: {
