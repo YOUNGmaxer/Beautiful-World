@@ -15,25 +15,29 @@ export default {
   },
 
   methods: {
-    init() {
-      // const canvas = document.getElementById('canvas-star');
-      let canvas = document.getElementsByClassName('star')[0];
-      const ctx = canvas.getContext('2d');
+    drawStar(ctx) {
       const WIDTH = document.documentElement.clientWidth;
       const HEIGHT = document.documentElement.clientHeight;
-      canvas.width = WIDTH;
-      canvas.height = HEIGHT;
       let round = [];
-
       for (let i = 0; i < this.roundNum; i++) {
         round[i] = new RoundItem(i, Math.random() * WIDTH, Math.random() * HEIGHT);
         round[i].draw(ctx);
       }
+    },
+
+    init() {
+      // const canvas = document.getElementById('canvas-star');
+      let canvas = document.getElementsByClassName('star')[0];
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      this.drawStar(ctx);
 
       // 对窗口改变的回调进行防抖，可以有效提高性能，减轻卡顿
       window.addEventListener('resize', _debounce(() => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+        this.drawStar(ctx);
       }, 300));
     }
   },
