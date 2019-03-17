@@ -33,6 +33,8 @@ router.get('/map/prov/name/:param', chinaMap.findOneByCodeOrName('province_map',
 // 获取城市地图数据
 router.get('/map/city/:param', chinaMap.findOneByCodeOrName('city_map', 'code'));
 router.get('/map/city/name/:param', chinaMap.findOneByCodeOrName('city_map', 'name'));
+// 根据城市名获取城市code
+router.get('/city/name/:param', chinaMap.getCityCodeByName);
 
 /**
  * @description: 获取省城区信息
@@ -46,5 +48,11 @@ router.get('/code/pca/:param?', chinaMap.findOneByCodeOrName('code_pca', 'code')
 router.get('/code/pca/name/:param?', chinaMap.findOneByCodeOrName('code_pca', 'name'));
 router.get('/code/pcas/:param?', chinaMap.findOneByCodeOrName('code_pcas', 'code'));
 router.get('/code/pcas/name/:param?', chinaMap.findOneByCodeOrName('code_pcas', 'name'));
+
+
+/**
+ * @description: 中文词汇情感分析接口
+ * TODO: 还是没有一个比较好的方案来实现
+ */
 
 module.exports = router;

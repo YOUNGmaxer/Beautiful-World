@@ -55,8 +55,22 @@ export default {
       return renderData;
     },
 
+    registerClick(chart) {
+      chart.on('click', params => {
+        if (params.componentType === 'series') {
+          // 根据景点名称找到对应的景点数据
+          let sight = this.localSightList.find((item) => {
+            return item.name === params.name;
+          });
+          let sid = sight.sid;
+          this.$router.push(`/detail_sight/${sid}`);
+        }
+      });
+    },
+
     initRankBar() {
       this.localSightList = this.sightList.slice(0);
+      console.log(this.localSightList);
       const data = this.getTopData(this.localSightList, 20);
       const option = {
         // title: {
@@ -97,7 +111,8 @@ export default {
         ]
       };
 
-      init('sight-bar', option);
+      const chart = init('sight-bar', option);
+      this.registerClick(chart);
     }
   },
 

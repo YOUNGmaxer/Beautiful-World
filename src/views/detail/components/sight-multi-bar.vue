@@ -12,6 +12,8 @@ import 'echarts/lib/component/tooltip';
 import 'echarts/lib/chart/bar';
 import ChartTitle from './chart-title.vue';
 import init from '../js/init';
+import axios from 'axios';
+import _url from 'Util/url';
 
 export default {
   components: {
@@ -31,7 +33,6 @@ export default {
   },
 
   methods: {
-
     // TODO: 可以优化下这段逻辑，使复杂度降低，使实现更优雅
     getCitySightsNum(sights) {
       let cityCounter = {};
@@ -87,6 +88,18 @@ export default {
       };
     },
 
+    async registerClick(chart) {
+      chart.on('click', async params => {
+        if (params.componentType === 'series') {
+          let cityName = encodeURIComponent(params.name);
+          let url = _url.getUrl(`/api/city/name/${cityName}`);
+          // 获取城市的code，从而实现路由跳转
+          let { data } = await axios.get(url);
+          this.$router.push(`/detail_city/${data}`);
+        }
+      });
+    },
+
     initLevelMultiBar() {
       const data = this.getCitySightsNum(this.sightList);
       const option = {
@@ -118,7 +131,8 @@ export default {
           };
         })
       };
-      init('sight-multi-bar', option);
+      const chart = init('sight-multi-bar', option);
+      this.registerClick(chart);
     }
   },
 

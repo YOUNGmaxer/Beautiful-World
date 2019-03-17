@@ -14,7 +14,7 @@
     </div>
     <div class="cc__charts bw-flex">
       <div class="chart--left">
-        <sight-bar v-if="isListPrepared" :_sight-list="sightList"></sight-bar>
+        <sight-bar v-if="isListPrepared" :sight-list="sightList"></sight-bar>
       </div>
       <div class="chart--right">
         <sight-polar-bar v-if="isListPrepared" :sight-list="sightList"></sight-polar-bar>

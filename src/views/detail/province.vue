@@ -81,7 +81,7 @@ export default {
   // },
   created() {
     this.getSightsData();
-  },
+  }
   // activated() {
   //   if (!this.$route.meta.isBack) {
   //     this.getSightsData();

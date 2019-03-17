@@ -64,6 +64,20 @@ class ChinaMap {
       }
     };
   }
+
+  /**
+   * @description: 根据城市名字获取城市的 code
+   */
+  async getCityCodeByName(ctx) {
+    let cityName = ctx.params.param;
+    if (!/市$/.test(cityName)) {
+      cityName += '市';
+    }
+    const mongo = new Mongo('map');
+    const cName = 'city_code';
+    const data = await mongo._find(cName, { name: cityName });
+    ctx.body = data.code;
+  }
 }
 
 module.exports = new ChinaMap();

@@ -49,7 +49,7 @@ export default {
 
   mounted() {
     const map = new BMap.Map('sight-map');
-    const point = this.sightData.point;
+    const point = this.sightData.point || [];
     const lng = Number(point[0]);
     const lat = Number(point[1]);
     const mapPoint = new BMap.Point(lng, lat);
