@@ -11,7 +11,7 @@ import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/visualMap';
 import { mapActions } from 'vuex';
 import init from '../js/init';
-import { getGeoJsonCities } from '../js/convert';
+import { getGeoJsonCities, convertData } from '../js/convert';
 
 export default {
   props: {
@@ -38,23 +38,6 @@ export default {
   methods: {
     ...mapActions(['getProvinceMap']),
     ...mapActions('sight', ['getProvSights']),
-
-    /**
-     * 处理数据，将数据转化为 {name, value} 格式
-     */
-    convertData(data, geoData) {
-      let res = [];
-      for (let i = 0; i < data.length; i++) {
-        const geoCoord = geoData[data[i].name];
-        if (geoCoord) {
-          res.push({
-            name: data[i].name,
-            value: geoCoord.concat(data[i].value)
-          });
-        }
-      }
-      return res;
-    },
 
     // 注册点击事件
     registerClickEvent(chart) {
@@ -118,13 +101,17 @@ export default {
           value: Number(sight.sale_count)
         };
       });
+
+      // 获取景点的坐标Map
       const geoData = {};
       this.sightList.forEach(sight => {
         if (sight.point) {
           geoData[sight.name] = [Number(sight.point[0]), Number(sight.point[1])];
         }
       });
-      const data = this.convertData(renderData, geoData);
+
+      // 将数据转换为特定格式
+      const data = convertData(renderData, geoData);
 
       const option = {
         title: {

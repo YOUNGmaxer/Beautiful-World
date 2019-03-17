@@ -12,15 +12,69 @@ import 'echarts/lib/component/geo';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/visualMap';
 import init from '../js/init';
-import { getGeoJsonCities, convertObj2Data } from '../js/convert';
+import { getGeoJsonCities, convertObj2Data, convertData } from '../js/convert';
 
 export default {
+  props: {
+    sightList: {
+      type: Array,
+      default: () => []
+    }
+  },
+
+  data() {
+    return {
+      localSightList: null,
+      chart: null
+    };
+  },
+
+  watch: {
+    sightList(_new, _old) {
+      console.log('watch sightList');
+      this.renderSightData(_new);
+    }
+  },
+
   methods: {
     // 注册点击事件
     registerClickEvent(chart) {
       chart.on('click', params => {
         this.$router.push(`/detail_province/${params.value}`);
       });
+    },
+
+    renderSightData(_sightList) {
+      // 构造景点 data 数据
+      const renderData = _sightList.map(sight => {
+        return {
+          name: sight.name,
+          value: Number(sight.sale_count)
+        };
+      });
+
+      const geoData = {};
+      _sightList.forEach(sight => {
+        if (sight.point) {
+          geoData[sight.name] = [Number(sight.point[0]), Number(sight.point[1])];
+        }
+      });
+
+      const sightMapData = convertData(renderData, geoData);
+
+      const option = {
+        series: [
+          // 注意，这里需要传入一个 {}，这样才不会把原来的配置覆盖掉，setOption 默认会 merge 配置
+          {},
+          {
+            name: '景点销量',
+            type: 'scatter',
+            coordinateSystem: 'geo',
+            data: sightMapData
+          }
+        ]
+      };
+      this.chart.setOption(option);
     },
 
     async initMap() {
@@ -35,6 +89,23 @@ export default {
       const mapName = 'china';
       // 注册可用的地图（形成一个地图名和数据的映射）
       echarts.registerMap(mapName, geoJson);
+
+      // 构造景点 data 数据
+      // const renderData = this.sightList.map(sight => {
+      //   return {
+      //     name: sight.name,
+      //     value: Number(sight.sale_count)
+      //   };
+      // });
+
+      // const geoData = {};
+      // this.sightList.forEach(sight => {
+      //   if (sight.point) {
+      //     geoData[sight.name] = [Number(sight.point[0]), Number(sight.point[1])];
+      //   }
+      // });
+
+      // const sightMapData = convertData(renderData, geoData);
 
       const option = {
         geo: {
@@ -80,13 +151,18 @@ export default {
                 textShadowBlur: 0
               }
             }
-          }
+          },
+          // {
+          //   name: '景点销量',
+          //   type: 'scatter',
+          //   coordinateSystem: 'geo',
+          //   data: sightMapData
+          // }
         ]
       };
 
-      const chart = init('china-map', option);
-      this.registerClickEvent(chart);
-      console.log(geoJson);
+      this.chart = init('china-map', option);
+      this.registerClickEvent(this.chart);
     }
   },
 
