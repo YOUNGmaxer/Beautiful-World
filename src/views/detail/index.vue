@@ -25,7 +25,7 @@ export default {
 
   methods: {
     async getHotSightData() {
-      const url = _url.getUrl(`/api/sight/city/name/${encodeURIComponent('热门景点')}`);
+      const url = _url.getUrl(`/api/sight/city/name/${encodeURIComponent('热门景点')}?limit=100`);
       const { data } = await axios.get(url);
       this.sightList = data;
       console.log(data);

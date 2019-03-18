@@ -8,7 +8,7 @@
 import echarts from 'echarts/lib/echarts';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/chart/pie';
-import init from '../js/init';
+import { initLoading, initBase } from '../js/init';
 
 export default {
   props: {
@@ -20,6 +20,8 @@ export default {
 
   methods: {
     initPie() {
+      const chart = initLoading('sight-nut-pie');
+
       const legendData = this.pieData.map(item => item.name);
       const option = {
         legend: {
@@ -69,7 +71,7 @@ export default {
           }
         ]
       };
-      init('sight-nut-pie', option, { legend: true });
+      initBase(chart, option, { legend: true });
     }
   },
 

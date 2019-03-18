@@ -8,10 +8,11 @@ import _url from 'Util/url';
 import echarts from 'echarts/lib/echarts';
 import 'echarts/lib/chart/map';
 import 'echarts/lib/chart/scatter';
+import 'echarts/lib/chart/effectScatter';
 import 'echarts/lib/component/geo';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/visualMap';
-import init from '../js/init';
+import { initLoading, initBase } from '../js/init';
 import { getGeoJsonCities, convertObj2Data, convertData } from '../js/convert';
 
 export default {
@@ -25,31 +26,83 @@ export default {
   data() {
     return {
       localSightList: null,
-      chart: null
+      chart: null,
+      sightMapData: null,
+      sightMapDataNormalize: null
     };
   },
 
   watch: {
     sightList(_new, _old) {
-      console.log('watch sightList');
-      this.renderSightData(_new);
-    }
+      this.generateSightMapData(_new);
+      this.normalizaSightMapData(this.sightMapData);
+      if (this.chart) {
+        this.renderSightData(this.sightMapData);
+      }
+    },
+    // chart(_new, _old) {
+    //   if (this.sightMapData) {
+    //     this.renderSightData(this.sightMapData);
+    //   }
+    // }
   },
 
   methods: {
     // 注册点击事件
     registerClickEvent(chart) {
       chart.on('click', params => {
-        this.$router.push(`/detail_province/${params.value}`);
+        if (params.seriesType === 'map') {
+          this.$router.push(`/detail_province/${params.value}`);
+        }
+        if (params.seriesType === 'scatter' || params.seriesType === 'effectScatter') {
+          const sightObj = this.sightList.find((sight) => {
+            return sight.name === params.name;
+          });
+          this.$router.push(`/detail_sight/${sightObj.sid}`);
+        }
       });
     },
 
-    renderSightData(_sightList) {
+    extractCommentNum(_sightList) {
+      const commentNumList = [];
+      _sightList.forEach(sight => {
+        const { comment } = sight;
+        if (comment && comment['全部']) {
+          commentNumList.push(comment['全部']);
+        }
+      });
+      return commentNumList;
+    },
+
+    normalizaSightMapData(sightMapData) {
+      let maxCommentNum = sightMapData[0].value[3];
+      let minCommentNum = sightMapData[0].value[3];
+
+      sightMapData.forEach(item => {
+        let commentNum = item.value[3];
+        if (maxCommentNum < commentNum) {
+          maxCommentNum = commentNum;
+        }
+        if (minCommentNum > commentNum) {
+          minCommentNum = commentNum;
+        }
+      });
+
+      this.sightMapDataNormalize = sightMapData.slice(0);
+      for (let i = 0, len = this.sightMapDataNormalize.length; i < len; i++) {
+        let commentNum = this.sightMapDataNormalize[i].value[3];
+        this.sightMapDataNormalize[i].value[4] = (commentNum - minCommentNum) / (maxCommentNum - minCommentNum);
+      }
+      console.log(this.sightMapDataNormalize);
+      return this.sightMapDataNormalize;
+    },
+
+    generateSightMapData(_sightList) {
       // 构造景点 data 数据
       const renderData = _sightList.map(sight => {
         return {
           name: sight.name,
-          value: Number(sight.sale_count)
+          value: [Number(sight.sale_count), Number(sight.comment['全部'])]
         };
       });
 
@@ -60,17 +113,73 @@ export default {
         }
       });
 
-      const sightMapData = convertData(renderData, geoData);
+      this.sightMapData = convertData(renderData, geoData);
+      console.log(this.sightMapData);
+      return this.sightMapData;
+    },
+
+    renderSightData(sightMapData) {
+
+      const formatter = (params) => {
+        return `
+          景点：${params.name}<br/>
+          销量：${params.value[2]}<br/>
+          评论量：${params.value[3]}<br/>
+          归一值：${params.value[4]}
+        `;
+      };
 
       const option = {
+        tooltip: {
+          formatter: params => {
+            return `
+              省份：${params.name}
+            `;
+          }
+        },
         series: [
           // 注意，这里需要传入一个 {}，这样才不会把原来的配置覆盖掉，setOption 默认会 merge 配置
           {},
           {
-            name: '景点销量',
+            name: '热门景点',
             type: 'scatter',
             coordinateSystem: 'geo',
-            data: sightMapData
+            data: sightMapData,
+            tooltip: {
+              formatter
+            },
+            symbolSize: val => {
+              let commentVal = val[4];
+              let computedVal = commentVal * 1000;
+              return val[3] < 10000 ? (computedVal > 25 ? 25 : computedVal) : 0;
+            },
+            itemStyle: {
+              color: '#996699'
+            }
+          },
+          {
+            name: '热门景点Top',
+            type: 'effectScatter',
+            coordinateSystem: 'geo',
+            tooltip: {
+              formatter
+            },
+            data: sightMapData.filter(item => {
+              return item.value[3] >= 10000;
+            }),
+            symbolSize: (val) => {
+              let baseVal = 25;
+              let computedVal = Math.floor(val[3] / 10000) / 2;
+              return baseVal + computedVal;
+            },
+            // 线条效果更明显
+            rippleEffect: {
+              brushType: 'stroke'
+            },
+            hoverAnimation: true,
+            itemStyle: {
+              color: '#cc9999'
+            }
           }
         ]
       };
@@ -78,6 +187,8 @@ export default {
     },
 
     async initMap() {
+      let chart = initLoading('china-map');
+
       const url = _url.getUrl('/api/map/china');
       const { data } = await axios.get(url);
       const geoJson = data[0];
@@ -90,24 +201,10 @@ export default {
       // 注册可用的地图（形成一个地图名和数据的映射）
       echarts.registerMap(mapName, geoJson);
 
-      // 构造景点 data 数据
-      // const renderData = this.sightList.map(sight => {
-      //   return {
-      //     name: sight.name,
-      //     value: Number(sight.sale_count)
-      //   };
-      // });
-
-      // const geoData = {};
-      // this.sightList.forEach(sight => {
-      //   if (sight.point) {
-      //     geoData[sight.name] = [Number(sight.point[0]), Number(sight.point[1])];
-      //   }
-      // });
-
-      // const sightMapData = convertData(renderData, geoData);
-
       const option = {
+        tooltip: {
+          trigger: 'item'
+        },
         geo: {
           map: mapName,
           itemStyle: {
@@ -151,22 +248,21 @@ export default {
                 textShadowBlur: 0
               }
             }
-          },
-          // {
-          //   name: '景点销量',
-          //   type: 'scatter',
-          //   coordinateSystem: 'geo',
-          //   data: sightMapData
-          // }
+          }
         ]
       };
 
-      this.chart = init('china-map', option);
+      // 初始化渲染 chart
+      this.chart = initBase(chart, option);
       this.registerClickEvent(this.chart);
+      if (this.sightMapData) {
+        this.renderSightData(this.sightMapData);
+      }
     }
   },
 
-  beforeMount() {
+  mounted() {
+    this.localSightList = this.sightList.slice(0);
     this.initMap();
   }
 };

@@ -13,7 +13,7 @@ import echarts from 'echarts/lib/echarts';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/chart/pie';
 import ChartTitle from './chart-title.vue';
-import init from '../js/init';
+import { initLoading, initBase } from '../js/init';
 
 export default {
   components: {
@@ -83,6 +83,8 @@ export default {
     },
 
     initWeekPie() {
+      const chart = initLoading('time-week');
+
       const groupedWeek = this.groupTimeByWeek(this.timeList);
       const outerData = this.convert4OuterPie(groupedWeek);
       const innerData = this.convert4InnerPie(groupedWeek);
@@ -137,7 +139,7 @@ export default {
           }
         }
       ];
-      init('time-week', option);
+      initBase(chart, option);
     }
   },
 

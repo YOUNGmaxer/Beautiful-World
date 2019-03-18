@@ -10,7 +10,7 @@ import 'echarts/lib/component/geo';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/visualMap';
 import { mapActions } from 'vuex';
-import init from '../js/init';
+import { init, initLoading, initBase } from '../js/init';
 import { getGeoJsonCities, convertData } from '../js/convert';
 
 export default {
@@ -80,6 +80,9 @@ export default {
     },
 
     async initAreaMap() {
+      const chartClassName = 'area-map';
+      const chart = initLoading(chartClassName);
+
       // 获取地图数据
       const geoJson = await this.getProvinceMap({ code: this.code });
       this.areaName = geoJson.name;
@@ -207,7 +210,8 @@ export default {
         ]
       };
 
-      const chart = init('area-map', option);
+      // const chart = init('area-map', option);
+      initBase(chart, option);
       // 注册点击事件
       this.registerClickEvent(chart);
     }

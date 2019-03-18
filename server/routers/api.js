@@ -10,7 +10,7 @@ const chinaMap = require('Controller/map/chinaMap');
 router.get('/sight/city/name/:city', citySights.getCitySightsByName);
 // 根据 code 获取某个城市的景点数据
 // 由于目前需要通过城市名才能获取到景点的数据，所以需要先将 code 转化为城市名
-router.get('/sight/city/:code', citySights.getCitySights);
+router.get('/sight/city/:code', citySights.getCitySightsByCode);
 // 获取某个省的所有城市的景点数据（需要兼容直辖市）
 router.get('/sight/prov/:code', citySights.getProvSights);
 // 根据景点id查询景点数据

@@ -11,7 +11,7 @@
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/chart/pie';
 import ChartTitle from './chart-title.vue';
-import init from '../js/init';
+import { initLoading, initBase } from '../js/init';
 
 export default {
   components: {
@@ -48,6 +48,8 @@ export default {
     },
 
     initLevelPie() {
+      const chart = initLoading('sight-pie');
+
       const data = this.getLevelData(this.sightList);
       const option = {
         // title: {
@@ -73,7 +75,7 @@ export default {
           }
         ]
       };
-      init('sight-pie', option, { legend: true });
+      initBase(chart, option, { legend: true });
     }
   },
 

@@ -11,7 +11,7 @@
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/chart/bar';
 import ChartTitle from './chart-title.vue';
-import init from '../js/init';
+import { initLoading, initBase } from '../js/init';
 import axios from 'axios';
 import _url from 'Util/url';
 
@@ -101,6 +101,8 @@ export default {
     },
 
     initLevelMultiBar() {
+      const chart = initLoading('sight-multi-bar');
+
       const data = this.getCitySightsNum(this.sightList);
       const option = {
         // title: {
@@ -131,7 +133,7 @@ export default {
           };
         })
       };
-      const chart = init('sight-multi-bar', option);
+      initBase(chart, option);
       this.registerClick(chart);
     }
   },

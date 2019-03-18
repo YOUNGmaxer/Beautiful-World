@@ -15,7 +15,7 @@ import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/dataZoom';
 import 'echarts/lib/chart/line';
 import ChartTitle from './chart-title.vue';
-import init from '../js/init';
+import { initLoading, initBase } from '../js/init';
 
 export default {
   components: {
@@ -70,6 +70,8 @@ export default {
     },
 
     async initLineChart() {
+      const chart = initLoading(this.specialClass);
+
       // 获取时间列表
       let list = [];
       let timeList = [];
@@ -138,7 +140,7 @@ export default {
           }
         ]
       };
-      init(this.specialClass, option);
+      initBase(chart, option);
     }
   },
 

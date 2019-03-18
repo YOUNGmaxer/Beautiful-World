@@ -13,7 +13,7 @@ import 'echarts/lib/chart/bar';
 import { mapActions, mapState } from 'vuex';
 import _sum from 'lodash/sum';
 import ChartTitle from './chart-title.vue';
-import init from '../js/init';
+import { initLoading, initBase } from '../js/init';
 
 export default {
   components: {
@@ -27,6 +27,8 @@ export default {
     ...mapActions('comment', ['groupTimeBySeason']),
 
     async initSeasonBar() {
+      const chart = initLoading('time-season');
+
       const yData = ['春', '夏', '秋', '冬'];
       const seasonData = await this.groupTimeBySeason(this.timeList);
       const xData = yData.map(item => {
@@ -107,7 +109,7 @@ export default {
         ]
       };
 
-      init('time-season', option);
+      initBase(chart, option);
     }
   },
 

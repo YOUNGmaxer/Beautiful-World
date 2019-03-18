@@ -73,6 +73,10 @@ export default {
       console.log('sight', res.data);
       this.sightData = res.data;
       this.rid = (this.sightData && this.sightData.rid) || '';
+      // TODO: 处理没有评论数据的情况
+      if (!this.rid) {
+        console.warn('Oh! 数据库没有该景点评论数据');
+      }
       await this.getCommentData(this.rid);
       await this.getCommentTimeList();
       this.ready = true;

@@ -13,7 +13,7 @@ import 'echarts/lib/component/polar';
 import 'echarts/lib/chart/bar';
 import ChartTitle from './chart-title.vue';
 import { axisLabelFormatter } from '../js/formatter';
-import init from '../js/init';
+import { initLoading, initBase } from '../js/init';
 
 export default {
   components: {
@@ -68,6 +68,8 @@ export default {
     },
 
     initCommentRankBar() {
+      const chart = initLoading('sight-polar-bar');
+
       this.localSightList = this.sightList.slice(0);
       const data = this.getTopCommentSights(this.localSightList, 15);
 
@@ -108,7 +110,7 @@ export default {
           };
         })
       };
-      init('sight-polar-bar', option, { legend: true });
+      initBase(chart, option, { legend: true });
     }
   },
   mounted() {

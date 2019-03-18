@@ -4,22 +4,10 @@ const { getCitiesSights, getCitySights } = require('./common');
 class CitySights {
   async getCitySightsByName(ctx) {
     const collectionName = ctx.params.city;
-    const data = await getCitySights(collectionName);
+    const query = ctx.query;
+    const limit = query && query.limit;
+    const data = limit ? await getCitySights(collectionName, Number(limit)) : await getCitySights(collectionName);
     ctx.body = data;
-    // const mongo = new Mongo('sights');
-    // try {
-    //   // 连接数据库
-    //   const db = await mongo.connect();
-    //   const connection = db.collection(collectionName);
-    //   // 查询数据
-    //   const data = await connection.find().toArray();
-    //   // 返回数据
-    //   ctx.body = data;
-    // } catch (err) {
-    //   console.error('getCitySightsByName', err);
-    // } finally {
-    //   mongo.close();
-    // }
   }
 
   /**
@@ -46,7 +34,7 @@ class CitySights {
   /**
    * @description: 获取城市景点数据
    */
-  async getCitySights(ctx) {
+  async getCitySightsByCode(ctx) {
     const mongo = new Mongo('map');
     const code = ctx.params.code;
     const query = { code };

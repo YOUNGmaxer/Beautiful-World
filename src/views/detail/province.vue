@@ -1,6 +1,7 @@
 <template>
 <div>
 <div class="area-container bw-flex">
+  <Spin v-if="!isListPrepared" size="large" fix></Spin>
   <star-bg></star-bg>
   <div class="ac--left bw-flex bw-flex--col">
     <div class="ac--left-box">
@@ -39,6 +40,7 @@ import SightPolarBar from './components/sight-polar-bar.vue';
 import StarBg from 'Components/bg/star.vue';
 import { mapActions } from 'vuex';
 import _url from 'Util/url';
+import { Spin } from 'iview';
 
 export default {
   components: {
@@ -47,7 +49,8 @@ export default {
     SightPie,
     SightMultiBar,
     SightPolarBar,
-    StarBg
+    StarBg,
+    Spin
   },
   data() {
     return {
@@ -95,6 +98,7 @@ export default {
 .area-container {
   width: 100vw;
   height: 100vh;
+  position: relative;
 }
 .ac--left, .ac--right {
   width: 25%;
@@ -107,5 +111,14 @@ export default {
 }
 .ac--center {
   flex: 1;
+}
+
+/* 自定义 spin 组件样式 */
+div .ivu-spin-fix {
+  background-color: rgba(255,255,255,0.1);
+}
+div .ivu-spin-large .ivu-spin-dot {
+  width: 80px;
+  height: 80px;
 }
 </style>

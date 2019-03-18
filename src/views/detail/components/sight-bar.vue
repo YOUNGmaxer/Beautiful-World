@@ -11,7 +11,7 @@
 import 'echarts/lib/component/tooltip';
 import ChartTitle from './chart-title.vue';
 import { axisLabelFormatter } from '../js/formatter';
-import init from '../js/init';
+import { initLoading, initBase } from '../js/init';
 
 // TODO: 考虑让组件既可以接收景点数组，又可以自己请求数据
 export default {
@@ -69,8 +69,9 @@ export default {
     },
 
     initRankBar() {
+      const chart = initLoading('sight-bar');
+
       this.localSightList = this.sightList.slice(0);
-      console.log(this.localSightList);
       const data = this.getTopData(this.localSightList, 20);
       const option = {
         // title: {
@@ -111,7 +112,7 @@ export default {
         ]
       };
 
-      const chart = init('sight-bar', option);
+      initBase(chart, option);
       this.registerClick(chart);
     }
   },

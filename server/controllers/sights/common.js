@@ -33,13 +33,13 @@ async function getCitiesSights(cities) {
  * @param city {String}
  * @return: data 景点数据数组
  */
-async function getCitySights(city) {
+async function getCitySights(city, limit) {
   const mongo = new Mongo('sights');
   try {
     const db = await mongo.connect();
     city = city.replace('市', '');
     const collection = db.collection(city);
-    const data = await collection.find().toArray();
+    const data = limit ? await collection.find().limit(limit).toArray() : await collection.find().toArray();
     return data;
   } finally {
     mongo.close();
