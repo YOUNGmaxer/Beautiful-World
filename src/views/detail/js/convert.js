@@ -2,7 +2,7 @@
  * @Description: 主要是一些业务共用的数据转换方法
  * @Author: Young
  * @Date: 2019-03-16 13:35:47
- * @LastEditTime: 2019-03-17 20:19:13
+ * @LastEditTime: 2019-03-19 14:52:22
  */
 
 // 提取省级 geoJson 中的城市名称和code
@@ -55,8 +55,30 @@ function convertData(data, geoData) {
   return res;
 }
 
+// 将景点数据转化为 echarts 可用格式
+function generateSightMapData(sightList) {
+  // 构造景点 data 数据
+  const renderData = sightList.map(sight => {
+    return {
+      name: sight.name,
+      value: [Number(sight.sale_count), Number(sight.comment['全部'])]
+    };
+  });
+
+  const geoData = {};
+  sightList.forEach(sight => {
+    if (sight.point) {
+      geoData[sight.name] = [Number(sight.point[0]), Number(sight.point[1])];
+    }
+  });
+
+  const sightMapData = convertData(renderData, geoData);
+  return sightMapData;
+}
+
 export {
   getGeoJsonCities,
   convertObj2Data,
-  convertData
+  convertData,
+  generateSightMapData
 };

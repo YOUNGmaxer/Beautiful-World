@@ -10,8 +10,8 @@ import 'echarts/lib/component/geo';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/visualMap';
 import { mapActions } from 'vuex';
-import { init, initLoading, initBase } from '../js/init';
-import { getGeoJsonCities, convertData } from '../js/convert';
+import { initLoading, initBase } from '../js/init';
+import { getGeoJsonCities, convertData, generateSightMapData } from '../js/convert';
 
 export default {
   props: {
@@ -28,7 +28,8 @@ export default {
   data() {
     return {
       chart: null,
-      areaName: ''
+      areaName: '',
+      sightMapData: null
     };
   },
 
@@ -79,9 +80,91 @@ export default {
       return res;
     },
 
+    // 根据销量来定义点的大小
+    symbolFuncBySale(val) {
+      let saleValue = val[2];
+      let baseValue = 1;
+      if (saleValue === 0) {
+        return baseValue;
+      }
+      else if (saleValue <= 10) {
+        return baseValue + saleValue / 2;
+      }
+      else if (saleValue <= 100) {
+        return baseValue + 5 + saleValue / 10;
+      }
+      else if (saleValue <= 1000) {
+        return 15 + saleValue / 100 / 2;
+      }
+      return 25;
+    },
+
+    // 根据品论量来定义点的大小
+    symbolFuncByComment(val) {
+      let saleValue = val[3];
+      let baseValue = 1;
+      if (saleValue === 0) {
+        return baseValue;
+      }
+      else if (saleValue <= 10) {
+        return baseValue + saleValue / 2;
+      }
+      else if (saleValue <= 100) {
+        return baseValue + 5 + saleValue / 10;
+      }
+      else if (saleValue <= 1000) {
+        return 15 + saleValue / 100 / 2;
+      }
+      else if (saleValue <= 10000) {
+        return 20 + saleValue / 1000 / 2;
+      }
+      return 25 + Math.floor(saleValue / 10000) / 2;
+    },
+
+    setTop5Symbol(sightMapData) {
+      sightMapData.sort((a, b) => {
+        return b.value[3] - a.value[3];
+      });
+
+      const topSymbol = sightMapData.slice(0, 5);
+      const option = {
+        series: [
+          {},
+          {},
+          {
+            name: '热门景点Top',
+            type: 'effectScatter',
+            coordinateSystem: 'geo',
+            tooltip: {
+              formatter: this.scatterFormatter
+            },
+            data: topSymbol,
+            symbolSize: 30,
+            rippleEffect: {
+              brushType: 'stroke'
+            },
+            hoverAnimation: true,
+            itemStyle: {
+              color: '#2f5fd4'
+            }
+          }
+        ]
+      };
+      this.chart.setOption(option);
+    },
+
+    scatterFormatter(params) {
+      return `
+        景点：${params.name}<br/>
+        销量：${params.value[2]}<br/>
+        评论量：${params.value[3]}
+      `;
+    },
+
     async initAreaMap() {
       const chartClassName = 'area-map';
       const chart = initLoading(chartClassName);
+      this.chart = chart;
 
       // 获取地图数据
       const geoJson = await this.getProvinceMap({ code: this.code });
@@ -96,25 +179,10 @@ export default {
       });
 
       echarts.registerMap(this.areaName, geoJson);
-      console.log(geoJson);
-
-      const renderData = this.sightList.map(sight => {
-        return {
-          name: sight.name,
-          value: Number(sight.sale_count)
-        };
-      });
-
-      // 获取景点的坐标Map
-      const geoData = {};
-      this.sightList.forEach(sight => {
-        if (sight.point) {
-          geoData[sight.name] = [Number(sight.point[0]), Number(sight.point[1])];
-        }
-      });
 
       // 将数据转换为特定格式
-      const data = convertData(renderData, geoData);
+      this.sightMapData = generateSightMapData(this.sightList);
+      console.log(this.sightMapData);
 
       const option = {
         title: {
@@ -160,9 +228,9 @@ export default {
             tooltip: {
               formatter: (params) => {
                 return `
-                  地区:${params.name}<br />
-                  代号:${params.data.code}<br />
-                  景点数量:${params.value}
+                  地区：${params.name}<br />
+                  代号：${params.data.code}<br />
+                  景点数量：${params.value}
                 `;
               }
             },
@@ -183,24 +251,12 @@ export default {
             name: '景点销量',
             type: 'scatter',
             coordinateSystem: 'geo',
-            data: data,
+            data: this.sightMapData,
             tooltip: {
-              formatter: params => {
-                return `${params.name} : ${params.value[2]}`;
-              }
+              formatter: this.scatterFormatter
             },
-            symbolSize: val => {
-              val = val[2];
-              return val > 0 ? (val > 15 ? 15 : val) : 5;
-            },
-            // label: {
-            //   normal: {
-            //     show: false
-            //   },
-            //   emphasis: {
-            //     show: true
-            //   }
-            // },
+            // symbolSize: this.symbolFuncBySale,
+            symbolSize: this.symbolFuncByComment,
             itemStyle: {
               normal: {
                 color: '#ddb926'
@@ -210,10 +266,10 @@ export default {
         ]
       };
 
-      // const chart = init('area-map', option);
       initBase(chart, option);
       // 注册点击事件
       this.registerClickEvent(chart);
+      this.setTop5Symbol(this.sightMapData);
     }
   },
 

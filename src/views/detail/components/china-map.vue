@@ -13,7 +13,7 @@ import 'echarts/lib/component/geo';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/visualMap';
 import { initLoading, initBase } from '../js/init';
-import { getGeoJsonCities, convertObj2Data, convertData } from '../js/convert';
+import { getGeoJsonCities, convertObj2Data, generateSightMapData } from '../js/convert';
 
 export default {
   props: {
@@ -34,7 +34,7 @@ export default {
 
   watch: {
     sightList(_new, _old) {
-      this.generateSightMapData(_new);
+      this.sightMapData = generateSightMapData(_new);
       this.normalizaSightMapData(this.sightMapData);
       if (this.chart) {
         this.renderSightData(this.sightMapData);
@@ -74,6 +74,7 @@ export default {
       return commentNumList;
     },
 
+    // 对景点数据的评论量进行归一化处理
     normalizaSightMapData(sightMapData) {
       let maxCommentNum = sightMapData[0].value[3];
       let minCommentNum = sightMapData[0].value[3];
@@ -97,27 +98,7 @@ export default {
       return this.sightMapDataNormalize;
     },
 
-    generateSightMapData(_sightList) {
-      // 构造景点 data 数据
-      const renderData = _sightList.map(sight => {
-        return {
-          name: sight.name,
-          value: [Number(sight.sale_count), Number(sight.comment['全部'])]
-        };
-      });
-
-      const geoData = {};
-      _sightList.forEach(sight => {
-        if (sight.point) {
-          geoData[sight.name] = [Number(sight.point[0]), Number(sight.point[1])];
-        }
-      });
-
-      this.sightMapData = convertData(renderData, geoData);
-      console.log(this.sightMapData);
-      return this.sightMapData;
-    },
-
+    // 将渲染景点数据分割开，避免等待加载整个页面的 loading 过久
     renderSightData(sightMapData) {
 
       const formatter = (params) => {
