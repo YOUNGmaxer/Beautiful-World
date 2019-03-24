@@ -5,7 +5,7 @@
     <china-map :sightList="sightList"></china-map>
   </div>
   <!-- <div class="detail-feeds-container"> -->
-  <list-rank @resize-map="emitChartResize"></list-rank>
+  <list-rank :sightList="sightList" @resize-map="emitChartResize"></list-rank>
   <!-- </div> -->
 </div>
 

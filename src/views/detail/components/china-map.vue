@@ -15,8 +15,6 @@ import 'echarts/lib/component/visualMap';
 import { initLoading, initBase } from '../js/init';
 import { getGeoJsonCities, convertObj2Data, generateSightMapData } from '../js/convert';
 import { mapState, mapMutations } from 'vuex';
-import trigger from 'Util/trigger';
-import _debounce from 'lodash/debounce';
 
 export default {
   props: {
@@ -47,19 +45,17 @@ export default {
         this.renderSightData(this.sightMapData);
       }
     },
+    // 检测并触发 resize
     emitResizeFlag(_new, _old) {
       if (_new) {
         setTimeout(this.chart.resize, 100);
-        // window.addEventListener('resize', _debounce(this.chart.resize, 0));
-        // console.log(this.chart.resize);
-        // trigger('resize');
         this.$store.commit('chinaMap/SET_FLAG', false);
       }
     }
   },
 
   methods: {
-    ...mapMutations('chinaMap', ['SET_FLAG']),
+    ...mapMutations('chinaMap', ['SET_FLAG', 'SET_LAUNCH']),
 
     // 注册点击事件
     registerClickEvent(chart) {
@@ -113,7 +109,6 @@ export default {
 
     // 将渲染景点数据分割开，避免等待加载整个页面的 loading 过久
     renderSightData(sightMapData) {
-
       const formatter = (params) => {
         return `
           景点：${params.name}<br/>
@@ -178,6 +173,8 @@ export default {
         ]
       };
       this.chart.setOption(option);
+      // 初始化页面加载完数据后展开侧栏
+      this.$store.commit('chinaMap/SET_LAUNCH', true);
     },
 
     async initMap() {

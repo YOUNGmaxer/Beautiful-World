@@ -5,27 +5,38 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex';
+
 export default {
   data() {
     return {
-      isLocked: false
+      // isLocked: true
     };
   },
+  watch: {
+    lockedLaunch(_new) {
+      if (_new) {
+        this.clickMethod();
+      }
+    }
+  },
   computed: {
+    ...mapState('chinaMap', ['lockedStatus', 'lockedLaunch']),
     activeClass() {
-      return this.isLocked ? 'link-locked' : '';
+      return this.lockedStatus ? 'link-locked' : '';
     }
   },
 
   methods: {
+    ...mapMutations('chinaMap', ['SET_LOCKED']),
     clickMethod() {
-      this.isLocked = !this.isLocked;
-      this.$emit('change-lock', this.isLocked);
+      this.$store.commit('chinaMap/SET_LOCKED', !this.lockedStatus);
+      this.$emit('change-lock');
     }
   },
 
   mounted() {
-    // setTimeout(this.clickMethod, 1000);
+    // setTimeout(this.clickMethod, 1500);
   }
 };
 </script>

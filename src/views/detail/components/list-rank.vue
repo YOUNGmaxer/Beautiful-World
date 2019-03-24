@@ -3,7 +3,20 @@
   <div class="list-lock bw-flex bw-flex--align-c">
     <link-lock @change-lock="lockedChanged"></link-lock>
   </div>
-  <div class="list-container">
+  <div class="list-rank-container">
+    <ul class="list-rank__sight">
+      <li class="list__item bw-flex bw-flex--align-c"
+        v-for="(sight, index) in sightList"
+        :key="index"
+      >
+        <div class="list__number">{{ index + 1 }}</div>
+        <div class="list__info">
+          <p class="sight-name">{{ sight.name }}</p>
+          <p class="sight-addr">{{ sight.address }}</p>
+        </div>
+        <div class="list__score">{{ sight.star_score }}</div>
+      </li>
+    </ul>
   </div>
 </div>
 
@@ -12,25 +25,33 @@
 <script>
 import LinkLock from 'Components/icon/line-lock.vue';
 import trigger from 'Util/trigger';
+import { mapState, mapMutations } from 'vuex';
 
 export default {
   components: {
     LinkLock
   },
+  props: {
+    sightList: {
+      type: Array,
+      default: () => []
+    }
+  },
   data() {
     return {
-      isLocked: false
+      // isLocked: true
     };
   },
   computed: {
+    ...mapState('chinaMap', ['lockedStatus']),
     activeClass() {
-      return this.isLocked ? 'list-rank-locked list-rank-locked-adapt' : '';
+      return this.lockedStatus ? 'list-rank-locked list-rank-locked-adapt' : '';
     }
   },
   methods: {
-    lockedChanged(status) {
-      this.isLocked = status;
-      if (this.isLocked === false) {
+    ...mapMutations('chinaMap', ['SET_LOCKED']),
+    lockedChanged() {
+      if (this.lockedStatus === false) {
         this.$emit('resize-map');
       } else {
         trigger('resize');
@@ -44,22 +65,85 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+@import 'Assets/style/functions/_common.scss';
+
 .list-rank-wrap {
-  width: 260px;
+  --wrap-width: 300px;
+  width: var(--wrap-width);
   height: 100vh;
-  transition: transform 1s ease 0.5s;
+  transition: transform 1s ease 0.3s;
 }
-.list-container {
+.list-rank-container {
   background: rgba(255,255,255,0.4);
   flex: 1;
 }
 div.list-rank-locked {
-  margin-left: -230px;
-  transform: translateX(230px);
+  margin-left: get-opposite(calc(var(--wrap-width) - 30px));
+  transform: translateX(calc(var(--wrap-width) - 30px));
   transition: transform 1s;
 }
-/* html, body {
-  width: 500px !important;
-} */
+
+.list-rank__sight {
+  height: 100%;
+  overflow-y: scroll;
+
+  .list__item {
+    margin: 10px;
+    min-height: 56px;
+    width: calc(var(--wrap-width) - 2 * 10px - 30px);
+    background: #ccc;
+    border-radius: 10px;
+  }
+
+  .list__number {
+    --list-size: 32px;
+    width: var(--list-size);
+    height: var(--list-size);
+    box-sizing: content-box;
+    line-height: var(--list-size);
+    text-align: center;
+    font-size: 22px;
+    font-weight: 400;
+    color: #eee;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    margin-left: 10px;
+    background: orange;
+    flex-shrink: 0;
+  }
+
+  .list__info {
+    margin-left: 10px;
+    color: #333;
+    flex-grow: 1;
+    flex-shrink: 1;
+    .sight-name {
+      font-size: 20px;
+    }
+    .sight-addr {
+      font-size: 8.5px;
+    }
+    .sight-name, .sight-addr {
+      max-width: 120px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .list__score {
+    margin-right: 10px;
+    margin-left: 10px;
+    font-size: 22px;
+    font-style: italic;
+    font-weight: 700;
+    color: #725B10;
+    &::after {
+      content: '分';
+      font-size: 8px;
+    }
+  }
+}
+
 </style>
