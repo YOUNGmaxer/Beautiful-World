@@ -14,6 +14,9 @@ import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/visualMap';
 import { initLoading, initBase } from '../js/init';
 import { getGeoJsonCities, convertObj2Data, generateSightMapData } from '../js/convert';
+import { mapState, mapMutations } from 'vuex';
+import trigger from 'Util/trigger';
+import _debounce from 'lodash/debounce';
 
 export default {
   props: {
@@ -32,6 +35,10 @@ export default {
     };
   },
 
+  computed: {
+    ...mapState('chinaMap', ['emitResizeFlag'])
+  },
+
   watch: {
     sightList(_new, _old) {
       this.sightMapData = generateSightMapData(_new);
@@ -40,14 +47,20 @@ export default {
         this.renderSightData(this.sightMapData);
       }
     },
-    // chart(_new, _old) {
-    //   if (this.sightMapData) {
-    //     this.renderSightData(this.sightMapData);
-    //   }
-    // }
+    emitResizeFlag(_new, _old) {
+      if (_new) {
+        setTimeout(this.chart.resize, 100);
+        // window.addEventListener('resize', _debounce(this.chart.resize, 0));
+        // console.log(this.chart.resize);
+        // trigger('resize');
+        this.$store.commit('chinaMap/SET_FLAG', false);
+      }
+    }
   },
 
   methods: {
+    ...mapMutations('chinaMap', ['SET_FLAG']),
+
     // 注册点击事件
     registerClickEvent(chart) {
       chart.on('click', params => {

@@ -1,20 +1,29 @@
 <template>
-<div class="detail-map-container">
+<div class="detail-wrap bw-flex">
   <star-bg></star-bg>
-  <china-map :sightList="sightList"></china-map>
+  <div class="detail-map-container">
+    <china-map :sightList="sightList"></china-map>
+  </div>
+  <!-- <div class="detail-feeds-container"> -->
+  <list-rank @resize-map="emitChartResize"></list-rank>
+  <!-- </div> -->
 </div>
+
 </template>
 
 <script>
 import ChinaMap from './components/china-map.vue';
+import ListRank from './components/list-rank.vue';
 import StarBg from 'Components/bg/star.vue';
 import axios from 'axios';
 import _url from 'Util/url';
+import { mapMutations } from 'vuex';
 
 export default {
   components: {
     ChinaMap,
-    StarBg
+    StarBg,
+    ListRank
   },
 
   data() {
@@ -24,11 +33,18 @@ export default {
   },
 
   methods: {
+    ...mapMutations('chinaMap', ['SET_FLAG']),
+
     async getHotSightData() {
       const url = _url.getUrl(`/api/sight/city/name/${encodeURIComponent('热门景点')}?limit=100`);
       const { data } = await axios.get(url);
       this.sightList = data;
       console.log(data);
+    },
+
+    emitChartResize() {
+      console.log('emitChartResize');
+      this.$store.commit('chinaMap/SET_FLAG', true);
     }
   },
 
@@ -40,7 +56,9 @@ export default {
 
 <style>
 .detail-map-container {
-  width: 100%;
   height: 100vh;
+  flex: 1;
+}
+.detail-feeds-container {
 }
 </style>

@@ -4,6 +4,7 @@ import actions from './actions';
 import map from './modules/map';
 import sight from './modules/sight';
 import comment from './modules/comment';
+import chinaMap from './modules/china-map';
 
 Vue.use(Vuex);
 
@@ -14,7 +15,8 @@ export default new Vuex.Store({
   modules: {
     map,
     sight,
-    comment
+    comment,
+    chinaMap
   },
   actions,
   strict: debug

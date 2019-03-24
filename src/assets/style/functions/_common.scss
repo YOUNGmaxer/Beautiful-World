@@ -1,0 +1,4 @@
+@function get-opposite($n) {
+  // 主要想要在纯CSS中使用SCSS变量，需要用#{}包裹
+  @return calc(-1 * #{$n});
+}
