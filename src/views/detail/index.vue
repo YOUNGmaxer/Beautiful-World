@@ -43,7 +43,6 @@ export default {
     },
 
     emitChartResize() {
-      console.log('emitChartResize');
       this.$store.commit('chinaMap/SET_FLAG', true);
     }
   },

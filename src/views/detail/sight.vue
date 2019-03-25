@@ -1,5 +1,6 @@
 <template>
 <div class="sight-container bw-flex">
+  <Spin v-if="!sightData" size="large" fix></Spin>
   <star-bg v-if="ready"></star-bg>
   <div class="sight-left">
     <sight-card
@@ -39,6 +40,7 @@ import StarBg from 'Components/bg/star.vue';
 import axios from 'axios';
 import _url from 'Util/url';
 import { mapActions, mapState } from 'vuex';
+import { Spin } from 'iview';
 
 export default {
   components: {
@@ -47,7 +49,8 @@ export default {
     TimeLine,
     TimeWeek,
     TimeSeason,
-    StarBg
+    StarBg,
+    Spin
   },
   data() {
     return {
@@ -70,16 +73,20 @@ export default {
       this.sid = sid || '1174758904';
       const url = _url.getUrl(`/api/sight/${this.sid}`);
       const res = await axios.get(url);
-      console.log('sight', res.data);
       this.sightData = res.data;
-      this.rid = (this.sightData && this.sightData.rid) || '';
-      // TODO: 处理没有评论数据的情况
-      if (!this.rid) {
-        console.warn('Oh! 数据库没有该景点评论数据');
+      // 确认数据库有该数据
+      if (this.sightData) {
+        this.rid = (this.sightData && this.sightData.rid) || '';
+        // TODO: 处理没有评论数据的情况
+        if (!this.rid) {
+          console.warn('Oh! 数据库没有该景点评论数据');
+        }
+        await this.getCommentData(this.rid);
+        await this.getCommentTimeList();
+        this.ready = true;
+      } else { // 如果数据库没有该数据
+        console.warn('数据库暂无该景点数据!');
       }
-      await this.getCommentData(this.rid);
-      await this.getCommentTimeList();
-      this.ready = true;
     }
   },
 
