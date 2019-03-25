@@ -8,6 +8,7 @@
       <li class="list__item bw-flex bw-flex--align-c"
         v-for="(sight, index) in sightList"
         :key="index"
+        @click="route2Sight(sight.sid)"
       >
         <div class="list__number">{{ index + 1 }}</div>
         <div class="list__info">
@@ -56,6 +57,10 @@ export default {
       } else {
         trigger('resize');
       }
+    },
+    // 点击列表项跳转到相应景点详情页
+    route2Sight(sid) {
+      this.$router.push(`/detail_sight/${sid}`);
     }
   },
 
@@ -75,7 +80,7 @@ export default {
   transition: transform 1s ease 0.3s;
 }
 .list-rank-container {
-  background: rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.2);
   flex: 1;
 }
 div.list-rank-locked {
@@ -92,8 +97,10 @@ div.list-rank-locked {
     margin: 10px;
     min-height: 56px;
     width: calc(var(--wrap-width) - 2 * 10px - 30px);
-    background: #ccc;
+    // background: #ccc;
+    background: rgba(204,204,204,0.6);
     border-radius: 10px;
+    cursor: pointer;
   }
 
   .list__number {
