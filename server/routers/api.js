@@ -2,6 +2,7 @@ const router = require('koa-router')();
 
 const citySights = require('Controller/sights/citySights');
 const chinaMap = require('Controller/map/chinaMap');
+const count = require('Controller/count/count.js');
 
 /**
  * @description: 获取景点数据
@@ -54,5 +55,10 @@ router.get('/code/pcas/name/:param?', chinaMap.findOneByCodeOrName('code_pcas', 
  * @description: 中文词汇情感分析接口
  * TODO: 还是没有一个比较好的方案来实现
  */
+
+/**
+ * @description: 统计接口，统计一个数据库的文档数
+ */
+router.get('/count/:db', count.countDocByDB);
 
 module.exports = router;

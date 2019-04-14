@@ -91,7 +91,6 @@ class CitySights {
       tasks.push(task(collections[i].name));
     }
     await Promise.all(tasks);
-    console.log(data);
     ctx.body = data;
   }
 }
