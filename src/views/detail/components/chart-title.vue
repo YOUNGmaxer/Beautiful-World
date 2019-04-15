@@ -5,6 +5,9 @@
     <slot></slot>
   </p>
   <div class="chart-button" :class="buttonClass" v-if="hasButton" @click="emitClick"></div>
+  <div class="chart-tab">
+    <slot name="tab"></slot>
+  </div>
 </div>
 </template>
 
@@ -20,7 +23,7 @@ export default {
   data() {
     return {
       buttonStatus: false
-    }
+    };
   },
 
   computed: {
@@ -81,5 +84,13 @@ div .chart-title__height {
 .chart-button__close {
   background: #538ea6;
   box-shadow: inset 0 0 3px rgba(0,0,0,0.8);
+}
+
+.chart-tab {
+  height: 20px;
+  position: absolute;
+  right: 10px;
+  display: flex;
+  align-items: center;
 }
 </style>

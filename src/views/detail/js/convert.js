@@ -2,7 +2,7 @@
  * @Description: 主要是一些业务共用的数据转换方法
  * @Author: Young
  * @Date: 2019-03-16 13:35:47
- * @LastEditTime: 2019-03-19 14:52:22
+ * @LastEditTime: 2019-04-15 20:43:59
  */
 
 // 提取省级 geoJson 中的城市名称和code

@@ -20,6 +20,7 @@ import loadJs from 'Util/asyncLoadJs.js';
 import axios from 'axios';
 import { LoadingBar, Switch } from 'iview';
 import ChartTitle from './chart-title.vue';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   components: {
@@ -54,12 +55,15 @@ export default {
   },
 
   computed: {
+    ...mapState('commentSegment', ['segmentData']),
     settingClass() {
       return this.settingStatus ? '' : 'word-setting--hidden';
     }
   },
 
   methods: {
+    ...mapActions('commentSegment', ['getSegmentData']),
+
     convertSegmentData(data) {
       let resList = [];
       for (let propKey in data) {
@@ -83,10 +87,12 @@ export default {
     },
 
     async getCommentSegment(rid) {
-      const url = `//localhost:3002/hanlp/api/segment/${rid}`;
-      const res = await axios.get(url);
-      this.originSegmentData = res.data;
-      console.log(this.originSegmentData);
+      // const url = `//localhost:3002/hanlp/api/segment/${rid}`;
+      // const res = await axios.get(url);
+      // this.originSegmentData = res.data;
+      // await this.getSegmentData(rid);
+      this.originSegmentData = this.segmentData;
+      console.log('segmentData', this.originSegmentData);
       this.wordPropsList = Object.keys(this.originSegmentData);
       this.curPropsList = [].concat(this.wordPropsList);
       const list = this.convertSegmentData(this.originSegmentData);

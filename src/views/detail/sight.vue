@@ -1,32 +1,42 @@
 <template>
-<div class="sight-container bw-flex">
+<div class="sight-container">
   <Spin v-if="!sightData" size="large" fix></Spin>
   <star-bg v-if="ready"></star-bg>
-  <div class="sight-left">
-    <sight-card
-      v-if="sightData"
-      :sightData="sightData"
-    ></sight-card>
-  </div>
-  <div class="sight-right">
-    <div class="sight-right--top">
-      <word-cloud v-if="rid" :rid="rid">景点词云</word-cloud>
+  <sight-header></sight-header>
+  <div class="sight-main bw-flex">
+    <div class="sight-left">
+      <sight-card
+        v-if="sightData"
+        :sightData="sightData"
+      ></sight-card>
     </div>
-    <div class="sight-right--bottom bw-flex">
-      <div class="right__chart right__time-line">
-        <time-line v-if="ready" groupType="month"></time-line>
+    <div class="sight-right">
+      <div class="sight-right--top">
+        <word-cloud v-if="segmentData" :rid="rid">景点词云</word-cloud>
       </div>
-      <div class="right__chart right__time-week">
-        <time-week v-if="ready"></time-week>
+      <!-- 两个同类组件需要切换显示 -->
+      <div class="sight-right--bottom bw-flex hidden">
+        <div class="right__chart right__time-line">
+          <time-line v-if="ready" groupType="month"></time-line>
+        </div>
+        <div class="right__chart right__time-week">
+          <time-week v-if="ready"></time-week>
+        </div>
+        <div class="right__chart right__time-line-season">
+          <time-line v-if="ready" groupType="season"></time-line>
+        </div>
+        <div class="right__chart right__time-season">
+          <time-season v-if="ready"></time-season>
+        </div>
       </div>
-      <div class="right__chart right__time-line-season">
-        <time-line v-if="ready" groupType="season"></time-line>
-      </div>
-      <div class="right__chart right__time-season">
-        <time-season v-if="ready"></time-season>
+      <div class="sight-right--bottom bw-flex">
+        <div class="right__chart--h100 right__word-rank">
+          <word-rank v-if="segmentData"></word-rank>
+        </div>
       </div>
     </div>
   </div>
+  
 </div>
 </template>
 
@@ -36,6 +46,8 @@ import WordCloud from './components/word-cloud.vue';
 import TimeLine from './components/time-line.vue';
 import TimeWeek from './components/time-week.vue';
 import TimeSeason from './components/time-season-bar.vue';
+import SightHeader from './components/header-sight.vue';
+import WordRank from './components/word-rank.vue';
 import StarBg from 'Components/bg/star.vue';
 import axios from 'axios';
 import _url from 'Util/url';
@@ -49,8 +61,10 @@ export default {
     TimeLine,
     TimeWeek,
     TimeSeason,
+    WordRank,
     StarBg,
-    Spin
+    Spin,
+    SightHeader
   },
   data() {
     return {
@@ -62,11 +76,13 @@ export default {
   },
 
   computed: {
-    ...mapState('comment', ['comments', 'timeList'])
+    ...mapState('comment', ['comments', 'timeList']),
+    ...mapState('commentSegment', ['segmentData'])
   },
 
   methods: {
     ...mapActions('comment', ['getCommentData', 'getCommentTimeList']),
+    ...mapActions('commentSegment', ['getSegmentData']),
 
     async initData() {
       const sid = _url.getPath(2);
@@ -83,11 +99,17 @@ export default {
         }
         await this.getCommentData(this.rid);
         await this.getCommentTimeList();
+        await this.getSegmentData(this.rid);
         this.ready = true;
       } else { // 如果数据库没有该数据
         console.warn('数据库暂无该景点数据!');
       }
     }
+
+    // async initSegmentData() {
+    //   await this.getSegmentData();
+    //   console.log(this.segmentData);
+    // }
   },
 
   beforeMount() {
@@ -96,10 +118,16 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+@import 'Assets/style/functions/_common.scss';
 .sight-container {
   width: 100vw;
   height: 100vh;
+}
+.sight-main {
+  --diff-offset: 20px;
+  height: calc(100% - var(--sight-header-h) + var(--diff-offset));
+  margin-top: get-opposite(var(--diff-offset));
 }
 .sight-left {
   width: 450px;
@@ -124,6 +152,10 @@ export default {
   height: 50%;
   padding: 10px;
 }
+.right__chart--h100 {
+  height: 100%;
+  padding: 10px;
+}
 .right__time-line {
   width: 60%;
 }
@@ -135,6 +167,9 @@ export default {
 }
 .right__time-season {
   width: 40%;
+}
+.right__word-rank {
+  width: 300px;
 }
 body {
   overflow: hidden;

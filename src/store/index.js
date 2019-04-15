@@ -5,6 +5,7 @@ import map from './modules/map';
 import sight from './modules/sight';
 import comment from './modules/comment';
 import chinaMap from './modules/china-map';
+import commentSegment from './modules/comment-segment';
 
 Vue.use(Vuex);
 
@@ -16,7 +17,8 @@ export default new Vuex.Store({
     map,
     sight,
     comment,
-    chinaMap
+    chinaMap,
+    commentSegment
   },
   actions,
   strict: debug
