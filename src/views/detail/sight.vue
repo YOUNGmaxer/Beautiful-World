@@ -2,7 +2,7 @@
 <div class="sight-container">
   <Spin v-if="!sightData" size="large" fix></Spin>
   <star-bg v-if="ready"></star-bg>
-  <sight-header></sight-header>
+  <sight-header @change-sight-view="toggleSightRightBottom"></sight-header>
   <div class="sight-main bw-flex">
     <div class="sight-left">
       <sight-card
@@ -15,7 +15,7 @@
         <word-cloud v-if="segmentData" :rid="rid">景点词云</word-cloud>
       </div>
       <!-- 两个同类组件需要切换显示 -->
-      <div class="sight-right--bottom bw-flex hidden">
+      <div class="sight-right--bottom bw-flex" :class="{ hidden: !isCommentView }">
         <div class="right__chart right__time-line">
           <time-line v-if="ready" groupType="month"></time-line>
         </div>
@@ -29,7 +29,7 @@
           <time-season v-if="ready"></time-season>
         </div>
       </div>
-      <div class="sight-right--bottom bw-flex">
+      <div class="sight-right--bottom bw-flex" :class="{ hidden: !isSegmentView }">
         <div class="right__chart--h100 right__word-rank">
           <word-rank v-if="segmentData"></word-rank>
         </div>
@@ -71,18 +71,29 @@ export default {
       sightData: null,
       sid: '1174758904',
       rid: '',
-      ready: false
+      ready: false,
+      sightViewTag: '评论'
     };
   },
 
   computed: {
     ...mapState('comment', ['comments', 'timeList']),
-    ...mapState('commentSegment', ['segmentData'])
+    ...mapState('commentSegment', ['segmentData']),
+    isCommentView() {
+      return this.sightViewTag === '评论';
+    },
+    isSegmentView() {
+      return this.sightViewTag === '分词';
+    }
   },
 
   methods: {
     ...mapActions('comment', ['getCommentData', 'getCommentTimeList']),
     ...mapActions('commentSegment', ['getSegmentData']),
+
+    toggleSightRightBottom(label) {
+      this.sightViewTag = label;
+    },
 
     async initData() {
       const sid = _url.getPath(2);

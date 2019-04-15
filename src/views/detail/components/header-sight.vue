@@ -4,7 +4,7 @@
     <Logo></Logo>
   </div>
   <div class="hs-option bw-flex bw-flex--center">
-    <RadioGroup v-model="viewType" type="button" size="small" @on-change="test">
+    <RadioGroup v-model="viewType" type="button" size="small" @on-change="radioClick">
       <Radio label="评论"></Radio>
       <Radio label="分词"></Radio>
     </RadioGroup>
@@ -33,8 +33,8 @@ export default {
     };
   },
   methods: {
-    test(params) {
-      console.log(params);
+    radioClick(label) {
+      this.$emit('change-sight-view', label);
     }
   }
 };
@@ -79,11 +79,53 @@ export default {
     display: block;
     // width: 100%;
     height: 1px;
-    background: #7c0e0e;
+    // background: #7c0e0e;
+    background: #e90000;
     margin: 0 20px;
+    transform: scaleY(0.5);
   }
 }
 
 // TODO: 自定义Radio样式
+.hs-option {
+  .ivu-radio-group-button {
+    .ivu-radio-wrapper {
+      background: rgba(255,255,255,0.8);
+      border-color: transparent;
 
+      box-shadow: 1px 1px 2px rgba(0,0,0,0.4) inset;
+      border: none;
+
+      &:first-child {
+        border-left: none;
+      }
+    }
+
+    &.ivu-radio-group-small {
+      .ivu-radio-wrapper {
+        line-height: 24px;
+      }
+    }
+
+    .ivu-radio-wrapper-checked {
+      background: rgba(206,118,90,1);
+      color: #fff;
+      box-shadow: none;
+
+      &:first-child {
+        border-color: transparent;
+      }
+
+      &:hover {
+        border-color: transparent;
+        color: currentColor;
+      }
+
+      &.ivu-radio-focus {
+        box-shadow: none;
+      }
+    }
+  }
+
+}
 </style>
