@@ -102,20 +102,21 @@ export default {
   height: 100vh;
 }
 .sight-left {
-  width: 500px;
+  width: 450px;
   height: 100%;
   padding: 20px;
 }
 .sight-right {
+  --right-top-h: 41.5%;
   height: 100%;
   flex: 1;
 }
 .sight-right--top {
-  height: 400px;
+  height: var(--right-top-h);
   padding: 20px 20px 10px 10px;
 }
 .sight-right--bottom {
-  height: calc(100% - 400px);
+  height: calc(100% - var(--right-top-h));
   flex-wrap: wrap;
   padding: 10px 10px 10px 0;
 }

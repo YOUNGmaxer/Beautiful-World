@@ -2,6 +2,7 @@
 <div class="detail-wrap bw-flex">
   <star-bg></star-bg>
   <div class="detail-map-container">
+    <stat-header></stat-header>
     <china-map :sightList="sightList"></china-map>
   </div>
   <!-- <div class="detail-feeds-container"> -->
@@ -14,6 +15,7 @@
 <script>
 import ChinaMap from './components/china-map.vue';
 import ListRank from './components/list-rank.vue';
+import StatHeader from './components/header-stats.vue';
 import StarBg from 'Components/bg/star.vue';
 import axios from 'axios';
 import _url from 'Util/url';
@@ -23,7 +25,8 @@ export default {
   components: {
     ChinaMap,
     StarBg,
-    ListRank
+    ListRank,
+    StatHeader
   },
 
   data() {
@@ -57,7 +60,6 @@ export default {
 .detail-map-container {
   height: 100vh;
   flex: 1;
-}
-.detail-feeds-container {
+  position: relative;
 }
 </style>

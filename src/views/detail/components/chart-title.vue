@@ -47,7 +47,9 @@ export default {
   --chart-title-height: 32px;
 }
 .chart-title {
-  background: rgb(30, 25, 50);
+  /* background: rgb(30, 25, 50); */
+  /* background: rgb(60, 40, 90); */
+  background: rgb(43, 35, 54);
   font-size: 16px;
   font-weight: 300;
   line-height: var(--chart-title-height);

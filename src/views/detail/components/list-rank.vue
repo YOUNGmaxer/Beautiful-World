@@ -75,7 +75,8 @@ export default {
 
 .list-rank-wrap {
   --wrap-width: 300px;
-  width: var(--wrap-width);
+  // width: var(--wrap-width);
+  width: 270px; // TODO: 临时进行一点调整
   height: 100vh;
   transition: transform 1s ease 0.3s;
 }
@@ -87,6 +88,10 @@ div.list-rank-locked {
   margin-left: get-opposite(calc(var(--wrap-width) - 30px));
   transform: translateX(calc(var(--wrap-width) - 30px));
   transition: transform 1s;
+}
+
+.list-lock {
+  margin-left: -30px; // TODO: 临时进行一点调整
 }
 
 .list-rank__sight {

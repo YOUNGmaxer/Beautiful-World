@@ -154,7 +154,9 @@ export default {
               formatter
             },
             data: sightMapData.filter(item => {
-              return item.value[3] >= 10000;
+              // return item.value[3] >= 10000;
+              // TODO: 临时修改，需要优化逻辑，否则太多会吃性能并且视觉效果差
+              return item.value[3] >= 100000;
             }),
             symbolSize: (val) => {
               let baseVal = 25;
