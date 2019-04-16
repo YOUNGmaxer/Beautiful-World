@@ -1,11 +1,15 @@
 <template>
 <div>
+<common-header>{{ areaName }}</common-header>
 <div class="area-container bw-flex">
   <Spin v-if="!isListPrepared" size="large" fix></Spin>
   <star-bg></star-bg>
   <div class="ac--left bw-flex bw-flex--col">
     <div class="ac--left-box">
-      <sight-bar v-if="isListPrepared" :sight-list="sightList">景点销量Top20</sight-bar>
+      <sight-bar v-if="isListPrepared" :sight-list="sightList">景点销量排行</sight-bar>
+    </div>
+    <div class="ac--left-box">
+      <sight-flexbar></sight-flexbar>
     </div>
     <div class="ac--left-box">
       <sight-pie v-if="isListPrepared" :sight-list="sightList">景点级别统计</sight-pie>
@@ -21,6 +25,9 @@
       </sight-multi-bar>
     </div>
     <div class="ac--right-box">
+      <sight-cloud></sight-cloud>
+    </div>
+    <div class="ac--right-box">
       <sight-polar-bar v-if="isListPrepared" :sight-list="sightList">
         景点评论最多
       </sight-polar-bar>
@@ -34,11 +41,14 @@
 <script>
 import AreaMap from './components/area-map.vue';
 import SightBar from './components/sight-bar.vue';
+import SightFlexbar from './components/sight-flexbar.vue';
 import SightPie from './components/sight-pie.vue';
 import SightMultiBar from './components/sight-multi-bar.vue';
 import SightPolarBar from './components/sight-polar-bar.vue';
 import StarBg from 'Components/bg/star.vue';
-import { mapActions } from 'vuex';
+import SightCloud from './components/sight-cloud.vue';
+import CommonHeader from './components/header-common.vue';
+import { mapActions, mapState, mapMutations } from 'vuex';
 import _url from 'Util/url';
 import { Spin } from 'iview';
 
@@ -46,11 +56,14 @@ export default {
   components: {
     AreaMap,
     SightBar,
+    SightFlexbar,
     SightPie,
     SightMultiBar,
     SightPolarBar,
+    SightCloud,
     StarBg,
-    Spin
+    Spin,
+    CommonHeader
   },
   data() {
     return {
@@ -59,20 +72,22 @@ export default {
     };
   },
   computed: {
+    ...mapState('sight', ['areaName']),
+    // ...mapMutations('sight', ['SET_SIGHTLIST_SORTED_BY_COMMENT']),
     isListPrepared() {
       return this.sightList && this.sightList.length;
     }
   },
   methods: {
     ...mapActions('sight', ['getProvSights']),
-    getSightsData() {
+    async getSightsData() {
       // 根据 /detail_province/code 来选择加载哪个地区的地图，默认情况下加载北京地图
       const pathCode = _url.getPath(2);
       this.code = pathCode || '11';
-      this.getProvSights({ code: this.code })
-        .then(data => {
-          this.sightList = data;
-        });
+      const data = await this.getProvSights({ code: this.code });
+      this.sightList = data;
+      // 对 sightList 进行排序
+      // this.$store.commit('sight/SET_SIGHTLIST_SORTED_BY_COMMENT');
     }
   },
   // beforeRouteEnter(to, from, next) {
@@ -97,7 +112,7 @@ export default {
 <style style="scss">
 .area-container {
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - var(--sight-common-h));
   position: relative;
 }
 .ac--left, .ac--right {
@@ -106,8 +121,9 @@ export default {
 }
 .ac--left-box, .ac--right-box {
   width: 100%;
-  height: 50%;
-  padding: 10px;
+  /* height: 50%; */
+  flex: 1;
+  padding: 0 10px 10px 10px;
 }
 .ac--center {
   flex: 1;

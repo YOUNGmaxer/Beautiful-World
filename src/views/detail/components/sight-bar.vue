@@ -72,7 +72,7 @@ export default {
       const chart = initLoading('sight-bar');
 
       this.localSightList = this.sightList.slice(0);
-      const data = this.getTopData(this.localSightList, 20);
+      const data = this.getTopData(this.localSightList, 10);
       const option = {
         // title: {
         //   text: '景点销量最多',
@@ -89,8 +89,8 @@ export default {
           containLabel: true,
           left: '5%',
           right: '8%',
-          bottom: '10%',
-          top: '10%'
+          bottom: '5%',
+          top: '5%'
         },
         // 直角坐标系的 x 轴
         xAxis: {
@@ -101,7 +101,9 @@ export default {
           type: 'category',
           data: data.name,
           axisLabel: {
-            formatter: axisLabelFormatter
+            formatter: axisLabelFormatter,
+            // rotate: 10,
+            fontSize: 9
           }
         },
         series: [

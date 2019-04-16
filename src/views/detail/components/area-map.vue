@@ -9,7 +9,7 @@ import 'echarts/lib/chart/scatter';
 import 'echarts/lib/component/geo';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/visualMap';
-import { mapActions } from 'vuex';
+import { mapActions, mapMutations } from 'vuex';
 import { initLoading, initBase } from '../js/init';
 import { getGeoJsonCities, convertData, generateSightMapData } from '../js/convert';
 
@@ -34,6 +34,7 @@ export default {
   },
 
   computed: {
+    ...mapMutations('sight', ['SET_AREA_NAME'])
   },
 
   methods: {
@@ -87,13 +88,13 @@ export default {
       if (saleValue === 0) {
         return baseValue;
       }
-      else if (saleValue <= 10) {
+      if (saleValue <= 10) {
         return baseValue + saleValue / 2;
       }
-      else if (saleValue <= 100) {
+      if (saleValue <= 100) {
         return baseValue + 5 + saleValue / 10;
       }
-      else if (saleValue <= 1000) {
+      if (saleValue <= 1000) {
         return 15 + saleValue / 100 / 2;
       }
       return 25;
@@ -106,16 +107,16 @@ export default {
       if (saleValue === 0) {
         return baseValue;
       }
-      else if (saleValue <= 10) {
+      if (saleValue <= 10) {
         return baseValue + saleValue / 2;
       }
-      else if (saleValue <= 100) {
+      if (saleValue <= 100) {
         return baseValue + 5 + saleValue / 10;
       }
-      else if (saleValue <= 1000) {
+      if (saleValue <= 1000) {
         return 15 + saleValue / 100 / 2;
       }
-      else if (saleValue <= 10000) {
+      if (saleValue <= 10000) {
         return 20 + saleValue / 1000 / 2;
       }
       return 25 + Math.floor(saleValue / 10000) / 2;
@@ -126,7 +127,8 @@ export default {
         return b.value[3] - a.value[3];
       });
 
-      const topSymbol = sightMapData.slice(0, 5);
+      // TODO: 临时改为0，否则可能存在耗性能问题
+      const topSymbol = sightMapData.slice(0, 0);
       const option = {
         series: [
           {},
@@ -169,6 +171,8 @@ export default {
       // 获取地图数据
       const geoJson = await this.getProvinceMap({ code: this.code });
       this.areaName = geoJson.name;
+      // 设置地区名称
+      this.$store.commit('sight/SET_AREA_NAME', this.areaName);
       // 获取省级区域的城市
       const { nameMap, nameMapForCode, nameMapForCounter } = getGeoJsonCities(geoJson);
       const cityCounter = this.countCitySights(this.sightList, nameMapForCounter);
@@ -185,14 +189,14 @@ export default {
       console.log(this.sightMapData);
 
       const option = {
-        title: {
-          text: `${this.areaName}`,
-          left: 'center',
-          top: '5%',
-          textStyle: {
-            color: '#fff'
-          }
-        },
+        // title: {
+        //   text: `${this.areaName}`,
+        //   left: 'center',
+        //   top: '5%',
+        //   textStyle: {
+        //     color: '#fff'
+        //   }
+        // },
         tooltip: {
           // 提示类型
           trigger: 'item'

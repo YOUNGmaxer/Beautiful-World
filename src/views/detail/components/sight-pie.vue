@@ -62,7 +62,9 @@ export default {
         legend: {
           orient: 'horizontal',
           x: 'center',
-          bottom: '8%',
+          bottom: '0',
+          itemWidth: 10,
+          itemHeight: 10
           // textStyle: {
           //   color: '#fff'
           // }
@@ -71,7 +73,8 @@ export default {
           {
             type: 'pie',
             data,
-            radius: [0, '60%']
+            radius: [0, '55%'],
+            center: ['50%', '45%']
           }
         ]
       };

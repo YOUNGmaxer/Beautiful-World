@@ -4,12 +4,29 @@ import _url from 'Util/url';
 export default {
   namespaced: true,
   state: {
-    sightList: []
+    sightList: [],
+    sightListSortedByComment: null,
+    areaName: ''
   },
 
   mutations: {
     SET_SIGHT_LIST(state, list) {
       state.sightList = list;
+    },
+    SET_AREA_NAME(state, name) {
+      state.areaName = name;
+    },
+    SET_SIGHTLIST_SORTED_BY_COMMENT(state) {
+      state.sightListSortedByComment = state.sightList.slice(0);
+      state.sightListSortedByComment.sort((a, b) => {
+        if (!a.comment) {
+          a.comment = { 全部: 0 };
+        }
+        if (!b.comment) {
+          b.comment = { 全部: 0 };
+        }
+        return b.comment['全部'] - a.comment['全部'];
+      });
     }
   },
 
@@ -38,7 +55,9 @@ export default {
         commit('SET_SIGHT_LIST', res.data);
         return res.data;
       }
-      return JSON.parse(cacheData);
+      let listData = JSON.parse(cacheData);
+      commit('SET_SIGHT_LIST', listData);
+      return listData;
     }
   }
 };

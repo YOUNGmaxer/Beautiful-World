@@ -25,7 +25,7 @@ export default {
           state.segmentData[key][word] = state.segmentDetailData[key][word].length;
         }
       });
-      console.log('segmentData', state.segmentData);
+      // console.log('segmentData', state.segmentData);
     },
     SET_A_WORD(state, data) {
       state.aWordData = data;
@@ -77,7 +77,7 @@ export default {
       let existList = state.aWordData || state.nWordData || state.vWordData || state.nsWordData;
       if (existList) {
         commit('SET_CURFOCUS_WORD', existList[0][0]);
-        console.log('sep', state.curFocusWord);
+        // console.log('sep', state.curFocusWord);
       }
     }
   }

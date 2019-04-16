@@ -104,6 +104,7 @@ export default {
       const chart = initLoading('sight-multi-bar');
 
       const data = this.getCitySightsNum(this.sightList);
+      console.log('sight-multi-bar', data);
       const option = {
         // title: {
         //   text: '景点城市分布'
