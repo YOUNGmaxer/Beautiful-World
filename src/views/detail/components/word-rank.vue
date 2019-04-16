@@ -16,30 +16,23 @@
     </template>
   </chart-title>
   <div class="word-rank__wrap">
-    <div class="wr__top-item bw-flex bw-flex--col bw-flex--justify-c">
-      <p class="word">{{ tabSelectedData[0] && tabSelectedData[0][0] }}</p>
-      <p class="weight">{{ tabSelectedData[0] && tabSelectedData[0][1] }}</p>
+    <div class="wr__top-item bw-flex bw-flex--col bw-flex--justify-c hover"
+      @click="clickListItem(listTopOneWord, tabList[wordTabSelected])"
+    >
+      <p class="word">{{ listTopOneWord }}</p>
+      <p class="weight">{{ listTopOneWeight }}</p>
     </div>
-    <ul class="wr__rest-list">
+    <ul class="wr__rest-list scroll-bar">
       <li
         v-for="(item, index) in tabSelectedData.slice(1)"
-        class="wr__item bw-flex bw-flex--align-c"
+        class="wr__item bw-flex bw-flex--align-c hover"
         :key="index"
+        @click="clickListItem(item[0], tabList[wordTabSelected])"
       >
         <div class="item-number">{{ index + 2 }}</div>
         <div class="item-word">{{ item[0] }}</div>
         <div class="item-weight">{{ item[1] }}</div>
       </li>
-      <!-- <li class="wr__item bw-flex bw-flex--align-c">
-        <div class="item-number">3</div>
-        <div class="item-word">苹果</div>
-        <div class="item-weight">88</div>
-      </li>
-      <li class="wr__item bw-flex bw-flex--align-c">
-        <div class="item-number">4</div>
-        <div class="item-word">苹果</div>
-        <div class="item-weight">88</div>
-      </li> -->
     </ul>
   </div>
 </div>
@@ -47,7 +40,7 @@
 
 <script>
 import ChartTitle from './chart-title.vue';
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapMutations } from 'vuex';
 
 export default {
   props: {
@@ -69,7 +62,15 @@ export default {
     };
   },
   computed: {
-    ...mapState('commentSegment', ['segmentData', 'aWordData', 'nWordData', 'vWordData', 'nsWordData']),
+    ...mapState('commentSegment', ['segmentData', 'aWordData', 'nWordData', 'vWordData', 'nsWordData', 'curFocusWord']),
+    ...mapMutations('commentSegment', ['SET_CURFOCUS_WORD', 'SET_CURFOCUS_TYPE']),
+
+    listTopOneWord() {
+      return this.tabSelectedData[0] && this.tabSelectedData[0][0];
+    },
+    listTopOneWeight() {
+      return this.tabSelectedData[0] && this.tabSelectedData[0][1];
+    }
   },
   methods: {
     ...mapActions('commentSegment', ['getSegmentData', 'sepSegmentData']),
@@ -82,6 +83,13 @@ export default {
     // 排序器
     compare(a, b) {
       return b[1] - a[1];
+    },
+
+    // 点击列表
+    clickListItem(word, tab) {
+      console.log(word, tab);
+      this.$store.commit('commentSegment/SET_CURFOCUS_WORD', word);
+      this.$store.commit('commentSegment/SET_CURFOCUS_TYPE', tab);
     },
 
     async initRank() {
@@ -126,14 +134,14 @@ export default {
   overflow-y: scroll;
   background: var(--bg-color);
 
-  &::-webkit-scrollbar {
-    width: 3px;
-    // background: var(--bg-color);
-  }
-  &::-webkit-scrollbar-thumb {
-    background: rgba(0,0,0,0.4);
-    border-radius: 50px;
-  }
+  // &::-webkit-scrollbar {
+  //   width: 3px;
+  //   // background: var(--bg-color);
+  // }
+  // &::-webkit-scrollbar-thumb {
+  //   background: rgba(0,0,0,0.4);
+  //   border-radius: 50px;
+  // }
 }
 .wr__item {
   --margin-h: 10px;
@@ -144,6 +152,7 @@ export default {
   // background: var(--bg-color);
   // color: rgb(47,95,212);
   color: rgb(60,75,83);
+
   .item-number {
     width: var(--number-length);
     height: var(--number-length);

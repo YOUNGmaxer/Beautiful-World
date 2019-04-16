@@ -42,7 +42,7 @@ export default {
           });
         }
       }
-      console.log(_commentData, typeof _commentData);
+      // console.log(_commentData, typeof _commentData);
       return _commentData;
     }
   },

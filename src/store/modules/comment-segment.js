@@ -4,15 +4,28 @@ import { convertObj2Array } from 'Util/convert';
 export default {
   namespaced: true,
   state: {
-    segmentData: null,
+    segmentData: {},
+    segmentDetailData: {},
     aWordData: null,
     nWordData: null,
     vWordData: null,
-    nsWordData: null
+    nsWordData: null,
+    curFocusWord: '',
+    curFocusWordType: ''
   },
   mutations: {
-    SET_SEGMENTDATA(state, data) {
-      state.segmentData = data;
+    SET_SEGMENT_DETAILDATA(state, data) {
+      state.segmentDetailData = data;
+    },
+    SET_SEGMENT_DATA(state) {
+      const keys = Object.keys(state.segmentDetailData);
+      keys.forEach(key => {
+        state.segmentData[key] = {};
+        for (let word in state.segmentDetailData[key]) {
+          state.segmentData[key][word] = state.segmentDetailData[key][word].length;
+        }
+      });
+      console.log('segmentData', state.segmentData);
     },
     SET_A_WORD(state, data) {
       state.aWordData = data;
@@ -25,14 +38,21 @@ export default {
     },
     SET_NS_WORD(state, data) {
       state.nsWordData = data;
+    },
+    SET_CURFOCUS_WORD(state, word) {
+      state.curFocusWord = word;
+    },
+    SET_CURFOCUS_TYPE(state, type) {
+      state.curFocusWordType = type;
     }
   },
   actions: {
     async getSegmentData({ commit }, rid) {
-      const url = `//localhost:3002/hanlp/api/segment/${rid}`;
+      const url = `//localhost:3002/hanlp/api/segment/detail/${rid}`;
       const { data } = await axios.get(url);
       if (data) {
-        commit('SET_SEGMENTDATA', data);
+        commit('SET_SEGMENT_DETAILDATA', data);
+        commit('SET_SEGMENT_DATA');
       }
     },
 
@@ -52,6 +72,12 @@ export default {
       if (state.segmentData.ns) {
         let list = convertObj2Array(state.segmentData.ns);
         commit('SET_NS_WORD', list);
+      }
+
+      let existList = state.aWordData || state.nWordData || state.vWordData || state.nsWordData;
+      if (existList) {
+        commit('SET_CURFOCUS_WORD', existList[0][0]);
+        console.log('sep', state.curFocusWord);
       }
     }
   }
