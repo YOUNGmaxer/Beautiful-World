@@ -9,10 +9,6 @@
       <Radio label="分词"></Radio>
     </RadioGroup>
   </div>
-  <!-- <div class="hs-option bw-flex bw-flex--center">
-    <input class="hs-option__tag hs-option__tag--active">评论分析
-    <input class="hs-option__tag">分词分析
-  </div> -->
   <div class="red-line"></div>
 </div>
 </template>

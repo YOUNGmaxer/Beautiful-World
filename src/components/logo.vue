@@ -1,10 +1,12 @@
 <template>
-<div class="bw-logo" :class="posClass">
+<div class="bw-logo" :class="posClass" @click="backToHome">
   Beautiful China
 </div>
 </template>
 
 <script>
+import trigger from 'Util/trigger';
+
 export default {
   props: {
     posType: {
@@ -22,6 +24,13 @@ export default {
           return '';
       }
     }
+  },
+
+  methods: {
+    backToHome() {
+      this.$router.push('/detail');
+      trigger('resize');
+    }
   }
 };
 </script>
@@ -33,6 +42,7 @@ export default {
   font-style: italic;
   font-weight: 300;
   color: #fff;
+  cursor: pointer;
 }
 
 .logo-fixed {

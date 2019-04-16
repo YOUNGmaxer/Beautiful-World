@@ -7,11 +7,14 @@
       :key="comment.commentId"
       class="wc__item bw-flex"
     >
-      <span class="wc__item-tag bw-flex bw-flex--align-c" :class="commentLevelClass(Number(comment.score))">
+      <span class="wc__item-tag bw-flex bw-flex--align-c"
+        :class="commentLevelClass(Number(comment.score))">
         {{ commentLevel(Number(comment.score)) }}
       </span>
       <!-- TODO: 最好能够把关键词高亮出来 -->
-      <div class="wc__item-content bw-flex bw-flex--align-c">{{ comment.content }}</div>
+      <div class="wc__item-content bw-flex bw-flex--align-c">
+        <p v-html="highlightKeyword(comment.content, curFocusWord)"></p>
+      </div>
     </li>
   </ul>
 </div>
@@ -72,6 +75,11 @@ export default {
       if (score <= 2) return 'wc__item-tag--bad';
       if (score <= 3) return 'wc__item-tag--middle';
       return 'wc__item-tag--good';
+    },
+    // 高亮关键词
+    highlightKeyword(content, keyword) {
+      const highlightTemplate = `<span style="background: #fef171">${keyword}</span>`;
+      return content.split(keyword).join(highlightTemplate);
     }
   }
 };

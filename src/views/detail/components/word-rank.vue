@@ -87,7 +87,7 @@ export default {
 
     // 点击列表
     clickListItem(word, tab) {
-      console.log(word, tab);
+      // console.log(word, tab);
       this.$store.commit('commentSegment/SET_CURFOCUS_WORD', word);
       this.$store.commit('commentSegment/SET_CURFOCUS_TYPE', tab);
     },

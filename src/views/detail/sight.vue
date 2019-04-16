@@ -55,6 +55,7 @@ import WordComment from './components/word-comment.vue';
 import StarBg from 'Components/bg/star.vue';
 import axios from 'axios';
 import _url from 'Util/url';
+import trigger from 'Util/trigger';
 import { mapActions, mapState } from 'vuex';
 import { Spin } from 'iview';
 
@@ -106,6 +107,7 @@ export default {
 
     toggleSightRightBottom(label) {
       this.sightViewTag = label;
+      trigger('resize');
     },
     async initData() {
       const sid = _url.getPath(2);

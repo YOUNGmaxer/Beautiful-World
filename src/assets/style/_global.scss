@@ -32,7 +32,8 @@
     background: currentColor;
   }
   &::-webkit-scrollbar-thumb {
-    background: rgba(0,0,0,0.4);
+    // background: rgba(0,0,0,0.4);
+    background: rgba(32,208,142,0.8);
     border-radius: 50px;
   }
 }
