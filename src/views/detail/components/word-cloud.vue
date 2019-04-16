@@ -112,6 +112,7 @@ export default {
       await loadJs(url);
       this.cloudDom = document.getElementsByClassName('word-cloud')[0];
       const list = await this.getCommentSegment(this.rid);
+      console.log('word-cloud', list);
       this.updateWordCloud(list);
       LoadingBar.finish();
     },

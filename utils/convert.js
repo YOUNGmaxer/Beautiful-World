@@ -13,6 +13,27 @@ function convertObj2Array(obj) {
   return arr;
 }
 
+/**
+ * @description: 实现一个二维矩阵转置
+ * @param {type}
+ * @return:
+ */
+function transArray(arr) {
+  let n = arr.length;
+  let m = arr[0].length;
+  let resArr = [];
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < m; j++) {
+      if (!resArr[j]) {
+        resArr[j] = new Array(n);
+      }
+      resArr[j][i] = arr[i][j];
+    }
+  }
+  return resArr;
+}
+
 export {
-  convertObj2Array
+  convertObj2Array,
+  transArray
 };
