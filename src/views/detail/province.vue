@@ -9,7 +9,7 @@
       <sight-bar v-if="isListPrepared" :sight-list="sightList">景点销量排行</sight-bar>
     </div>
     <div class="ac--left-box">
-      <sight-flexbar></sight-flexbar>
+      <sight-flexbar v-if="isListPrepared"></sight-flexbar>
     </div>
     <div class="ac--left-box">
       <sight-pie v-if="isListPrepared" :sight-list="sightList">景点级别统计</sight-pie>
@@ -25,7 +25,7 @@
       </sight-multi-bar>
     </div>
     <div class="ac--right-box">
-      <sight-cloud></sight-cloud>
+      <sight-cloud v-if="isListPrepared"></sight-cloud>
     </div>
     <div class="ac--right-box">
       <sight-polar-bar v-if="isListPrepared" :sight-list="sightList">

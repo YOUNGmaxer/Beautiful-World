@@ -1,4 +1,6 @@
 <template>
+<div>
+<common-header>{{ areaName }}</common-header>
 <div class="city-container bw-flex">
   <!-- TODO: 这里为什么没有了 if 之后会出现问题，获取 dom 时好像获取到上一个页面的 dom 节点 -->
   <star-bg v-if="isListPrepared"></star-bg>
@@ -12,15 +14,26 @@
         :dataBox="dataBox"
       ></data-city>
     </div>
-    <div class="cc__charts bw-flex">
-      <div class="chart--left">
-        <sight-bar v-if="isListPrepared" :sight-list="sightList"></sight-bar>
+    <div class="cc__charts bw-flex bw-flex--col">
+      <div class="cc__charts-row bw-flex">
+        <div class="chart__box">
+          <sight-bar v-if="isListPrepared" :sight-list="sightList"></sight-bar>
+        </div>
+        <div class="chart__box">
+          <sight-polar-bar v-if="isListPrepared" :sight-list="sightList"></sight-polar-bar>
+        </div>
       </div>
-      <div class="chart--right">
-        <sight-polar-bar v-if="isListPrepared" :sight-list="sightList"></sight-polar-bar>
+      <div class="cc__charts-row bw-flex">
+        <div class="chart__box">
+          <sight-flexbar v-if="isListPrepared"></sight-flexbar>
+        </div>
+        <div class="chart__box">
+          <sight-cloud></sight-cloud>
+        </div>
       </div>
     </div>
   </div>
+</div>
 </div>
 </template>
 
@@ -29,7 +42,11 @@ import AreaMap from './components/area-map.vue';
 import SightBar from './components/sight-bar.vue';
 import SightPolarBar from './components/sight-polar-bar.vue';
 import DataCity from './components/data-city.vue';
-import { mapActions, mapMutations } from 'vuex';
+import CommonHeader from './components/header-common.vue';
+import SightFlexbar from './components/sight-flexbar.vue';
+import SightCloud from './components/sight-cloud.vue';
+
+import { mapState, mapActions, mapMutations } from 'vuex';
 import _url from 'Util/url';
 import StarBg from 'Components/bg/star.vue';
 
@@ -39,7 +56,10 @@ export default {
     SightBar,
     SightPolarBar,
     DataCity,
-    StarBg
+    StarBg,
+    CommonHeader,
+    SightFlexbar,
+    SightCloud
   },
   data() {
     return {
@@ -49,6 +69,7 @@ export default {
     };
   },
   computed: {
+    ...mapState('sight', ['areaName']),
     isListPrepared() {
       return this.sightList && this.sightList.length;
     }
@@ -133,7 +154,7 @@ export default {
 <style>
 .city-container {
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - var(--sight-common-h));
   --left-width: 40%;
   --statistics-height: 30%;
 }
@@ -152,7 +173,11 @@ export default {
   width: 100%;
   height: calc(100% - var(--statistics-height));
 }
-.chart--left, .chart--right {
+.cc__charts-row {
+  /* width: 100%; */
+  flex: 1;
+}
+.chart__box {
   width: 50%;
   height: 100%;
   padding-right: 15px;

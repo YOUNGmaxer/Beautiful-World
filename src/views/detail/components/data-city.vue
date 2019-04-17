@@ -31,7 +31,7 @@ export default {
 
 <style>
 .title__statistics {
-  padding-top: 15px;
+  /* padding-top: 15px; */
   padding-bottom: 15px;
   padding-right: 15px;
 }

@@ -48,9 +48,13 @@ export default {
     },
 
     getTopCommentSights(topLevel = 20) {
-      if (!this.sightListSortedByComment) {
-        this.$store.commit('sight/SET_SIGHTLIST_SORTED_BY_COMMENT');
-      }
+      // if (!this.sightListSortedByComment) {
+      //   this.$store.commit('sight/SET_SIGHTLIST_SORTED_BY_COMMENT');
+      // }
+      // TODO: 取消判断条件，避免切换省份使用的是同一份数据
+      this.$store.commit('sight/SET_SIGHTLIST_SORTED_BY_COMMENT');
+
+      console.log('sightListSorted', this.sightListSortedByComment);
       let topData = this.sightListSortedByComment.slice(0, topLevel);
       let nameList = [];
       let commentList = [];
