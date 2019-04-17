@@ -41,10 +41,11 @@ export default {
       const url = '//tencent.beecdn.cn/libs/wordcloud2.js/1.1.0/wordcloud2.js';
       await loadJs(url);
       this.cloudDom = document.getElementsByClassName('sight-cloud')[0];
-      console.log('dom', this.cloudDom);
       this.getCloudList();
       const list = this.sightCloudList.slice(0, 100);
+      // console.log('list', list);
       const scaleList = this.getScaleList(list);
+      console.log('scaleList', scaleList);
       this.renderWordCloud(scaleList, this.cloudDom);
     },
 
@@ -54,19 +55,29 @@ export default {
       const minValue = d3.min(valueList);
       const scale = scaleLinear()
         .domain([minValue, maxValue])
-        .range([1, 100]);
+        .range([1, 40]);
       // console.log('scaleList', valueList, maxValue, minValue);
       // console.log('scale', scale(1000));
       const resList = list.map(item => [item[0], scale(item[1])]);
-      console.log('scale list', resList);
+      // console.log('scale list', resList);
       return resList;
     },
 
     renderWordCloud(list, dom) {
+      const that = this;
       const wordOption = {
         list,
-        backgroundColor: 'rgba(255,255,255,1)',
-        minSize: 10
+        backgroundColor: 'rgba(255,255,255,0.8)',
+        minSize: 10,
+        click: function routeToSight(item, dimension, event) {
+          const sightName = item[0];
+          const sightObj = that.sightListSortedByComment.find(sight => {
+            return sight.name === sightName;
+          });
+          that.$router.push(`/detail_sight/${sightObj.sid}`);
+          // console.log(item, sightName, sightObj);
+          // console.log('clickWord', item, dimension, event);
+        }
       };
       WordCloud(dom, wordOption);
     }
@@ -78,6 +89,12 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+.sight-cloud {
+  overflow: hidden;
 
+  span {
+    cursor: pointer;
+  }
+}
 </style>

@@ -25,7 +25,7 @@ export default {
         if (!b.comment) {
           b.comment = { 全部: 0 };
         }
-        return b.comment['全部'] - a.comment['全部'];
+        return Number(b.comment['全部'] || 0) - Number(a.comment['全部'] || 0);
       });
     }
   },
