@@ -2,7 +2,7 @@
 <div class="word-cloud-wrap bw-full box-shadow-1">
   <chart-title :hasButton="hasButton" @trigger-click="handleChartBtn"><slot></slot></chart-title>
   <div class="word-container chart-title__height">
-    <div class="word-cloud bw-full"></div>
+    <div class="word-cloud bw-full scroll-bar"></div>
     <div class="word-setting" :class="settingClass">
       <ul class="setting__list" v-for="wordProp in wordPropsList" :key="wordProp">
         <li class="bw-flex bw-flex--align-c bw-flex--justify-between">
@@ -21,6 +21,7 @@ import axios from 'axios';
 import { LoadingBar, Switch } from 'iview';
 import ChartTitle from './chart-title.vue';
 import { mapActions, mapState } from 'vuex';
+import { getScaleList } from '../js/convert';
 
 export default {
   components: {
@@ -111,9 +112,10 @@ export default {
       const url = '//tencent.beecdn.cn/libs/wordcloud2.js/1.1.0/wordcloud2.js';
       await loadJs(url);
       this.cloudDom = document.getElementsByClassName('word-cloud')[0];
-      const list = await this.getCommentSegment(this.rid);
-      console.log('word-cloud', list);
-      this.updateWordCloud(list);
+      let list = await this.getCommentSegment(this.rid);
+      let scaleList = getScaleList(list, 1, 100);
+      console.log('word-cloud', scaleList);
+      this.updateWordCloud(scaleList);
       LoadingBar.finish();
     },
 
@@ -150,7 +152,9 @@ export default {
         list = list.concat(itemArr);
       }));
 
-      this.updateWordCloud(list);
+      let scaleList = getScaleList(list, 6, 80);
+      console.log('update list', scaleList);
+      this.updateWordCloud(scaleList);
       // console.log(this.curPropsList);
       // console.log(list);
     }

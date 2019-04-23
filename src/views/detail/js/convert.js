@@ -2,8 +2,10 @@
  * @Description: 主要是一些业务共用的数据转换方法
  * @Author: Young
  * @Date: 2019-03-16 13:35:47
- * @LastEditTime: 2019-04-15 20:43:59
+ * @LastEditTime: 2019-04-21 18:07:22
  */
+import { scaleLinear } from 'd3';
+import * as d3 from 'd3';
 
 // 提取省级 geoJson 中的城市名称和code
 function getGeoJsonCities(geoJson) {
@@ -76,9 +78,25 @@ function generateSightMapData(sightList) {
   return sightMapData;
 }
 
+// 归一化函数
+function getScaleList(list, min, max) {
+  const valueList = list.map(item => item[1]);
+  const maxValue = d3.max(valueList);
+  const minValue = d3.min(valueList);
+  const scale = scaleLinear()
+    .domain([minValue, maxValue])
+    .range([min, max]);
+  // console.log('scaleList', valueList, maxValue, minValue);
+  // console.log('scale', scale(1000));
+  const resList = list.map(item => [item[0], scale(item[1])]);
+  // console.log('scale list', resList);
+  return resList;
+}
+
 export {
   getGeoJsonCities,
   convertObj2Data,
   convertData,
-  generateSightMapData
+  generateSightMapData,
+  getScaleList
 };

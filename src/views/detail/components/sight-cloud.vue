@@ -9,9 +9,7 @@
 import ChartTitle from './chart-title.vue';
 import { mapState } from 'vuex';
 import loadJs from 'Util/asyncLoadJs';
-// 引入 d3 比例尺
-import { scaleLinear } from 'd3';
-import * as d3 from 'd3';
+import { getScaleList } from '../js/convert';
 
 export default {
   components: {
@@ -44,23 +42,9 @@ export default {
       this.getCloudList();
       const list = this.sightCloudList.slice(0, 100);
       // console.log('list', list);
-      const scaleList = this.getScaleList(list);
+      const scaleList = getScaleList(list, 1, 40);
       console.log('scaleList', scaleList);
       this.renderWordCloud(scaleList, this.cloudDom);
-    },
-
-    getScaleList(list) {
-      const valueList = list.map(item => item[1]);
-      const maxValue = d3.max(valueList);
-      const minValue = d3.min(valueList);
-      const scale = scaleLinear()
-        .domain([minValue, maxValue])
-        .range([1, 40]);
-      // console.log('scaleList', valueList, maxValue, minValue);
-      // console.log('scale', scale(1000));
-      const resList = list.map(item => [item[0], scale(item[1])]);
-      // console.log('scale list', resList);
-      return resList;
     },
 
     renderWordCloud(list, dom) {
@@ -68,7 +52,7 @@ export default {
       const wordOption = {
         list,
         backgroundColor: 'rgba(255,255,255,0.8)',
-        minSize: 10,
+        minSize: 1,
         click: function routeToSight(item, dimension, event) {
           const sightName = item[0];
           const sightObj = that.sightListSortedByComment.find(sight => {

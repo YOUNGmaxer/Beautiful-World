@@ -28,7 +28,7 @@
           <sight-flexbar v-if="isListPrepared"></sight-flexbar>
         </div>
         <div class="chart__box">
-          <sight-cloud></sight-cloud>
+          <sight-cloud v-if="isListPrepared"></sight-cloud>
         </div>
       </div>
     </div>

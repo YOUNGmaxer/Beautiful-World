@@ -10,7 +10,7 @@
 import _groupBy from 'lodash/groupBy';
 import moment from 'moment';
 import { mapState, mapActions } from 'vuex';
-import echarts from 'echarts/lib/echarts';
+import 'echarts/lib/echarts';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/dataZoom';
 import 'echarts/lib/chart/line';
@@ -108,17 +108,24 @@ export default {
         },
         grid: {
           show: false,
-          top: '10%'
+          top: '10%',
+          right: '8%'
         },
         xAxis: {
           type: 'category',
           data: timeList,
+          // name: '时间',
+          // nameLocation: 'end',
+          // nameGap: 20,
           axisLabel: {
             // interval: 1
           }
         },
         yAxis: {
           type: 'value',
+          // name: '数量',
+          // nameLocation: 'middle',
+          // nameGap: 30,
           axisTick: {
             show: false
           }
@@ -126,8 +133,8 @@ export default {
         dataZoom: [
           {
             type: 'slider',
-            start: 20,
-            end: 80,
+            start: 10,
+            end: 90,
             textStyle: {
               color: '#aaa'
             }

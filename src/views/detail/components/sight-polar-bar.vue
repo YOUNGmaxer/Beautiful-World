@@ -28,7 +28,7 @@ export default {
 
   data() {
     return {
-      commentRefer: ['全部', '好评', '中评', '差评'],
+      commentRefer: ['好评', '中评', '差评'],
       localSightList: []
     };
   },
@@ -82,7 +82,9 @@ export default {
         },
         legend: {
           orient: 'horizontal',
-          bottom: '8%'
+          bottom: '0',
+          itemWidth: 10,
+          itemHeight: 10
         },
         // 极坐标
         polar: {

@@ -38,7 +38,7 @@ export default {
       let cityCounter = {};
       let cityRank = [];
       let nameList = [];
-      let levelList = [[], [], [], [], []];
+      let levelList = [[], [], [], [], [], []];
       // 按城市进行景点级别的提取，并统计数量
       sights.forEach(sight => {
         const city = sight.city || '';
@@ -48,9 +48,12 @@ export default {
             cityCounter[city] = {};
             cityCounter[city].sum = 0;
           }
+          let temp = cityCounter[city];
           if (level) {
-            let temp = cityCounter[city];
             temp[level] = temp[level] ? temp[level] + 1 : 1;
+            temp.sum++;
+          } else {
+            temp['其他'] = temp['其他'] ? temp['其他'] + 1 : 1;
             temp.sum++;
           }
         }
@@ -112,9 +115,17 @@ export default {
         tooltip: {
           trigger: 'axis'
         },
+        // legend: {
+        //   orient: 'horizontal',
+        //   bottom: '0',
+        //   itemWidth: 10,
+        //   itemHeight: 10
+        // },
         grid: {
           containLabel: true,
-          bottom: '10%',
+          left: '5%',
+          right: '8%',
+          bottom: '5%',
           top: '10%'
         },
         xAxis: {

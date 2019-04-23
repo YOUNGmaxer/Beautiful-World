@@ -9,7 +9,7 @@
 import { mapState } from 'vuex';
 import moment from 'moment';
 import _groupBy from 'lodash/groupBy';
-import echarts from 'echarts/lib/echarts';
+// import echarts from 'echarts/lib/echarts';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/chart/pie';
 import ChartTitle from './chart-title.vue';
@@ -95,10 +95,17 @@ export default {
           trigger: 'item'
         },
         // TODO: 未做自适应处理，在小屏幕下会出现重叠
-        // legend: {
-        //   orient: 'vertical',
-        //   x: 'right'
-        // },
+        legend: {
+          orient: 'vertical',
+          x: 'right',
+          itemWidth: 10,
+          itemHeight: 10,
+          itemGap: 6,
+          textStyle: {
+            color: '#ccc'
+          },
+          top: 5
+        },
         series: [
           {
             name: '评论时间（按工作日和休息日）',

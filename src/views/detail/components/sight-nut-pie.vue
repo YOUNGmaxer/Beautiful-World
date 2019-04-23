@@ -29,6 +29,8 @@ export default {
           x: 'left',
           bottom: '10',
           left: '15',
+          itemWidth: 10,
+          itemHeight: 10,
           data: legendData
         },
         tooltip: {
