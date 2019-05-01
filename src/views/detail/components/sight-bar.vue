@@ -2,6 +2,7 @@
 <div class="sight-bar-wrap bw-full box-shadow-1">
   <chart-title>
     <slot>景点销量排名</slot>
+    <!-- <template v-slot:tab>hello</template> -->
   </chart-title>
   <div class="sight-bar"></div>
 </div>
